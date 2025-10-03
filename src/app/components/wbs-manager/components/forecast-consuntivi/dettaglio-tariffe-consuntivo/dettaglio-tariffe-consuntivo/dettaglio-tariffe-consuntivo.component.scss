@@ -1,0 +1,68 @@
+.slide-toggle {
+	width: 5%;
+}
+
+.th-width {
+	&-12 {
+		width: 12%;
+	}
+	&-5 {
+		width: 5%;
+	}
+	&-10 {
+		width: 10%;
+	}
+	&-18 {
+		width: 18%;
+	}
+	&-15 {
+		width: 15%;
+	}
+}
+
+.icon {
+	&-small {
+		transform: scale(0.7);
+	}
+}
+
+.font-size {
+	&-11 {
+		font-size: 11px;
+	}
+	&-13 {
+		font-size: 13px;
+	}
+}
+
+.medium_strong_text {
+	font: var(--unnamed-font-style-normal) normal bold var(--unnamed-font-size-16) / 19px
+		var(--unnamed-font-family-helvetica-neue);
+	letter-spacing: var(--unnamed-character-spacing-0);
+
+	//font: normal normal bold 10px/13px;
+	letter-spacing: 0px;
+	color: #1b73e8;
+	opacity: 1;
+	cursor: pointer;
+}
+
+.icon-table {
+	cursor: pointer;
+	color: #0d67d0;
+}
+
+.td-importo {
+	text-align: center;
+	margin-top: 5px;
+}
+
+.pErrorTab {
+	color: red;
+	font-size: 9px;
+}
+
+.form-field-profilo {
+	font-size: 9px;
+	width: 100%;
+}

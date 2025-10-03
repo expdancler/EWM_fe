@@ -1,0 +1,236 @@
+.codice_commessa{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #0D67D0;
+}
+.commessa{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.main-section {
+    background-color: #FAFAFA;
+    border: 1px solid #E1E1E1;
+    opacity: 1;
+    //font: normal normal bold 13px/16px Helvetica Neue;
+}
+.responsive-fixed {
+    position: fixed;
+    background: #F5F5F5;
+    display:none;
+    z-index:9
+}
+.main-title {
+    //margin-top: 20px;
+    //margin-bottom: 20px;
+    text-align: left;
+    //font: normal normal 300 26px/32px Helvetica Neue;
+    color: #2C2C2C;
+}
+.form {
+    background-color: #F5F5F5;
+    .search-title {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        margin-top: 20px;
+        margin-left: 20px;
+        width: 59px;
+        height: 35px;
+        color: #6E6E6E;
+    }
+}
+.cliente-section{
+    ::ng-deep .ng-dropdown-panel .scroll-host{
+        display: inline-flex !important;
+    }
+}
+.form-responsive {
+    background-color: #F5F5F5;
+    height: 50px;
+    .main-section-responsive {
+        margin-top: 10px;
+        .search-title-responsive .icon{
+            color: #6E6E6E;
+        }
+        .search-title-responsive p {
+            margin-left: 5px;
+            display: inline;
+            line-height: 28px;
+            color: #6E6E6E;
+        }
+    }
+}
+.button-ricerca {
+    margin-top: 20px;
+    margin-right: 20px;
+    width: 74px;
+    height: 38px;
+}
+.button-reset {
+    margin-top: 20px;
+    margin-right: 20px;
+    width: 74px;
+    height: 38px;
+}
+.main-table-section {
+    padding-left: 0px;
+    padding-right: 0px;
+    .thead-section {
+        background: #FAFAFA 0% 0% no-repeat padding-box;
+        border: 1px solid #E1E1E1;
+        opacity: 1;
+    }
+    .tr-section {
+        font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+        text-align: left;
+        letter-spacing: 0px;
+        color: #6E6E6E;
+        opacity: 1;
+        .th-color-section {
+            width: 1%;
+        }
+        .wbs-section {
+            width: 15%;
+        }
+        .stato-wbs-section {
+            width: 5%;
+        }
+        .action-section {
+            width: 5%;
+        }
+        .neutral-color-section {
+            background-color: grey;
+        }
+        .red-color-section {
+            background-color: #ff1a1a;
+        }
+        .orange-color-section {
+            background-color: orange;
+        }
+        .green-color-section {
+            background-color: #40ff00;
+        }
+        .wbs-detail {
+            color: #0D67D0;
+        }
+    }
+}
+.table thead tr th {
+    border: none;
+}
+p {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.list-group-item {
+    height: auto;
+    margin-top: 20px;
+    border-radius: 20px;
+    .neutral-color-section {
+        width: 5%;
+        padding: 5px;
+        background-color:grey;
+        border-radius: 20px;
+    }
+    .red-color-section {
+        width: 5%;
+        padding: 5px;
+        background-color:red;
+        border-radius: 20px;
+    }
+    .orange-color-section {
+        width: 5%;
+        padding: 5px;
+        background-color:orange;
+        border-radius: 20px;
+    }
+    .green-color-section {
+        width: 5%;
+        padding: 5px;
+        background-color:green;
+        border-radius: 20px;
+    }
+    .detail-section {
+        width: 95%;
+    }
+    .wbs-detail {
+        color: #0D67D0;
+    }
+    .icon {
+        border-radius: 50%;
+    }
+    .table-section {
+        margin-left: 2px;
+        margin-top: 30px
+    }
+    .table {
+        .tr-section {
+            text-align: left;
+            font: normal normal bold 13px/16px Helvetica Neue;
+            letter-spacing: 0px;
+            color: #6E6E6E;
+            opacity: 1;
+        }
+    }
+}
+.labelPeriodo{
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-weight: normal;
+    margin-top: 5px;
+}
+.inputPeriodo{
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-weight: normal;
+
+}
+.button-action{
+    background: whitesmoke;
+    border: 1px solid grey;
+}
+.tr-section {
+  font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: 0px;
+  color: #6E6E6E;
+  opacity: 1;
+}
+.nopadding {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+/*thead, tbody { display: block; }*/
+
+/*tbody {
+  //height: auto;       /* Just for the demo          */
+  //overflow-y: auto;    /* Trigger vertical scroll    */
+  //overflow-x: hidden;  /* Hide the horizontal scroll */
+/*}*/
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.button-aperte {
+    border-top-right-radius: 0px ;
+    border-bottom-right-radius: 0px ;
+    border: none;
+}
+
+.button-chiuse {
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+    border : none;
+}
+
+.width-unset {
+    width: unset;
+}

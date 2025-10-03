@@ -1,0 +1,836 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-6 main-section d-none d-sm-block">
+			<h3 class="main-title">Report {{ typePage }}</h3>
+		</div>
+		<div class="col-md-4 main-section d-none d-sm-block divFormFielPeriod" >
+			<mat-form-field appearance="fill" appearance="outline" class="formFieldPeriod">
+				<mat-label>Periodo di selezione</mat-label>
+				<mat-select (selectionChange)="onChangePeriod($event)" [value]="valueSelctedPeriod">
+				  <mat-option *ngFor="let pSelezione of periodoSelezione" [value]="pSelezione.value">
+					{{pSelezione.label}}
+				  </mat-option>
+				</mat-select>
+			  </mat-form-field>
+		</div>
+		<div class="col-md-2 main-section d-none d-sm-block" style="text-align: center;">
+			<button type="button" class="btn btn-green" (click)="exportAsXLSX()" style="margin-top: 20px;">
+				<i class="fas fa-file-excel"></i> All data export
+			</button>
+		</div>
+		<div class="col-md-12 main-section d-block d-sm-none">
+			<h3 class="main-title">WBS Manager</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2 form lateral">
+			<div class="search-title">
+				<h6><i class="fas fa-sliders-h" style="color: coral"></i> Viste</h6>
+			</div>
+			<hr />
+			<div class="vertical-menu">
+				<!--
+        href="/WBSManager/reports?type=Marketunit"
+        href="/WBSManager/reports?type=DeliveryCenter"
+        href="/WBSManager/reports?type=DigitalFactory"
+        href="/WBSManager/reports?type=DescrCustomer"
+        href="/WBSManager/reports?type=Wbs"
+        -->
+				<a
+					[className]="isActive.MU ? 'active' : 'inactive'"
+					(click)="tabPivot(paramPivotMarket)"
+					style="cursor: pointer"
+					>Market Unit</a
+				>
+				<a
+					[className]="isActive.DC ? 'active' : 'inactive'"
+					style="cursor: pointer"
+					(click)="tabPivot(['DescrDlvctr', 'DescrDf', 'ProjectManager', 'DescrWbs', 'Wbs'])"
+					>Delivery Center</a
+				>
+				<a
+					[className]="isActive.DF ? 'active' : 'inactive'"
+					style="cursor: pointer"
+					(click)="tabPivot(['DigitalFactory', 'DescrDf', 'ProjectManager', 'DescrWbs', 'Wbs'])"
+					>Digital Factory</a
+				>
+				<a
+					[className]="isActive.Cli ? 'active' : 'inactive'"
+					style="cursor: pointer"
+					(click)="tabPivot(['DescrCustomer', 'DescrDf', 'ProjectManager', 'DescrWbs', 'Wbs'])"
+					>Cliente</a
+				>
+				<a [className]="isActive.WBS ? 'active' : 'inactive'" style="cursor: pointer" (click)="allData()">All Data</a>
+			</div>
+			<br />
+			<!--NG SELECT SALVA REPORT-->
+			<ng-container *ngIf="showLayout == true">
+				<div class="row">
+					<div class="col-md-4">
+						<button
+							type="button"
+							class="btn btn-outline-secondary"
+							data-toggle="modal"
+							data-target="#salvaLayout"
+							(click)="clickButtonLayout = 'Salva'"
+							[disabled]="
+								ngSelectName.length == 0 || ngModelSelect == undefined || ngModelSelect == 'Selezione Layout'
+							">
+							Salva
+						</button>
+					</div>
+					<div class="col-md-6">
+						<button
+							type="button"
+							class="btn btn-outline-secondary"
+							data-toggle="modal"
+							data-target="#salvaLayout"
+							(click)="clickButtonLayout = 'New'">
+							New
+						</button>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-10">
+						<ng-select
+							(change)="layoutSalvato($event)"
+							[(ngModel)]="ngModelSelect"
+							[items]="ngSelectName"
+							[placeholder]="'Selezione Layout'">
+						</ng-select>
+					</div>
+					<div class="col-md-2">
+						<p
+							style="cursor: pointer"
+							(click)="clickButtonLayout = 'Delete'"
+							data-toggle="modal"
+							data-target="#salvaLayout">
+							<i class="fas fa-trash" style="font-size: 20px; margin-top: 8px"> </i>
+						</p>
+					</div>
+				</div>
+			</ng-container>
+			<!--<select (change)="layoutSalvato($event)" style="width: 100%">
+        <ng-container *ngFor="let ListName of ListName">
+          <option>
+            {{ListName.LayoutName}}<p *ngIf="ListName.LayoutDescr != '' && ListName.LayoutDescr != ' '">
+            - {{ListName.LayoutDescr}}</p>
+          </option>
+        </ng-container>
+      </select>-->
+			<!--WbsFlexGetlist.data.EtFlexList.LayoutName-->
+			<div class="search-title">
+				<h6><i class="fas fa-sliders-h" style="color: #558a51"></i> Report Standard</h6>
+			</div>
+			<hr />
+			<div class="vertical2-menu">
+				<a [className]="isActive.MU ? 'active' : 'inactive'" style="cursor: pointer" (click)="listWbsPivot()"
+					>Stato WBS</a
+				>
+				<a href="/WBSManager/reports?type=Pivot" [className]="isActive.DC ? 'active' : 'inactive'">2 - Pivot Table</a>
+				<a [className]="isActive.DF ? 'active' : 'inactive'">3 Report</a>
+				<a [className]="isActive.Cli ? 'active' : 'inactive'">4 Report</a>
+				<a [className]="isActive.WBS ? 'active' : 'inactive'">5 Report</a>
+			</div>
+		</div>
+		<div class="col-md-10 p-3">
+			<div class="row" *ngIf="showReport">
+				<div class="col-md-2 p-3" style="margin-top: 16px">
+					<ng-select
+						placeholder="Tipo Periodo"
+						[items]="option_tipiPeriodo"
+						bindLabel="selectedType"
+						bindValue="selectedType"
+						(change)="cambiaPeriodo()"
+						[(ngModel)]="selectedType"></ng-select>
+				</div>
+				<div class="col-md-7 p-3" *ngIf="showMonthSearch">
+					<div class="row">
+						<div class="col-md-4 p-3">
+							<ng-select
+								placeholder="Mese"
+								[items]="option_selectMeseReport"
+								bindLabel="Mese"
+								bindValue="Value"
+								[(ngModel)]="selectedMonth"></ng-select>
+						</div>
+						<div class="col-md-4 p-3">
+							<ng-select
+								placeholder="Anno"
+								[items]="option_selectAnnoReport"
+								bindLabel="selectedYear"
+								bindValue="selectedYear"
+								[(ngModel)]="selectedYear">
+							</ng-select>
+						</div>
+						<div class="col-md-2 p-3">
+							<button type="button" class="btn btn-primary" (click)="searchByMonth()">
+								<i class="fas fa-search"></i>
+							</button>
+							<button type="button" class="btn btn-primary" (click)="svuota()" style="margin-left: 5px">
+								<i class="fas fa-window-close"></i>
+							</button>
+						</div>
+						<div class="col-md-2 p-3"></div>
+					</div>
+				</div>
+				<!--<div class=" col-md-7 p-3 " *ngIf="showQuarter">
+          <div class="row">
+            <div class=" col-md-4  p-3 ">
+              <ng-select placeholder="Quarter" [items]="option_selectQuarterReport" bindLabel="Quarter"
+                bindValue="Value" [(ngModel)]="selectedQuarter"></ng-select>
+            </div>
+            <div class=" col-md-4  p-3 ">
+              <ng-select placeholder="Anno" [items]="option_selectAnnoReport" bindLabel="selectedYear"
+                bindValue="selectedYear" [(ngModel)]="selectedYear">
+              </ng-select>
+            </div>
+            <div class=" col-md-2  p-3 ">
+              <button type="button" class="btn btn-primary" (click)="searchByQuarter()"><i class="fas fa-search"></i>
+              </button>
+              <button type="button" class="btn btn-primary" (click)="svuota()" style="margin-left: 5px"><i
+                  class="fas fa-window-close"></i></button>
+            </div>
+            <div class=" col-md-2  p-3 "> </div>
+          </div>
+        </div>-->
+				<div class="col-md-7 p-3" *ngIf="showHalf">
+					<div class="row">
+						<div class="col-md-4 p-3">
+							<ng-select
+								placeholder="Half"
+								[items]="option_selectHalfReport"
+								bindLabel="Half"
+								bindValue="Value"
+								[(ngModel)]="selectedHalf"></ng-select>
+						</div>
+						<div class="col-md-4 p-3">
+							<ng-select
+								placeholder="Anno"
+								[items]="option_selectAnnoReport"
+								bindLabel="selectedYear"
+								bindValue="selectedYear"
+								[(ngModel)]="selectedYear">
+							</ng-select>
+						</div>
+						<div class="col-md-2 p-3">
+							<button type="button" class="btn btn-primary" (click)="searchByHalf()">
+								<i class="fas fa-search"></i>
+							</button>
+							<button type="button" class="btn btn-primary" (click)="svuota()" style="margin-left: 5px">
+								<i class="fas fa-window-close"></i>
+							</button>
+						</div>
+						<div class="col-md-2 p-3"></div>
+					</div>
+				</div>
+				<div class="col-md-7 p-3" *ngIf="showYear">
+					<div class="row">
+						<div class="col-md-4 p-3"></div>
+						<div class="col-md-4 p-3">
+							<ng-select
+								placeholder="Anno"
+								[items]="option_selectAnnoReport"
+								bindLabel="selectedYear"
+								bindValue="selectedYear"
+								[(ngModel)]="selectedYear">
+							</ng-select>
+						</div>
+						<div class="col-md-2 p-3">
+							<button type="button" class="btn btn-primary" (click)="searchByYear()">
+								<i class="fas fa-search"></i>
+							</button>
+							<button type="button" class="btn btn-primary" (click)="svuota()" style="margin-left: 5px">
+								<i class="fas fa-window-close"></i>
+							</button>
+						</div>
+						<div class="col-md-2 p-3"></div>
+					</div>
+				</div>
+				<div class="col-md-3 p-3" style="margin-top: 16px"></div>
+			</div>
+			<!-- Marketunit-->
+			<div class="row" id="buttonGroup" *ngIf="typePage == 'Marketunit'">
+				<table class="table" *ngFor="let reportData of reportDataMarketUnit; let i = index">
+					<thead *ngIf="i == 0">
+						<tr>
+							<th></th>
+							<th>
+								<p class="label_tab float-left">Market Unit</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Digital Factory</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Delivery Center</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Cliente</p>
+							</th>
+							<!-- <th>
+                <p class="label_tab  float-left"> <input type="text" class="form-control" placeholder="WBS" maxlength="10" [(ngModel)]="wbsSearch" (ngModelChange)="searchWBS()"></p>
+              </th> -->
+							<th>
+								<p class="label_tab float-left">WBS</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Mese</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Anno</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Costi Consuntivo</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Ricavi Consuntivo</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Costi Forecast</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Ricavi Forecast</p>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="width: 3%">
+								<button
+									class="btn btn-primary btnCol"
+									type="button"
+									data-toggle="collapse"
+									data-parent="#buttonGroup"
+									attr.data-target="#collapseExample{{ i }}"
+									aria-expanded="false"
+									aria-controls="collapseExample"
+									(click)="changeButtonMU(i)">
+									{{ reportData['intestazione'].Button }}
+								</button>
+							</td>
+							<td style="width: 10%">{{ reportData['intestazione'].Marketunit }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].DigitalFactory }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].DeliveryCenter }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].Cliente }}</td>
+							<td style="width: 10%"></td>
+							<td style="width: 5%"></td>
+							<td style="width: 5%"></td>
+							<td style="width: 10%">{{ reportData['intestazione'].totCostiC }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].totRicaviC }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].totCostiF }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].totRicaviF }}</td>
+						</tr>
+					</tbody>
+					<tbody class="collapse" id="collapseExample{{ i }}" style="font-size: 14px; background-color: #efefef">
+						<tr *ngFor="let reportDataWBS of reportDataMarketUnit[i]; let g = index">
+							<td style="width: 3%"></td>
+							<td style="width: 10%"></td>
+							<td style="width: 10%">{{ reportDataWBS.DigitalFactory }}</td>
+							<td style="width: 10%">{{ reportDataWBS.DeliveryCenter }}</td>
+							<td style="width: 10%">{{ reportDataWBS.DescrCustomer }}</td>
+							<td style="width: 10%">{{ reportDataWBS.Wbs }}</td>
+							<td style="width: 5%">{{ reportDataWBS.Fmonth }}</td>
+							<td style="width: 5%">{{ reportDataWBS.Fyear }}</td>
+							<td style="width: 10%">{{ reportDataWBS.BalCosts }}</td>
+							<td style="width: 10%">{{ reportDataWBS.BalRevenues }}</td>
+							<td style="width: 10%">{{ reportDataWBS.FcCosts }}</td>
+							<td style="width: 10%">{{ reportDataWBS.FcRevenues }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Market Unit New-->
+			<!-- <div class="row" id="buttonGroup" *ngIf="typePage == 'MarketUnitNew'">
+        <table class="table" *ngFor="let reportData of reportDataMarketUnitNew; let i = index">
+          <thead *ngIf="i==0">
+            <tr>
+              <th></th>
+              <th>
+                <p class="label_tab float-left">Account Unit</p>
+              </th>
+              <th>
+                <p class="label_tab float-left">Descr Market</p>
+              </th>
+              <th>
+                <p class="label_tab float-left">Account</p>
+              </th>
+              <th>
+                <p class="label_tab float-left">Cliente</p>
+              </th>
+              <th>
+                <p class="label_tab float-left">Anno</p>
+              </th>
+              <th>
+                <p class="label_tab float-left">Mese</p>
+              </th>
+
+              <th>
+                <p class="label_tab float-left">Costi Consuntivo</p>
+              </th>
+              <th>
+                <p class="label_tab float-left">Ricavi Consuntivo</p>
+              </th>
+              <th>
+                <p class="label_tab float-left">Costi Forecast</p>
+              </th>
+              <th>
+                <p class="label_tab float-left">Ricavi Forecast</p>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="width: 3%;"> <button class="btn btn-primary btnCol" type="button" data-toggle="collapse"
+                  data-parent="#buttonGroup" attr.data-target="#collapseExample{{i}}" aria-expanded="false"
+                  aria-controls="collapseExample" (click)="changeButtonMUN(i)">{{reportData["intestazione"].Button}}
+                </button></td>
+              <td style="width: 10%;">{{reportData["intestazione"].MarketUnitNew}}</td>
+              <td style="width: 10%;">{{reportData["intestazione"].DescrMarket}}</td>
+              <td style="width: 10%;">{{reportData["intestazione"].Account}}</td>
+              <td style="width: 10%;">{{reportData["intestazione"].Cliente}}</td>
+              <td style="width: 10%;"></td>
+              <td style="width: 5%;"></td>
+              <td style="width: 5%;"></td>
+              <td style="width: 10%;">{{reportData["intestazione"].totCostiC}}</td>
+              <td style="width: 10%;">{{reportData["intestazione"].totRicaviC}}</td>
+              <td style="width: 10%;">{{reportData["intestazione"].totCostiF}}</td>
+              <td style="width: 10%;">{{reportData["intestazione"].totRicaviF}}</td>
+            </tr>
+          </tbody>
+          <tbody class="collapse" id="collapseExample{{i}}" style="font-size: 14px;background-color: #efefef;">
+            <tr *ngFor="let reportDataWBS of reportDataMarketUnitNew[i]; let g = index">
+              <td style="width: 3%;"></td>
+              <td style="width: 10%;"></td>
+              <td style="width: 10%;">{{reportDataWBS.DescrMarket}}</td>
+              <td style="width: 10%;">{{reportDataWBS.Account}}</td>
+              <td style="width: 10%;">{{reportDataWBS.DescrCustomer}}</td>
+              <td style="width: 5%;">{{reportDataWBS.Fyear}}</td>
+              <td style="width: 5%;">{{reportDataWBS.Fmonth}}</td>
+              <td style="width: 10%;">{{reportDataWBS.BalCosts}}</td>
+              <td style="width: 10%;">{{reportDataWBS.BalRevenues}}</td>
+              <td style="width: 10%;">{{reportDataWBS.FcCosts}}</td>
+              <td style="width: 10%;">{{reportDataWBS.FcRevenues}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div> -->
+
+			<!-- Delivery Center Report-->
+			<div class="row" id="buttonGroup" *ngIf="typePage == 'DeliveryCenter'">
+				<table class="table" *ngFor="let reportData of reportDataDC; let i = index">
+					<thead *ngIf="i == 0">
+						<tr>
+							<th></th>
+							<th>
+								<p class="label_tab float-left">Delivery Center</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Digital Factory</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Market Unit</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Cliente</p>
+							</th>
+							<!-- <th>
+                <p class="label_tab  float-left"> <input type="text" class="form-control" placeholder="WBS" maxlength="10" [(ngModel)]="wbsSearch" (ngModelChange)="searchWBS()"></p>
+              </th> -->
+							<th>
+								<p class="label_tab float-left">WBS</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Mese</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Anno</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Costi Consuntivo</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Ricavi Consuntivo</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Costi Forecast</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Ricavi Forecast</p>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="width: 3%">
+								<button
+									class="btn btn-primary btnCol"
+									type="button"
+									data-toggle="collapse"
+									data-parent="#buttonGroup"
+									attr.data-target="#collapseExample{{ i }}"
+									aria-expanded="false"
+									aria-controls="collapseExample"
+									(click)="changeButtonDC(i)">
+									{{ reportData['intestazione'].Button }}
+								</button>
+							</td>
+							<td style="width: 15%">{{ reportData['intestazione'].DeliveryCenter }}</td>
+							<td style="width: 5%">{{ reportData['intestazione'].DigitalFactory }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].Marketunit }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].Cliente }}</td>
+							<td style="width: 10%"></td>
+							<td style="width: 5%"></td>
+							<td style="width: 5%"></td>
+							<td style="width: 10%">{{ reportData['intestazione'].totCostiC }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].totRicaviC }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].totCostiF }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].totRicaviF }}</td>
+						</tr>
+					</tbody>
+					<tbody class="collapse" id="collapseExample{{ i }}" style="font-size: 14px; background-color: #efefef">
+						<tr *ngFor="let reportDataWBS of reportDataDC[i]; let g = index">
+							<td style="width: 3%"></td>
+							<td style="width: 15%"></td>
+							<td style="width: 5%">{{ reportDataWBS.DigitalFactory }}</td>
+							<td style="width: 10%">{{ reportDataWBS.Marketunit }}</td>
+							<td style="width: 10%">{{ reportDataWBS.DescrCustomer }}</td>
+							<td style="width: 10%">{{ reportDataWBS.Wbs }}</td>
+							<td style="width: 5%">{{ reportDataWBS.Fmonth }}</td>
+							<td style="width: 5%">{{ reportDataWBS.Fyear }}</td>
+							<td style="width: 10%">{{ reportDataWBS.BalCosts }}</td>
+							<td style="width: 10%">{{ reportDataWBS.BalRevenues }}</td>
+							<td style="width: 10%">{{ reportDataWBS.FcCosts }}</td>
+							<td style="width: 10%">{{ reportDataWBS.FcRevenues }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- Digital Factory Report-->
+			<div class="row" id="buttonGroup" *ngIf="typePage == 'DigitalFactory'">
+				<table class="table" *ngFor="let reportData of reportDataDF; let i = index">
+					<thead *ngIf="i == 0">
+						<tr>
+							<th></th>
+							<th>
+								<p class="label_tab float-left">Digital Factory</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Delivery Center</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Market Unit</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Cliente</p>
+							</th>
+							<!-- <th>
+                <p class="label_tab  float-left"> <input type="text" class="form-control" placeholder="WBS" maxlength="10" [(ngModel)]="wbsSearch" (ngModelChange)="searchWBS()"></p>
+              </th> -->
+							<th>
+								<p class="label_tab float-left">WBS</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Mese</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Anno</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Costi Consuntivo</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Ricavi Consuntivo</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Costi Forecast</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Ricavi Forecast</p>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="width: 3%">
+								<button
+									class="btn btn-primary btnCol"
+									type="button"
+									data-toggle="collapse"
+									data-parent="#buttonGroup"
+									attr.data-target="#collapseExample{{ i }}"
+									aria-expanded="false"
+									aria-controls="collapseExample"
+									(click)="changeButtonDF(i)">
+									{{ reportData['intestazione'].Button }}
+								</button>
+							</td>
+							<td style="width: 10%">{{ reportData['intestazione'].DigitalFactory }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].DeliveryCenter }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].Marketunit }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].Cliente }}</td>
+							<td style="width: 10%"></td>
+							<td style="width: 5%"></td>
+							<td style="width: 5%"></td>
+							<td style="width: 10%">{{ reportData['intestazione'].totCostiC }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].totRicaviC }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].totCostiF }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].totRicaviF }}</td>
+						</tr>
+					</tbody>
+					<tbody class="collapse" id="collapseExample{{ i }}" style="font-size: 14px; background-color: #efefef">
+						<tr *ngFor="let reportDataWBS of reportDataDF[i]; let i = index">
+							<td style="width: 3%"></td>
+							<td style="width: 10%"></td>
+							<td style="width: 10%">{{ reportDataWBS.DeliveryCenter }}</td>
+							<td style="width: 10%">{{ reportDataWBS.Marketunit }}</td>
+							<td style="width: 10%">{{ reportDataWBS.DescrCustomer }}</td>
+							<td style="width: 10%">{{ reportDataWBS.Wbs }}</td>
+							<td style="width: 5%">{{ reportDataWBS.Fmonth }}</td>
+							<td style="width: 5%">{{ reportDataWBS.Fyear }}</td>
+							<td style="width: 10%">{{ reportDataWBS.BalCosts }}</td>
+							<td style="width: 10%">{{ reportDataWBS.BalRevenues }}</td>
+							<td style="width: 10%">{{ reportDataWBS.FcCosts }}</td>
+							<td style="width: 10%">{{ reportDataWBS.FcRevenues }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!--  Cliente Report-->
+			<div class="row" id="buttonGroup" *ngIf="typePage == 'DescrCustomer'">
+				<table class="table" *ngFor="let reportData of reportDataCliente; let i = index">
+					<thead *ngIf="i == 0">
+						<tr>
+							<th></th>
+							<th>
+								<p class="label_tab float-left">Cliente</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Digital Factory</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Delivery Center</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Market Unit</p>
+							</th>
+
+							<!-- <th>
+                <p class="label_tab  float-left"> <input type="text" class="form-control" placeholder="WBS" maxlength="10" [(ngModel)]="wbsSearch" (ngModelChange)="searchWBS()"></p>
+              </th> -->
+							<th>
+								<p class="label_tab float-left">WBS</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Mese</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Anno</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Costi Consuntivo</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Ricavi Consuntivo</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Costi Forecast</p>
+							</th>
+							<th>
+								<p class="label_tab float-left">Ricavi Forecast</p>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="width: 3%">
+								<button
+									class="btn btn-primary btnCol"
+									type="button"
+									data-toggle="collapse"
+									data-parent="#buttonGroup"
+									attr.data-target="#collapseExample{{ i }}"
+									aria-expanded="false"
+									aria-controls="collapseExample"
+									(click)="changeButtonCli(i)">
+									{{ reportData['intestazione'].Button }}
+								</button>
+							</td>
+							<td style="width: 10%">{{ reportData['intestazione'].Cliente }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].DigitalFactory }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].DeliveryCenter }}</td>
+							<td style="width: 10%">{{ reportData['intestazione'].Marketunit }}</td>
+
+							<td style="width: 10%"></td>
+							<td style="width: 5%"></td>
+							<td style="width: 5%"></td>
+							<td style="width: 10%">{{ reportDataWBS.BalCosts }}</td>
+							<td style="width: 10%">{{ reportDataWBS.BalRevenues }}</td>
+							<td style="width: 10%">{{ reportDataWBS.FcCosts }}</td>
+							<td style="width: 10%">{{ reportDataWBS.FcRevenues }}</td>
+						</tr>
+					</tbody>
+					<tbody class="collapse" id="collapseExample{{ i }}" style="font-size: 14px; background-color: #efefef">
+						<tr *ngFor="let reportDataWBS of reportDataCliente[i]; let g = index">
+							<td style="width: 3%"></td>
+							<td style="width: 10%"></td>
+							<td style="width: 10%">{{ reportDataWBS.DeliveryCenter }}</td>
+							<td style="width: 10%">{{ reportDataWBS.Marketunit }}</td>
+							<td style="width: 10%">{{ reportDataWBS.DescrCustomer }}</td>
+							<td style="width: 10%">{{ reportDataWBS.Wbs }}</td>
+							<td style="width: 5%">{{ reportDataWBS.Fmonth }}</td>
+							<td style="width: 5%">{{ reportDataWBS.Fyear }}</td>
+							<td style="width: 10%">{{ reportDataWBS.FcCosts }}</td>
+							<td style="width: 10%">{{ reportDataWBS.FcRevenues }}</td>
+							<td style="width: 10%">{{ reportDataWBS.BalRevenues }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!--  Graphical Analisys-->
+			<!--<div class="row" id="buttonGroup" *ngIf="typePage == 'Graph'">
+        <div class="col-md-8 d-none d-sm-block" id="btnGroup">
+          <div class="justify-content-md-center" style="margin-left: 10%;">
+            <div class="form-check form-check-inline" *ngFor="let anno of option_selectAnnoReport; let i = index">
+              <input class="form-check-input" [(ngModel)]="checkBoxes[i]" type="checkbox" id="inlineCheckbox{{i}}"
+                value="{{anno}}">
+              <label class="form-check-label" for="inlineCheckbox1">{{anno}}</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <button type="button" class="btn btn-primary" (click)="filtraStatisticheDigitalFactory()"> <i
+                  class="fas fa-filter"></i> Filtra</button>
+            </div>
+          </div>
+          <div id="report_statistiche" style="height: 420px;"></div>
+        </div>
+        <div class="col-md-4 d-none d-sm-block">
+          <div class="row">
+            <div class="col-md-12 d-none d-sm-block">
+              <div id="report_costiG" style="height: 140px;"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 d-none d-sm-block">
+              <div id="report_ricavi" style="height: 140px;"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 d-none d-sm-block">
+              <div id="report_marginalita" style="height: 140px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>-->
+			<div class="row" *ngIf="typePage == 'Pivot'">
+				<!-- <div  id="pivotContainer" class="col-md-12 d-none d-sm-block">
+          <fm-pivot
+          [toolbar]="true">
+         </fm-pivot>
+        </div> #e85212-->
+			</div>
+			<br />
+
+			<div>
+				<div id="pivot-container"></div>
+				<!-- <div id="spinner" style="margin: auto;
+  width: 20%;
+  padding: 10px;">
+      <div
+        class="spinner-border" style="color: orange;" >
+      </div>
+      </div>-->
+				<!--<div class="row">
+        <div class="col-md-6 d-none d-sm-block">
+          <div id="report_ricavi_button" style="height: 355px;"></div>
+        </div>
+        <div class="col-md-6 d-none d-sm-block">
+          <div id="report_ricavi_button2" style="height: 355px;"></div>
+        </div>
+        <div id="wdr-component"></div>
+      </div>-->
+			</div>
+		</div>
+	</div>
+	<!--MODALE TASTO SALVA LAYOUT-->
+	<div class="modal fade" id="salvaLayout" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" #closebutton>&times;</button>
+				</div>
+				<!-- BODY DELLA MODALE QUANDO SCHIACCI IL BUTTON NEW -->
+				<div class="modal-body" *ngIf="clickButtonLayout == 'New'">
+					<div class="form-group">
+						<label for="namelayout">Layout:</label>
+						<input type="text" class="form-control" id="namelayout" (change)="layoutNamefnt($event)" maxlength="14" />
+						<p style="color: red" *ngIf="confirmName == 'nomeUguale'">Nome Layout già in uso</p>
+						<p style="color: red" *ngIf="confirmName == 'stringaVuota'">Inserire il nome del Layout</p>
+					</div>
+					<!--<div class="form-group">
+        <label for="Descrlayout">Descrizione:</label>
+        <input type="text" class="form-control" id="Descrlayout" (change)="layoutDescrfnt($event)" maxlength="30">
+        </div>-->
+					<div class="row">
+						<div class="col-3"></div>
+						<div class="col-3">
+							<button class="btn btn-primary" style="background-color: #005069; border: none" (click)="savePivotTab()">
+								Conferma
+							</button>
+						</div>
+						<div class="col-3">
+							<button class="btn btn-primary" style="background-color: #005069; border: none" data-dismiss="modal">
+								Annulla
+							</button>
+						</div>
+						<div class="col-3"></div>
+					</div>
+				</div>
+				<!--BODY DELLA MOADALE QUANDO SCHIACCIO IL BUTTON SALVA-->
+				<div class="modal-body" *ngIf="clickButtonLayout == 'Salva'">
+					<p>Sovrascrivere il layout selezionato?</p>
+					<div class="row">
+						<div class="col-3"></div>
+						<div class="col-3">
+							<button
+								class="btn btn-primary"
+								style="background-color: #005069; border: none"
+								data-dismiss="modal"
+								(click)="svrLayout()">
+								Conferma
+							</button>
+						</div>
+						<div class="col-3">
+							<button class="btn btn-primary" style="background-color: #005069; border: none" data-dismiss="modal">
+								Annulla
+							</button>
+						</div>
+						<div class="col-3"></div>
+					</div>
+				</div>
+				<!--BODY DELLA MODALE QUANDO SCHIACCIO IL BIDONE-->
+				<div class="modal-body" *ngIf="clickButtonLayout == 'Delete'">
+					<p>Cancellare il layout selezionato?</p>
+					<div class="row">
+						<div class="col-3"></div>
+						<div class="col-3">
+							<button
+								class="btn btn-primary"
+								style="background-color: #005069; border: none"
+								data-dismiss="modal"
+								(click)="delateLayout()">
+								Conferma
+							</button>
+						</div>
+						<div class="col-3">
+							<button class="btn btn-primary" style="background-color: #005069; border: none" data-dismiss="modal">
+								Annulla
+							</button>
+						</div>
+						<div class="col-3"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

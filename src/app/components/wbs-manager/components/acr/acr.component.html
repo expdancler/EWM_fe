@@ -1,0 +1,279 @@
+<!--------------------------  PREVISIONE INZIALE ----------------------------->
+<div class="row ">
+    <div class=" col-md-4 ">
+      <div class="card">
+        <div class="card-header card_tiitle">
+          ACR INIZIALE
+          </div>
+        <div class="card-body">
+          <!--<div class="float-left ">
+            <p class="bold_text">Data Apertura : <br><b class="opacity_text">{{EsAcrFirst.StartDate | date: 'dd/MM/yyyy'}}</b></p>
+          </div>
+          <div class="float-right ">
+            <p class="bold_text">Data Prevista Chiusura : <br><b class="opacity_text float-right">{{EsAcrFirst.EndDate | date: 'dd/MM/yyyy'}}</b></p>
+          </div>
+          <br><br><br>-->
+          <!--<div class="progress d-sm-block d-none">
+            <div class="progress-bar" [ngStyle]="{'width': overviewAcrProgress + '%'}">{{overviewAcrProgress | decimalCustomPipe}}%</div>
+          </div>-->
+          <!--<div class="float-left d-sm-block d-none margin_top_nine">
+            <p class="bold_text">Ricavi Iniziali € : <b class="opacity_text">{{EsAcr.Revenues | decimalCustomPipe}}</b></p>
+            <p class="float-left margin_top_twenty opacity_text">{{EsAcr.Revenues | decimalCustomPipe}}</p>-->
+          <!--</div>
+          <div class="d-sm-block d-none">
+          <br><br><br>
+          </div>
+          <div class="d-sm-none float-left">
+            <p class="bold_text">Ricavi Iniziali € : <b class=" opacity_text">{{EsAcr.Revenues | decimalCustomPipe}}</b></p>
+          </div>
+          <div class="float-left">
+            <p class="bold_text">Totale costi Iniziali € : <b class="opacity_text">{{EsAcr.Costs | decimalCustomPipe}}</b></p>-->
+            <!--<p class="float-left margin_top_twenty opacity_text" >{{EsAcr.Costs | decimalCustomPipe}}</p>-->
+          <!--</div>
+          <br><br><br>
+          <div>
+          <p class="opacity_text">Marginalità Iniziale</p>
+          <p class="strong_text">€ {{EsAcr.DiffRc | decimalCustomPipe}}</p>
+          <p class="medium_strong_text">( {{EsAcr.Profitability | decimalCustomPipe}} % )</p>
+          </div>-->
+          <div>
+            <p class="bold_text">Ricavi € : <b class="opacity_text">{{EsAcrFirst.Revenues | decimalCustomPipe}}</b></p>
+            <p class="bold_text">Totale costi € : <b class="opacity_text">{{EsAcrFirst.Costs | decimalCustomPipe}}</b></p>
+            <p class="bold_text">Marginalità € : <b class="opacity_text">{{EsAcrFirst.DiffRc | decimalCustomPipe}} </b> <b class="opacity_text"> ( {{EsAcrFirst.Profitability | decimalCustomPipe}} % )</b></p>
+            <p class="bold_text">Ricavi / Costi : <b class="opacity_text">{{EsAcrFirst.RatioRc | decimalCustomPipe}} </b></p>
+            <p class="bold_text">Voci di costo € : </p>
+            <table class="table table_inside_card">
+              <thead class="thead-light ">
+              </thead>
+              <tbody>
+              <tr *ngFor="let vociCosto_tab of vociDiCosto_first">
+                <td class="other_value_tab" style="font-size: 13px">{{vociCosto_tab.DescrCe}}</td>
+                <td class="econmy_value_tab" style="font-size: 13px">{{vociCosto_tab.totalCost | decimalCustomPipe}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <div class="row">
+        <!--<div class=" col-md-6 main-table-section">
+          <div class="card">
+            <div class="card-header card_tiitle">
+              VOCI DI COSTO
+            </div>
+            <div class="card-body">
+              <table class="table table_inside_card">
+                <thead class="thead-light ">
+                </thead>
+                <tbody>
+                <tr *ngFor="let vociCosto_tab of vociDiCosto">
+                  <td class="other_value_tab">{{vociCosto_tab.DescrCe}}</td>
+                  <td class="econmy_value_tab">{{vociCosto_tab.totalCost | decimalCustomPipe}}</td>
+                </tr>
+                </tbody>
+              </table>
+          </div>
+          </div>
+        </div>-->
+        <div class="d-sm-none">
+        <br>
+        </div>
+        <!--<div class="col-md-6 main-table-section ">
+          <div class="card">
+            <div class="card-header card_tiitle">
+              MARGINALITA'
+            </div>
+            <div class="card-body text-center">
+              <p class="opacity_text">Margine</p>
+              <p class="strong_text">€ {{EsAcr.DiffRc | decimalCustomPipe}}</p>
+              <p class="medium_strong_text">( {{EsAcr.Profitability | decimalCustomPipe}} % )</p>
+              <br>
+              <p class="opacity_text">Ricavi / Costi</p>
+              <p class="medium_strong_text">{{EsAcr.RatioRc | decimalCustomPipe}} %</p>
+            </div>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <div class=" col-md-4 ">
+      <div class="card">
+        <div class="card-header card_tiitle">
+          ACR AGGIORNATA
+        </div>
+        <div class="card-body">
+          <!--<div class="float-left ">
+            <p class="bold_text">Data Apertura : <br><b class="opacity_text">{{EsAcr.StartDate | date: 'dd/MM/yyyy'}}</b></p>
+          </div>
+          <div class="float-right ">
+            <p class="bold_text">Data Prevista Chiusura : <br><b class="opacity_text float-right">{{EsAcr.EndDate | date: 'dd/MM/yyyy'}}</b></p>
+          </div>
+          <br><br><br>-->
+          <div>
+            <p class="bold_text">Ricavi € : <b class="opacity_text">{{EsAcr.Revenues | decimalCustomPipe}}</b></p>
+            <p class="bold_text">Totale costi € : <b class="opacity_text">{{EsAcr.Costs | decimalCustomPipe}}</b></p>
+            <p class="bold_text">Marginalità € : <b class="opacity_text">{{EsAcr.DiffRc | decimalCustomPipe}} </b> <b class="opacity_text"> ( {{EsAcr.Profitability | decimalCustomPipe}} % )</b></p>
+            <p class="bold_text">Ricavi / Costi : <b class="opacity_text">{{EsAcr.RatioRc | decimalCustomPipe}} </b></p>
+            <p class="bold_text">Voci di costo € : </p>
+            <table class="table table_inside_card">
+              <thead class="thead-light ">
+              </thead>
+              <tbody>
+              <tr *ngFor="let vociCosto_tab of vociDiCosto">
+                <td class="other_value_tab" style="font-size: 13px">{{vociCosto_tab.DescrCe}}</td>
+                <td class="econmy_value_tab" style="font-size: 13px">{{vociCosto_tab.totalCost | decimalCustomPipe}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class=" col-md-4 ">
+    <div class="card">
+      <div class="card-header card_tiitle">
+        AVANZAMENTO TEMPORALE
+      </div>
+      <div class="card-body">
+        <div class="float-left ">
+          <p class="bold_text">Apertura : <br><b class="opacity_text">{{EsAcr.StartDate | date: 'dd/MM/yyyy'}}</b></p>
+        </div>
+        <div class="float-right ">
+          <p class="bold_text">Chiusura : <br><b class="opacity_text float-right">{{EsAcr.EndDate | date: 'dd/MM/yyyy'}}</b></p>
+        </div>
+        <br><br><br>
+        <div class="progress d-sm-block d-none">
+          <div class="progress-bar" [ngStyle]="{'width': overviewAcrProgress + '%'}">{{overviewAcrProgress | decimalCustomPipe}}%</div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="card">
+      <div class="card-header card_tiitle">
+        AVANZAMENTO RICAVI
+      </div>
+      <div class="card-body">
+        <div class="progress d-sm-block d-none">
+          <div class="progress-bar" [ngStyle]="{'width': overviewRicavi + '%'}">{{overviewRicavi | decimalCustomPipe}}%</div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="card">
+      <div class="card-header card_tiitle">
+        AVANZAMENTO COSTI
+      </div>
+      <div class="card-body">
+        <div class="progress d-sm-block d-none">
+          <div class="progress-bar" [ngStyle]="{'width': overviewCosti + '%'}">{{overviewCosti | decimalCustomPipe}}%</div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="card">
+      <div class="card-header card_tiitle">
+        AVANZAMENTO FATTURAZIONE
+      </div>
+      <div class="card-body">
+        <div class="progress d-sm-block d-none">
+          <div class="progress-bar" [ngStyle]="{'width': overviewFatturazione + '%'}">{{overviewFatturazione | decimalCustomPipe}}%</div>
+        </div>
+      </div>
+    </div>
+    <br>
+    </div>
+    <div class="d-sm-none">
+      <br>
+    </div>
+    <!--<div class="col-md-5 main-table-section ">
+      <div class="card">
+        <div class="card-header card_tiitle">
+          DETTAGLIO ACR
+        </div>
+        <div class="card-body">
+          <table class="table table_inside_card" >
+            <thead class="thead-light">
+            <tr>
+              <th></th>
+              <th class="label_tab">COSTO ACR €</th>
+              <th class="label_tab">RICAVO ACR €</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let dettaglioAcr_tab of detailAcr">
+              <td class="other_value_tab">{{dettaglioAcr_tab.Fyear}}-{{dettaglioAcr_tab.Fmonth | numberMonth}}</td>
+              <td *ngIf="dettaglioAcr_tab.sumCostoAcr !== '-'" class="econmy_value_tab">{{dettaglioAcr_tab.sumCostoAcr | decimalCustomPipe}}</td>
+              <td *ngIf="dettaglioAcr_tab.sumCostoAcr === '-'" class="econmy_value_tab">{{dettaglioAcr_tab.sumCostoAcr}}</td>
+              <td *ngIf="dettaglioAcr_tab.sumRicavoAcr !== '-'" class="econmy_value_tab">{{dettaglioAcr_tab.sumRicavoAcr | decimalCustomPipe}}</td>
+              <td *ngIf="dettaglioAcr_tab.sumRicavoAcr === '-'" class="econmy_value_tab">{{dettaglioAcr_tab.sumRicavoAcr}}</td>
+            </tr>
+            </tbody>
+          </table>
+
+      </div>
+    </div>
+    </div>-->
+  </div>
+<div class="card">
+  <div class="card-header card_tiitle">
+    DETTAGLIO ORDINI / CONTRATTI
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <p class="opacity_text">ORDINI</p>
+    <table class="table">
+      <thead>
+      <tr>
+        <th style="font-size: 13px">N. Ordine</th>
+        <th style="font-size: 13px">Data</th>
+        <th style="font-size: 13px">Valore €</th>
+        <th style="font-size: 13px">CUP</th>
+        <th style="font-size: 13px">CIG</th>
+        <th style="font-size: 13px">N. Contratto</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let dataWBsDetail of dataWBsDetail.data?.EtOrd">
+       <td class="opacity_text" style="font-size: 11px">{{dataWBsDetail.OrdNum}}</td>
+        <td class="opacity_text" style="font-size: 11px">{{dataWBsDetail.OrdDate |  date:"dd/MM/yy"}}</td>
+        <td class="opacity_text" style="font-size: 11px">{{dataWBsDetail.OrdValue | decimalCustomPipe}}</td>
+        <td class="opacity_text" style="font-size: 11px">{{dataWBsDetail.Cup}}</td>
+        <td class="opacity_text" style="font-size: 11px">{{dataWBsDetail.Cig}}</td>
+        <td class="opacity_text" style="font-size: 11px">{{dataWBsDetail.CtrNum}}</td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+      <div class="col-md-6">
+        <p class="opacity_text">CONTRATTI</p>
+        <table class="table">
+          <thead>
+          <tr>
+            <th style="font-size: 13px">N. Contratto</th>
+            <th style="font-size: 13px">Descr. Contratto</th>
+            <th style="font-size: 13px">Inizio Validità</th>
+            <th style="font-size: 13px">Fine Validità</th>
+            <th style="font-size: 13px">Valore €</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let dataWBsDetail of dataWBsDetail.data?.EtCtr">
+            <td class="opacity_text" style="font-size: 11px">{{dataWBsDetail.CtrNum}}</td>
+            <td class="opacity_text" style="font-size: 11px">{{dataWBsDetail.DescrCtr}}</td>
+            <td class="opacity_text" style="font-size: 11px">{{dataWBsDetail.StartDate | date:"dd/MM/yy"}}</td>
+            <td class="opacity_text" style="font-size: 11px">{{dataWBsDetail.EndDate | date:"dd/MM/yy"}}</td>
+            <td class="opacity_text" style="font-size: 11px">{{dataWBsDetail.ValCtr | decimalCustomPipe}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!------------- PREVISIONE AGGIORNATA ------------------------->
+
+
+
+

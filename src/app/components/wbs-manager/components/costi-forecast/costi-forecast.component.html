@@ -1,0 +1,288 @@
+<div class="container-fluid">
+  <div class="row">
+    <!--
+    Card parte sinistra
+    -->
+    <div class="col-xl-8">
+      <!--
+      COSTO DEL PERSONALE
+      -->
+      <div class="card" style="margin-top: 20px">
+        <div class="card-header card_tiitle">
+          COSTO DEL PERSONALE
+        </div>
+
+        <div class="card-body">
+          <div style="overflow-x: scroll;">
+          <table class="table" >
+            <thead>
+            <tr>
+              <th></th>
+              <th ><p class="label_tab  float-left">Profilo di costo</p></th>
+              <th ><p class="label_tab float-left">Costo</p></th>
+              <th ><p class="label_tab float-left">GG Gennaio 2021</p></th>
+              <th ><p class="label_tab float-left">Importo Gennaio 2021</p></th>
+              <th><p  class="label_tab float-left">GG Febbraio 2021</p></th>
+              <th ><p class="label_tab float-left">Importo Febbrario 2021</p></th>
+              <th ><p class="label_tab float-left">Marzo 2021</p></th>
+              <th><p  class="label_tab float-left">Importo Marzo 2021</p></th>
+            </tr>
+            </thead>
+            <tbody *ngIf="array_costoPersonale.length!=0">
+            <tr *ngFor="let array_costoPersonale of array_costoPersonale;let i=index">
+              <td>
+                <input  type="checkbox" class="checkbox" [value]="array_costoPersonale.id" [id]="i"
+                            (change)="check_costoPersonale(i,$event) ">
+              </td>
+              <td >
+                <ng-select
+                  [clearable]="false"
+                  placeholder="profilo costo"
+                  [items]="option_selectProfiloCosto"
+                  bindValue="profiloCosto"
+                 >
+                </ng-select>
+              </td>
+              <td>
+                <div class="input" style="margin-top: 10px">
+                <p class="econmy_value_tab">158,16</p>
+                </div>
+              </td>
+              <td><input type="text" class=" input" ></td>
+              <td><input type="text" class=" input" ></td>
+              <td><input type="text" class=" input" ></td>
+              <td><input type="text" class=" input" ></td>
+              <td><input type="text" class=" input" ></td>
+              <td><input type="text" class=" input" ></td>
+            </tr>
+            </tbody>
+          </table>
+          </div>
+          <p *ngIf="array_costoPersonale.length==0" class="econmy_value_tab">Aggiungi costo del personale </p>
+        </div>
+        <!--
+
+        CTA ELIMINA E AGGIUNGI DEL COSTO PERSONALE
+        -->
+        <div class="row">
+          <div class="col-xs-6 col-md-6 col-sm-6">
+        <a
+          (click)="delete_array_costoPersonale()"
+          style="color: #1B73E8;margin-left: 15px;margin-bottom: 10px"
+          class="opacity_text d-inline-block text-3p ">
+          <em class="fa fa-trash mr-2" ></em>
+          <span>{{'Elimina'}}</span>
+        </a>
+          </div>
+          <div class="col-xs-6  col-md-6 col-sm-6">
+            <a
+              (click)="push_array_costoPersonale()"
+              style="color: #1B73E8;margin-right: 15px;margin-bottom: 10px"
+              class="opacity_text d-inline-block text-3p float-right">
+              <em class="fa fa-plus mr-2" ></em>
+              <span>{{'Aggiungi'}}</span>
+            </a>
+          </div>
+      </div>
+      </div>
+      <!--
+      COSTO DI CONSULENZA
+      -->
+      <div class="card" style="margin-top: 20px">
+        <div class="card-header card_tiitle">
+          COSTO DI CONSULENZA
+        </div>
+        <div class="card-body">
+          <div style="overflow-x: scroll;">
+          <table class="table">
+            <thead>
+            <tr>
+              <th></th>
+              <th ><p class="label_tab  float-left">Fornitore</p></th>
+              <th ><p class="label_tab float-left">Dettaglio</p></th>
+              <th ><p class="label_tab float-left">Gennaio 2021</p></th>
+              <th><p  class="label_tab float-left">Febbraio 2021</p></th>
+              <th ><p class="label_tab float-left">Marzo 2021</p></th>
+              <th ><p class="label_tab float-left">Aprile 2021</p></th>
+            </tr>
+            </thead>
+            <tbody *ngIf="array_costoConsulenza.length!=0">
+            <tr *ngFor="let array_costoConsulenza of array_costoConsulenza;let i=index">
+              <td>
+                <input  type="checkbox" class="checkbox" value="" (change)="check_costoConsulenza(i,$event)">
+              </td>
+              <td >
+                <ng-select
+                  [clearable]="false"
+                  placeholder="Fornitore"
+                  [items]="option_selectFornitore"
+                  bindValue="fornitore"
+                 >
+                </ng-select>
+              </td>
+              <td>
+                <div style="margin-top: 10px;width: 60px">
+                  <p class="econmy_value_tab">Descrizione</p>
+                </div>
+              </td>
+              <td><input type="text" class=" input" ></td>
+              <td><input type="text" class=" input" ></td>
+              <td><input type="text" class=" input" ></td>
+              <td><input type="text" class=" input" ></td>
+            </tr>
+            </tbody>
+          </table>
+          </div>
+          <p *ngIf="array_costoConsulenza.length==0" class="econmy_value_tab">Aggiungi costo consulenza </p>
+        </div>
+        <!--
+
+        CTA ELIMINA E AGGIUNGI DEL COSTO CONSULENZA
+        -->
+        <div class="row">
+          <div class="col-xs-6 col-md-6 col-sm-6">
+            <a
+              (click)="delete_array_costoConsulenza()"
+              style="color: #1B73E8;margin-left: 15px;margin-bottom: 10px"
+              class="opacity_text d-inline-block text-3p ">
+              <em class="fa fa-trash mr-2" ></em>
+              <span>{{'Elimina'}}</span>
+            </a>
+          </div>
+          <div class="col-xs-6 col-md-6 col-sm-6">
+            <a
+              (click)="push_array_costoConsulenza()"
+              style="color: #1B73E8;margin-right: 15px;margin-bottom: 10px"
+              class="opacity_text d-inline-block text-3p float-right">
+              <em class="fa fa-plus mr-2" ></em>
+              <span>{{'Aggiungi'}}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!--
+      VOCI DI COSTO
+      -->
+      <div class="card" style="margin-top: 20px">
+        <div class="card-header card_tiitle">
+          VOCI DI COSTO
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+            <tr>
+              <th ><p class="label_tab  float-left">Dettaglio</p></th>
+              <th ><p class="label_tab float-left">Gennaio 2021</p></th>
+              <th><p  class="label_tab float-left">Febbraio 2021</p></th>
+              <th ><p class="label_tab float-left">Marzo 2021</p></th>
+              <th ><p class="label_tab float-left">Aprile 2021</p></th>
+            </tr>
+            </thead>
+            <tbody >
+            <tr *ngFor="let array_vociCosto of array_vociCosto">
+              <td>
+                <p class="econmy_value_tab">{{array_vociCosto.dettaglio}}</p>
+              </td>
+              <td><input type="text" class=" input_vociCosto" ></td>
+              <td><input type="text" class=" input_vociCosto" ></td>
+              <td><input type="text" class=" input_vociCosto" ></td>
+              <td><input type="text" class=" input_vociCosto" ></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!--
+    CARD PARTE DESTRA
+    -->
+    <div class="col-xl-4">
+      <!--
+      TOTALI VOCI DI COSTO FORECAST
+      -->
+      <div class="card" style="margin-top: 20px">
+        <div class="card-header card_tiitle">
+          VOCI DI COSTO
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <tbody >
+            <tr *ngFor="let array_totaliVociCosto of array_totaliVociCosto">
+              <td>
+                <p class="econmy_value_tab">{{array_totaliVociCosto.descrizione}}</p>
+              </td>
+              <td>
+                <p class="econmy_value_tab">€ {{array_totaliVociCosto.value | decimalCustomPipe}}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="label_tot">TOTALE</p>
+              </td>
+              <td>
+                <p class="label_tot">€ {{totale_totaliVociCosto | decimalCustomPipe}}</p>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!--
+      TOTALI VOCI DI COSTO ACR
+      -->
+      <div class="card" style="margin-top: 20px">
+        <div class="card-header card_tiitle">
+          TOTALI VOCI DI COSTO ACR
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <tbody >
+            <tr *ngFor="let array_totaliVociCostoAcr of array_totaliVociCostoAcr">
+              <td>
+                <p class="econmy_value_tab">{{array_totaliVociCostoAcr.descrizione}}</p>
+              </td>
+              <td>
+                <p class="econmy_value_tab">€ {{array_totaliVociCostoAcr.value | decimalCustomPipe}}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="label_tot">TOTALE</p>
+              </td>
+              <td>
+                <p class="label_tot">€ {{totale_totaliVociCostoAcr | decimalCustomPipe}}</p>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!--
+      BOTTONE SALVA
+      -->
+      <div style="margin-top: 20px">
+      <button type="button" class="btn btn-primary " style="border-radius: 20px">SALVA</button>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--
+    FINE DIV INIZIALI
+    -->
+  </div>
+</div>

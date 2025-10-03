@@ -1,0 +1,38 @@
+.page {
+
+}
+.header {
+  background-color: #FAFAFA;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 50px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  vertical-align: center;
+  //padding: 15px 0 0 0;
+}
+.section {
+  //background-color: #00b0f0;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  vertical-align: center;
+}
+.action-section {
+  //background-color: #00b0f0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.btn-blue {
+  color: #fff;
+  background-color: #005069;
+  border-color: #005069;
+}
+.btn-green {
+  color: #fff;
+  background-color: #558a51;
+  border-color: #558a51;
+}

@@ -1,0 +1,55 @@
+<div class="page">
+    <div class="header">
+        <div class="section">
+            <mat-form-field appearance="fill">
+                <mat-label>CRM - Mese</mat-label>
+                <mat-select (selectionChange)="onChangePeriodCrm('month', $event)" [value]="selectePeriod?.crm?.month">
+                    <mat-option *ngFor="let month of monthRange" [value]="month.value">
+                        {{ month.label }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>CRM - Anno</mat-label>
+                <mat-select (selectionChange)="onChangePeriodCrm('year', $event)" [value]="selectePeriod?.crm?.year">
+                    <mat-option *ngFor="let year of yearRange" [value]="year">
+                        {{ year }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="section">
+            <mat-form-field appearance="fill">
+                <mat-label>EWM - Mese</mat-label>
+                <mat-select (selectionChange)="onChangePeriodEwm('month', $event)" [value]="selectePeriod?.ewm?.month">
+                    <mat-option *ngFor="let month of monthRange" [value]="month.value">
+                        {{ month.label }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>EWM - Anno</mat-label>
+                <mat-select (selectionChange)="onChangePeriodEwm('year', $event)" [value]="selectePeriod?.ewm?.year">
+                    <mat-option *ngFor="let year of yearRange" [value]="year">
+                        {{ year }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="action-section">
+            <button type="button" class="btn btn-blue" (click)="getDataForecast()" [disabled]="isSelectedPeriodEmpty()">
+                <i class="fas fa-search"></i> Ricerca
+            </button>
+            <button type="button" class="btn btn-green" (click)="exportAllDataAsXLSX()">
+                <i class="fas fa-file-excel"></i> Esporta dati
+            </button>
+        </div>
+
+        <div class="col-md-12 main-section d-block d-sm-none">
+            <h3 class="main-title">WBS Manager</h3>
+        </div>
+    </div>
+    <div id="report-container"></div>
+</div>

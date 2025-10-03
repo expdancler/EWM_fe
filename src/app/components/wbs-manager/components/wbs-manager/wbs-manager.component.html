@@ -1,0 +1,253 @@
+<div class="container-fluid" >
+  <!--   <div class="row" >
+      <div class="col-md-12 main-section d-none d-sm-block" style="height: 30px">
+        <h5 class="main-title">WBS Manager</h5>
+      </div>
+      <div class="col-md-12 main-section d-block d-sm-none">
+        <h5 class="main-title">WBS Manager</h5>
+      </div>
+    </div> -->
+    <div class="row">
+      <nav class="navbar navbar-expand-lg lateral ">
+        <button class="btn" style="box-shadow: none;" type="button" (click)="sidebarOpen()" data-bs-toggle="collapse" data-bs-target="#sidebarLeft" aria-expanded="true" aria-controls="sidebarLeft">
+          <div *ngIf="openSid">
+            <i class="fas fa-angle-left" title="Nascondi anagrafica"></i>
+          </div>
+          <div *ngIf="!openSid">
+            <i class="fas fa-angle-right" style="margin-right: 5px;" title="Mostra anagrafica"></i>
+            <p class="highlighted_text wbs-sidebar">{{EsHeader.Wbs}}</p>
+          </div>
+        </button>
+        <ul class="navbar-nav" style="margin-left: 30%;">
+          <li class="nav-item" [ngStyle]="border_bottom" *ngIf="appare_acr==true">
+            <a class="nav-link " (click)="click_acr()" [ngStyle]="word_navbar">ACR</a>
+          </li>
+          <li class="nav-item" *ngIf="appare_acr==false">
+            <a class="nav-link" (click)="click_acr()">ACR</a>
+          </li>
+
+          <li class="nav-item" [ngStyle]="border_bottom" *ngIf="revType === 'TM' && appare_tariffe == true">
+            <a class="nav-link " (click)="click_tariffe()" [ngStyle]="word_navbar">Profili T&M</a>
+          </li>
+          <li class="nav-item" *ngIf="revType === 'TM' && appare_tariffe == false">
+            <a class="nav-link" (click)="click_tariffe()">Profili T&M</a>
+          </li>
+
+          <li class="nav-item" [ngStyle]="border_bottom" *ngIf="appare_forecast==true">
+            <a class="nav-link" (click)="click_forecast()" [ngStyle]="word_navbar">Forecast e Consuntivi</a>
+          </li>
+          <li class="nav-item" *ngIf="appare_forecast==false">
+            <a class="nav-link" (click)="click_forecast()">Forecast e Consuntivi</a>
+          </li>
+          <li class="nav-item" [ngStyle]="border_bottom" *ngIf="appare_comunicazioni==true">
+            <a class="nav-link" (click)="click_comunicazioni()" [ngStyle]="word_navbar">Comunicazioni {{viewCommToRead()}}</a>
+          </li>
+          <li class="nav-item" *ngIf="appare_comunicazioni==false">
+            <a class="nav-link" (click)="click_comunicazioni()">Comunicazioni {{viewCommToRead()}}</a>
+          </li>
+        <!--<li class="nav-item" [ngStyle]="border_bottom" *ngIf="appare_costiForecast==true">
+            <a class="nav-link " (click)="click_costiForecast()" [ngStyle]="word_navbar">Costi Forecast</a>
+          </li>
+          <li class="nav-item" *ngIf="appare_costiForecast==false">
+            <a class="nav-link" (click)="click_costiForecast()">Costi Forecast</a>
+          </li> -->
+        </ul>
+      </nav>
+    </div>
+    <div class="tendinaSx col-md-2">
+  <!--     <button class="navbar-toggler" type="button" style="background-color: white; height: 50px;" data-bs-toggle="collapse" data-bs-target="#sidebarLeft" aria-expanded="true" aria-controls="flush-collapseOne">
+        <i class="fas fa-bars"></i>
+      </button> -->
+    </div>
+    <div class="row">
+      <div class="col-md-2 form lateral navbar-nav-scroll collapse show" id="sidebarLeft" style="--bs-scroll-height: 100vh;">
+        <div class="list-group">
+          <div class="list-group-item list-group-item-action flex-column align-items-start card_performance">
+              <!--<div  style="margin-top: 10px" [ngClass]="{
+                'neutral-color-section': EsHeader.neutral,
+                'red-color-section': EsHeader.red,
+                'orange-color-section': EsHeader.orange,
+                'green-color-section': EsHeader.green
+             }">
+  
+              <p class="highlighted_text" style="margin-top: -9px;margin-left: 5px" >{{EsHeader.Wbs}}</p>
+              <p class="strong_opacity_text" style="margin-top: -9px;margin-left: 5px">{{EsHeader.DescrWbs}}</p>
+              </div>-->
+            <div *ngIf="EsHeader.Performance == '0'" class="neutral-color-section" style="margin-top: 10px" [matTooltip]="'Performance di marginalità rispetto alla ACR non disponibile'">
+              <p class="highlighted_text wbs-style" >{{EsHeader.Wbs}}</p>
+              <p class="strong_opacity_text descr-wbs-style">{{EsHeader.DescrWbs}}</p>
+            </div>
+            <div *ngIf="EsHeader.Performance == '3'" class="green-color-section" style="margin-top: 10px" [matTooltip]="'Le performance di marginalità sono maggiori o uguali alla ACR'">
+              <p class="highlighted_text wbs-style" >{{EsHeader.Wbs}}</p>
+              <p class="strong_opacity_text descr-wbs-style">{{EsHeader.DescrWbs}}</p>
+            </div>
+            <div *ngIf="EsHeader.Performance == '1'" class="red-color-section" style="margin-top: 10px" [matTooltip]="'Le performance di marginalità sono inferiori alla ACR ed oltre il range di accettabilità'">
+              <p class="highlighted_text wbs-style" >{{EsHeader.Wbs}}</p>
+              <p class="strong_opacity_text descr-wbs-style">{{EsHeader.DescrWbs}}</p>
+            </div>
+            <div *ngIf="EsHeader.Performance == '2'" class="orange-color-section" style="margin-top: 10px" [matTooltip]="'Le performance di marginalità sono inferiori alla ACR ma nel range di accettabilità'">
+              <p class="highlighted_text wbs-style" >{{EsHeader.Wbs}}</p>
+              <p class="strong_opacity_text descr-wbs-style">{{EsHeader.DescrWbs}}</p>
+            </div>
+            <div>
+              <p class="opacity_text">Tip. avanzamento: <b class="bold_text">{{EsHeader.DescrRevType}}</b></p>
+              <p *ngIf="EsHeader.RevType === 'CA'" class="opacity_text">Tip. Fatturazione: <b class="bold_text">{{textTipFatturazione(EsHeader.InvType)}}</b></p>
+              <p *ngIf="EsHeader.RevType === 'CA'" class="opacity_text">Freq. Fatturazione: <b class="bold_text">{{textFreqFatturazione(EsHeader.InvFreq)}}</b></p>
+              
+              <p class="opacity_text">Performance {{lastConsMonth}} / {{lastConsYear}}</p>
+              <p class="opacity_text">Costi : <b class="bold_text">{{Costs | decimalCustomPipe}} €</b></p>
+              <p class="opacity_text">W.I.P. : <b class="bold_text">{{Revenues | decimalCustomPipe}} €</b></p>
+              <p class="opacity_text" >Marginalità : <b class="bold_text">{{Profitability | decimalCustomPipe}} %</b></p>
+              <p class="" data-toggle="modal" data-target="#myModal"
+                 style="cursor: pointer;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+              color: #0D67D0; "href="javascript:{}">Fatturato : <b class="bold_text">{{Billing | decimalCustomPipe}} €</b></p>
+              <p class="opacity_text">W.I.P. netto : <b class="bold_text">{{NetWip | decimalCustomPipe}} €</b></p>
+              <br>
+              <p class="opacity_text">Forecast</p>
+              <p class="opacity_text">Costi : <b class="bold_text">{{Costi | decimalCustomPipe}} €</b></p>
+              <p class="opacity_text">Ricavi : <b class="bold_text">{{Ricavi | decimalCustomPipe}} €</b></p>
+              <p class="opacity_text" >Marginalità : <b class="bold_text">{{Marginalita | decimalCustomPipe}} %</b></p>
+              <br>
+              <b>Costi a Finire : <b class="bold_text">{{CostiFinire | decimalCustomPipe}} €</b></b>
+            </div>
+          </div>
+        </div>
+        <hr>
+  
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+          <div class="accordion-item" style="background-color: #F5F5F5;">
+            <h2 class="accordion-header" id="flush-headingOne">
+              <button class="accordion-button collapsed" type="button" style="background-color: #F5F5F5; height: 50px;" data-bs-toggle="collapse" data-bs-target="#cliente" aria-expanded="true" aria-controls="flush-collapseOne">
+                <p style="float: left" class="opacity_text">CLIENTE</p>
+              </button>
+            </h2>
+            <div id="cliente" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                <p class="opacity_text">Ragione sociale: <b class="bold_text">{{EsHeader.DescrCustomer}}</b></p>
+                <p class="opacity_text">Codice SAP : <b class="bold_text">{{EsHeader.Customer}}</b></p>
+                <p class="opacity_text">Paese : <b class="bold_text">{{EsHeader.DescrCustLand}}</b></p>
+                <p class="opacity_text" *ngIf="EsHeader.CustType == 0 || EsHeader.CustType==undefined">Pubblico/Privato : <b class="bold_text"></b></p>
+                <p class="opacity_text" *ngIf="EsHeader.CustType == 1">Pubblico/Privato : <b class="bold_text">Pubblico</b></p>
+                <p class="opacity_text" *ngIf="EsHeader.CustType == 2">Pubblico/Privato : <b class="bold_text">Privato</b></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+  
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+          <div class="accordion-item" style="background-color: #F5F5F5;">
+            <h2 class="accordion-header" id="flush-headingOne">
+              <button class="accordion-button collapsed" type="button" style="background-color: #F5F5F5; height: 50px;" data-bs-toggle="collapse" data-bs-target="#marketUnit" aria-expanded="true" aria-controls="flush-collapseOne">
+                <p style="float: left" class="opacity_text">MARKET UNIT</p>
+              </button>
+            </h2>
+            <div id="marketUnit" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                <p class="opacity_text margin_top_nine" style="margin-top: 9px">Mercato: <b
+                    class="bold_text">{{EsHeader.Marketunit}}</b></p>
+                <p class="opacity_text margin_top_twenty">Descrizione : <b class="bold_text">{{EsHeader.DescrMarket}}</b></p>
+                <p class="opacity_text margin_top_twenty">Responsabile : <b
+                    class="bold_text">{{EsHeader.RespMarket}}</b></p>
+                <p class="opacity_text margin_top_twenty">Account : <b class="bold_text">{{EsHeader.Account}}</b></p>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <hr>
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+          <div class="accordion-item" style="background-color: #F5F5F5;">
+            <h2 class="accordion-header" id="flush-headingOne">
+              <button class="accordion-button collapsed" type="button" style="background-color: #F5F5F5; height: 50px;" data-bs-toggle="collapse" data-bs-target="#digitalFactory" aria-expanded="true" aria-controls="flush-collapseOne">
+                <p style="float: left" class="opacity_text">DIGITAL FACTORY</p>
+              </button>
+            </h2>
+            <div id="digitalFactory" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                <p class="opacity_text margin_top_nine" style="margin-top: 9px">DF: <b class="bold_text">{{EsHeader.DigitalFactory}}</b></p>
+                <p class="opacity_text margin_top_twenty">Descrizione DF: <b class="bold_text">{{EsHeader.DescrDf}}</b></p>
+                <p class="opacity_text margin_top_twenty">Responsabile DF: <b class="bold_text">{{EsHeader.RespDf}}</b></p>
+                <p class="opacity_text margin_top_nine" style="margin-top: 9px">Delivery Center: <b class="bold_text">{{EsHeader.ProfitCenter}}</b></p>
+                <p class="opacity_text margin_top_twenty">Descrizione DC: <b class="bold_text">{{EsHeader.DescrProfitCenter}}</b></p>
+                <p class="opacity_text margin_top_twenty">Responsabile DC: <b class="bold_text">{{EsHeader.RespProfitCenter}}</b></p>
+                <p class="opacity_text margin_top_nine" style="margin-top: 9px">Project Manager: <b class="bold_text">{{EsHeader.ProjectManager}}</b></p>
+                <p class="opacity_text margin_top_twenty">RAC: <b class="bold_text">{{EsHeader.Rac}}</b></p>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <hr>
+      </div>
+  
+      
+      <div class="p-3 background_acr" *ngIf="appare_acr == true" [ngClass]=" openSid ? 'col-md-10' : 'col-md-12'">
+        <app-acr [dataWBsDetail]="dataWBsDetail"></app-acr>
+      </div>
+
+      <div class="p-3 background_acr" *ngIf="appare_tariffe == true " [ngClass]=" openSid ? 'col-md-10' : 'col-md-12'">
+        <app-tariffe-contrattuali [dataWBsDetail]="dataWBsDetail" (aggiornaEsProfCtr)="changeDataWBbsDetail($event)"></app-tariffe-contrattuali>
+      </div>
+
+      <div class="background_forecast" *ngIf="appare_forecast == true" [ngClass]=" openSid ? 'col-md-10' : 'col-md-12'">
+        <app-forecast-consuntivi [dataWBsDetail]="dataWBsDetail" [wbs]="wbs" [role]="role" [revType]="revType" [action]="action" [EtPrcstList]="EtPrcstList" [EtSupplList]="EtSupplList" [WbsCe]="WbsCe" (dataWBsDetailUpdated)="changeDataWBbsDetail($event)">
+        </app-forecast-consuntivi>
+      </div>
+
+      <div class="p-3" *ngIf="appare_comunicazioni == true" [ngClass]=" openSid ? 'col-md-10' : 'col-md-12'">
+        <app-comunicazioni [dataWBsDetail]="dataWBsDetail" (messLetti)="saveMessLett($event)"></app-comunicazioni>
+      </div>
+
+      <div class="p-3 background_acr" *ngIf="appare_costiForecast == true" [ngClass]=" openSid ? 'col-md-10' : 'col-md-12'">
+        <app-costi-forecast></app-costi-forecast>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Importo Fatturato-->
+  <div class="container">
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Dettaglio</h5>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <table class="table">
+              <thead>
+              <tr class="tr-section-color">
+                <th>
+                  <p class="bold_text font-color">Nr.Fattura</p>
+                </th>
+                <th>
+                  <p class="bold_text font-color">Data Emissione</p>
+                </th>
+                <th>
+                  <p class="bold_text font-color">Importo (€)</p>
+                </th>
+              </tr>
+              </thead>
+              <tbody *ngFor="let TBalInv of dataWBsDetail.data?.EsBalance.TBalInv">
+              <tr class="opacity_text">
+                <td>
+                  <p class="opacity_value_tab">{{TBalInv.Invoice}}</p>
+                </td>
+                <td>
+                  <p class="opacity_value_tab">{{TBalInv.BillDate | date: 'dd/MM/yyyy'}}</p>
+                </td>
+                <td>
+                  <p class="opacity_value_tab">€ {{TBalInv.Value | decimalCustomPipe}}</p>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

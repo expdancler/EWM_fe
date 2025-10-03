@@ -1,0 +1,66 @@
+<table class="table" aria-label="Tabella dettaglio forecast">
+	<thead>
+		<tr class="tr-section-color">
+			<th>
+				<p class="bold_text font-color">CID</p>
+			</th>
+			<th>
+				<p class="bold_text font-color">Nome</p>
+			</th>
+			<th>
+				<p class="bold_text font-color">Data</p>
+			</th>
+
+			<th>
+				<p class="bold_text font-color">Tipo lavoro</p>
+			</th>
+			<th>
+				<p class="bold_text font-color">Importo</p>
+			</th>
+			<th>
+				<p class="bold_text font-color">Ore</p>
+			</th>
+			<th>
+				<p class="bold_text font-color">Sede lavorativa</p>
+			</th>
+			<th>
+				<p class="bold_text font-color">Profilo di costo</p>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="opacity_text" *ngFor="let emplDet of dataTBalEmplDet">
+			<td>
+				<p class="opacity_value_tab">{{ emplDet?.Persno }}</p>
+			</td>
+			<td>
+				<p class="opacity_value_tab">{{ emplDet?.Name }}</p>
+			</td>
+			<td>
+				<p class="opacity_value_tab">
+					{{ emplDet?.WorkDate | date : 'dd/MM/YYYY' }}
+				</p>
+			</td>
+			<td>
+				<p class="opacity_value_tab">{{ emplDet?.WorkType }}</p>
+			</td>
+
+			<td>
+				<p class="opacity_value_tab">
+					{{ emplDet?.Value | decimalCustomPipe }}
+				</p>
+			</td>
+			<td>
+				<p class="opacity_value_tab">
+					{{ emplDet?.Quantity | decimalCustomPipe }}
+				</p>
+			</td>
+			<td>
+				<p class="opacity_value_tab">{{ emplDet?.Site }}</p>
+			</td>
+			<td>
+				<p class="opacity_value_tab">{{ emplDet?.CostProfile }}</p>
+			</td>
+		</tr>
+	</tbody>
+</table>

@@ -1,0 +1,184 @@
+<table class="table" aria-label="Tabella dettaglio forecast">
+	<thead>
+		<tr class="tr-section-color">
+			<th class="th-width-5"></th>
+			<th class="th-width-18">
+				<p class="bold_text font-color">Profilo</p>
+			</th>
+			<th class="th-width-10">
+				<p class="bold_text font-color">Tariffa</p>
+			</th>
+			<th class="slide-toggle"></th>
+			<th class="th-width-10">
+				<p class="bold_text font-color">GG</p>
+			</th>
+			<th class="th-width-15">
+				<p class="bold_text font-color">Importo €</p>
+			</th>
+		</tr>
+	</thead>
+	<!-- <ng-container [formGroup]="profiloFormGroup">
+		<ng-container formArrayName="profiliArray"> -->
+	<tbody class="opacity_text">
+		<ng-container *ngFor="let tariffaCons of dataWBsDetail.data.EsBalance.TBalProf; let i = index">
+			<tr *ngIf="tariffaCons.Fyear == annoCardSelezionato && tariffaCons.Fmonth == meseCardSelezionato">
+				<td class="font-size-13">
+					<!-- *ngIf="!readOnly" -->
+					<div>
+						<p
+								*ngIf="!tariffaCons.AutoInd && !readOnly"
+								(click)="eliminaRiga(i)"
+								class="font-size-13"
+								style="margin: auto">
+							<em class="fas fa-trash-alt icon-table"></em>
+						</p>
+						<!--note-->
+						<div class="dropdown">
+							<p
+									style="font-size: 13px; margin: auto"
+									id="pencilCostoPer"
+									data-toggle="dropdown"
+									aria>
+								<b
+										*ngIf="
+									!readOnly &&
+									(tariffaCons.Description == undefined ||
+										tariffaCons.Description == '' ||
+										tariffaCons.Description == ' ')
+								">
+									<em class="fas fa-pencil-alt icon-table"></em>
+								</b>
+								<b
+										*ngIf="
+									tariffaCons.Description != undefined &&
+									tariffaCons.Description != '' &&
+									tariffaCons.Description != ' '
+								">
+									<i
+											class="fas fa-sticky-note"
+											style="color: #ffd700; cursor: pointer"
+											data-toggle="tooltip"
+											data-placement="top"
+											[title]="tariffaCons.Description"></i>
+								</b>
+							</p>
+							<!--COLOR NOTE  #ffff9e-->
+							<div
+									class="dropdown-menu"
+									aria-labelledby="pencilCostoPer"
+									style="background-color: #ffd700">
+							<textarea
+									rows="5"
+									id="commentCostPer"
+									maxlength="100"
+									style="background-color: #ffd700; border: none"
+									[(ngModel)]="tariffaCons.Description"
+									[readonly]="readOnly"></textarea>
+							</div>
+						</div>
+					</div>
+				</td>
+				<ng-container [formGroup]="profiloFormGroup">
+					<ng-container formArrayName="profiloArray">
+						<td [formGroupName]="i">
+							<!-- <mat-form-field appearance="outline" class="font-size-11"> -->
+							<!-- [value]="tariffaCons" -->
+							<!-- [matTooltip]="tariffaCons.Profile" -->
+							<!-- [compareWith]="compareObjects" -->
+							<!-- [disabled]="readOnly" -->
+							<mat-form-field appearance="outline" class="form-field-profilo">
+								<mat-select
+										formControlName="Profilo"
+										(selectionChange)="tariffaSelezionata($event, i)"
+										[compareWith]="compareObjects"
+										[disabled]="readOnly"
+										required>
+									<mat-select-trigger class="font-size-11">
+										{{ tariffaCons.Profile }}
+									</mat-select-trigger>
+									<mat-option
+											*ngFor="let profilo of listaProfili"
+											[value]="profilo">
+										{{ visualizzazioneSelezioneProfilo(profilo) }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+							<mat-error
+									*ngIf="
+								profiloFormArray.controls[i]
+									?.get('Profilo')
+									?.hasError('required')
+							"
+							>Scegliere un profilo</mat-error
+							>
+							<!-- </mat-form-field> -->
+						</td>
+					</ng-container>
+				</ng-container>
+
+				<td>
+					<p class="font-size-11">
+						{{ tariffaCons.Rate | decimalCustomPipe }}
+					</p>
+				</td>
+				<td>
+					<mat-slide-toggle
+							*ngIf="
+						!readOnly && tariffaCons.Profile !== 'ALTRO' && tariffaCons.AutoInd
+					"
+							[checked]="tariffaCons?.ManInd === 'X'"
+							(change)="selettore($event, i)"
+							color="primary">
+					</mat-slide-toggle>
+				</td>
+				<td>
+					<input
+							class="form-control font-size-11"
+							[value]="tariffaCons.Quantity | decimalCustomPipe: 3"
+							(change)="calcolaImporto($event, i)"
+							[disabled]="readOnly || tariffaCons.Profile === 'ALTRO' || !tariffaCons.ManInd"
+					/>
+				</td>
+				<td>
+					<input
+							class="form-control font-size-11"
+							[value]="tariffaCons.Value | decimalCustomPipe"
+							(change)="consuntivoTmImporto($event, tariffaCons, i)"
+							[disabled]="readOnly || tariffaCons.Profile !== 'ALTRO'" />
+					<p *ngIf="trovaIndiceErrore(i)" class="pErrorTab">Notazione errata</p>
+				</td>
+			</tr>
+		</ng-container>
+		<tr class="tr-section-color" *ngIf="mostraTotali()">
+			<th class="th-width-5"></th>
+			<th class="th-width-18">
+				<p class="bold_text font-color"></p>
+			</th>
+			<th class="th-width-10">
+				<p class="bold_text font-color"></p>
+			</th>
+			<th class="slide-toggle"></th>
+			<th class="th-width-10">
+				<input
+						class="form-control font-size-11"
+						[value]="sumQuantity() | decimalCustomPipe: 3"
+						disabled
+				/>
+			</th>
+			<th class="th-width-15">
+				<p class="bold_text font-color"></p>
+			</th>
+		</tr>
+	</tbody>
+	<!-- </ng-container>
+	</ng-container> -->
+</table>
+<div>
+	<button
+		*ngIf="!readOnly"
+		mat-button
+		class="medium_strong_text"
+		(click)="aggiungiRiga()">
+		Aggiungi
+	</button>
+</div>

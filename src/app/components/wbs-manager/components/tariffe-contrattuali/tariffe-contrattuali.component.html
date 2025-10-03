@@ -1,0 +1,352 @@
+<div>
+	<div class="card card-table">
+		<div class="card-header card_tiitle">PROFILI CONTRATTUALI (a cura del RAC)</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-md-12">
+					<table class="table" aria-describedby="PROFILI CONTRATTUALI">
+						<thead>
+							<tr>
+								<th class="font-th th-width-5"></th>
+								<!-- <th class="font-th th-width-5">P</th> -->
+								<th class="font-th th-width-10">PROFILO</th>
+								<th class="font-th">DESCRIZIONE</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let TProf of EsProfCtr?.TProf; let i = index">
+								<td class="opacity_text font-size-11">
+									<button
+										*ngIf="abilitaButtonPm()"
+										mat-icon-button
+										(click)="
+											confermaEliminaRigaDialog(i, 'TProf', TProf.ProfileId)
+										"
+										class="icon-dimension"
+										matTooltip="Elimina riga">
+										<mat-icon>delete</mat-icon>
+									</button>
+								</td>
+								<!-- <td class="opacity_text font-size-11">
+									<p class="profile-id">{{ TProf.ProfileId }}</p>
+								</td> -->
+								<td class="opacity_text font-size-11">
+									<mat-form-field appearance="outline">
+										<mat-label> Profilo </mat-label>
+										<input
+											matInput
+											[disabled]="disabilitaInputPm() || TProf.received"
+											[value]="TProf?.Profile"
+											[maxLength]="20"
+											(change)="validazioneProfilo($event, TProf, i)" />
+									</mat-form-field>
+									<p
+										*ngIf="trovaIndiceErrore(i, 'indiceProfili')"
+										class="pErrorTab">
+										Inserire profilo diverso e non vuoto
+									</p>
+								</td>
+								<td class="opacity_text font-size-11">
+									<mat-form-field
+										appearance="outline"
+										class="form-field-descrizione">
+										<mat-label> Descrizione </mat-label>
+										<input
+											[disabled]="disabilitaInputPm()"
+											matInput
+											[value]="TProf.Description"
+											(change)="validazioneDescrizione($event, TProf, i)" />
+									</mat-form-field>
+									<p
+										*ngIf="trovaIndiceErrore(i, 'indiceDescrizione')"
+										class="pErrorTab">
+										Inserire una descrizione non vuota
+									</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div>
+				<button
+					*ngIf="abilitaButtonPm()"
+					mat-button
+					color="primary"
+					(click)="aggiungiRiga('TProf')">
+					Aggiungi
+				</button>
+				<button
+					*ngIf="abilitaButtonPm() && !disabilitaApplicaModifica()"
+					mat-button
+					color="primary"
+					(click)="applicaModifica()">
+					Applica Modifica
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="card card-table" *ngIf="visualizzaTabella()">
+		<div class="card-header card_tiitle">TARIFFE CONTRATTUALI (a cura del RAC)</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-md-12">
+					<table class="table" aria-describedby="TARIFFE CONTRATTUALI">
+						<thead>
+							<tr>
+								<th class="font-th th-width-5"></th>
+								<!-- <th class="font-th th-width-5">T</th>
+								<th class="font-th th-width-5">P</th> -->
+								<th class="font-th">PROFILO</th>
+								<th class="font-th">TARIFFA</th>
+								<th class="font-th">INIZIO VALIDITÀ</th>
+								<th class="font-th">FINE VALIDITÀ</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ng-container [formGroup]="formRate">
+								<ng-container formArrayName="rateArray">
+									<tr
+										*ngFor="let TRate of EsProfCtr?.TRate; let i = index"
+										[formGroupName]="i">
+										<td class="opacity_text font-size-11">
+											<button
+												*ngIf="abilitaButtonPm()"
+												mat-icon-button
+												(click)="
+													confermaEliminaRigaDialog(i, 'TRate', TRate.ProfileId)
+												"
+												class="icon-dimension"
+												matTooltip="Elimina riga">
+												<mat-icon>delete</mat-icon>
+											</button>
+										</td>
+										<!-- <td class="opacity_text font-size-11">
+											{{ TRate.RateId }}
+										</td>
+										<td class="opacity_text font-size-11">
+											{{ TRate.ProfileId }}
+										</td> -->
+										<!-- [disabled]="disabilitaInputPm()" -->
+										<td class="opacity_text font-size-11">
+											<mat-form-field appearance="outline" class="mat-field">
+												<mat-label>Profilo</mat-label>
+												<mat-select
+													formControlName="profileId"
+													[value]="TRate.ProfileId"
+													(selectionChange)="aggiornaRateIdRiga($event, TRate)"
+													[disabled]="TRate.received"
+													required>
+													<mat-option>--</mat-option>
+													<mat-option
+														*ngFor="let profilo of listaProfili"
+														[value]="profilo.ProfileId">
+														{{ profilo.Profile }}
+													</mat-option>
+												</mat-select>
+												<mat-error
+													*ngIf="
+														rateFormArray.controls[i]
+															?.get('profileId')
+															?.hasError('required')
+													"
+													>Inserire un profilo</mat-error
+												>
+											</mat-form-field>
+										</td>
+										<td class="opacity_text font-size-11">
+											<mat-form-field appearance="outline">
+												<mat-label> Tariffa </mat-label>
+												<input
+													matInput
+													[disabled]="disabilitaInputPm()"
+													name="rate"
+													id="rate"
+													[value]="TRate.Rate | decimalCustomPipe"
+													(change)="aggiornaRate($event, TRate, i)" />
+											</mat-form-field>
+											<p
+												*ngIf="trovaIndiceErrore(i, 'indiceTariffa')"
+												class="pErrorTab">
+												Notazione errata
+											</p>
+										</td>
+										<!-- [disabled]="disabilitaInputPm()" -->
+										<td class="opacity_text font-size-11">
+											<mat-form-field appearance="outline">
+												<mat-label>Inizio validita</mat-label>
+												<input
+													matInput
+
+													[matDatepicker]="picker1"
+													formControlName="startDate"
+													(dateChange)="
+														validazioneDate($event, TRate, i, 'StartDate')
+													" />
+												<mat-datepicker-toggle
+													matSuffix
+													[for]="picker1"></mat-datepicker-toggle>
+												<mat-datepicker #picker1></mat-datepicker>
+											</mat-form-field>
+											<p
+												class="pErrorTab"
+												*ngIf="trovaIndiceErrore(i, 'indiceData')">
+												Errore data inziale
+											</p>
+										</td>
+										<!-- [disabled]="disabilitaInputPm()" -->
+										<td class="opacity_text font-size-11">
+											<mat-form-field appearance="outline">
+												<mat-label>Fine validita</mat-label>
+												<input
+													matInput
+
+													[matDatepicker]="picker2"
+													formControlName="endDate"
+													(dateChange)="
+														validazioneDate($event, TRate, i, 'EndDate')
+													" />
+												<mat-datepicker-toggle
+													matSuffix
+													[for]="picker2"></mat-datepicker-toggle>
+												<mat-datepicker #picker2></mat-datepicker>
+											</mat-form-field>
+											<p
+												class="pErrorTab"
+												*ngIf="trovaIndiceErrore(i, 'indiceData')">
+												Errore data finale
+											</p>
+										</td>
+									</tr>
+								</ng-container>
+							</ng-container>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div>
+				<button
+					*ngIf="abilitaButtonPm()"
+					mat-button
+					color="primary"
+					(click)="aggiungiRiga('TRate')">
+					Aggiungi
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="card card-table" *ngIf="visualizzaTabella()">
+		<div class="card-header card_tiitle">DIPENDENTI (a cura del PM)</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-md-12">
+					<table class="table" aria-describedby="DIPENDENTI">
+						<thead>
+							<tr>
+								<th class="font-th th-width-5"></th>
+								<th class="font-th th-width-10">PROFILO</th>
+								<th class="font-th">NOMINATIVO</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ng-container [formGroup]="controlNominativo">
+								<ng-container formArrayName="nominativi">
+									<tr
+										*ngFor="let TEmpl of EsProfCtr?.TEmpl; let i = index"
+										[formGroupName]="i">
+										<td class="opacity_text font-size-11">
+											<button
+												*ngIf="abilitaButtonRac()"
+												mat-icon-button
+												(click)="
+													confermaEliminaRigaDialog(i, 'TEmpl', TEmpl.ProfileId)
+												"
+												class="icon-dimension"
+												matTooltip="Elimina riga">
+												<mat-icon>delete</mat-icon>
+											</button>
+										</td>
+
+										<td class="opacity_text font-size-11">
+											<mat-form-field appearance="outline" class="mat-field">
+												<mat-select
+													[(value)]="TEmpl.ProfileId"
+													[disabled]="disabilitaInputRac() || TEmpl.received"
+													(selectionChange)="validazioneProfiloDip($event, TEmpl, i)"
+													required>
+													<mat-option
+														*ngFor="let profilo of listaProfili"
+														[value]="profilo.ProfileId">
+														{{ profilo.Profile }}
+													</mat-option>
+												</mat-select>
+											</mat-form-field>
+											<p *ngIf="trovaIndiceErrore(i, 'indiceProfiliDip')" class="pErrorTab">
+												Inserire un profilo
+											</p>
+										</td>
+
+										<td class="opacity_text font-size-11">
+											<mat-form-field appearance="outline" class="form-field-descrizione">
+												<mat-label>Nominativo</mat-label>
+												<input
+													type="text"
+													matInput
+													formControlName="controlNom"
+													name="controlNom"
+													id="controlNom"
+													[ngStyle]="{
+														color: disabilitaInputRac()
+															? 'rgba(0,0,0,.38)'
+															: 'black'
+													}"
+													[matAutocomplete]="auto"
+													(change)="validazioneNominativo(TEmpl, i, $event)"
+													/>
+												<mat-autocomplete
+													#auto="matAutocomplete"
+													[displayWith]="displayFn"
+													(optionSelected)="nominativoSelezionato($event, i)">
+													<mat-option
+														*ngFor="let nom of filtroOpzioni[i] | async"
+														[value]="nom">
+														{{ nom.name }}
+													</mat-option>
+												</mat-autocomplete>
+											</mat-form-field>
+											<p *ngIf="trovaIndiceErrore(i, 'indiceNominativi')" class="pErrorTab">
+												Selezionare il nominativo dalla lista suggerita
+											</p>
+										</td>
+									</tr>
+								</ng-container>
+							</ng-container>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div>
+				<button
+					*ngIf="abilitaButtonRac()"
+					mat-button
+					color="primary"
+					(click)="aggiungiRiga('TEmpl')">
+					Aggiungi
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="button-save">
+		<button
+			*ngIf="abilitaButtonPm() || abilitaButtonRac()"
+			mat-raised-button
+			color="primary"
+			(click)="salvaTariffe()"
+			[disabled]="disabilitaSalvaTabella()">
+			SALVA
+		</button>
+	</div>
+</div>

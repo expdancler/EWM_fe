@@ -1,0 +1,3199 @@
+<router-outlet xmlns="http://www.w3.org/1999/html"></router-outlet>
+<div class="row" style="font-size: 14px">
+	<!--
+  BARRA IN ALTO CONSUNTIVI
+  -->
+	<div class="col-md-7">
+		<div style="background-color: #034d6a; text-align: center; height: 25px">
+			<!---NUOVA SELECT PER LA SCELTA DELL'ANNO-->
+			<label for="Anno">
+				<p
+					(click)="buttonExprot()"
+					style="font-weight: bold; color: white; cursor: pointer; font-size: 16px"
+					data-toggle="modal"
+					data-target="#visDettagli">
+					<i class="fas fa-search" style="color: white"></i> Esercizio &nbsp;
+				</p>
+			</label>
+			<select
+				id="Anno"
+				name="interest"
+				[disabled]="disabilitedYear == true"
+				[(ngModel)]="select_year"
+				(ngModelChange)="select_year_function($event)">
+				<ng-container *ngFor="let option of optionSelectAnno">
+					<option>
+						<b>{{ option }}</b>
+					</option>
+				</ng-container>
+			</select>
+		</div>
+		<!--<ng-select
+      [(ngModel)]="select_year" [clearable]="false" (change)="select_year_function($event)"
+      [disabled]="disabilitedYear == true"
+      [items]="optionSelectAnno" bindValue="Anno" bindLabel="Anno">
+    </ng-select>-->
+		<div class="row text-center padding">
+			<div class="col-md-2">
+				<b style="font-size: 16px">Consuntivo</b>
+			</div>
+			<div class="col-md-2 opacity_text">
+				<p class="bold_text" style="font-size: 16px">Costi</p>
+				<p class="opacity_value">€ {{ costiConsuntivati | decimalCustomPipe }}</p>
+			</div>
+			<div class="col-md-2 opacity_text">
+				<p class="bold_text" style="font-size: 16px">Ricavi</p>
+				<p class="opacity_value">€ {{ ricaviMaturati | decimalCustomPipe }}</p>
+			</div>
+			<div class="col-md-2 opacity_text">
+				<p class="bold_text" style="font-size: 16px">Margine</p>
+				<ng-container *ngIf="marginalitaTotale == '-'">
+					<p class="opacity_value">{{ marginalitaTotale }} %</p>
+				</ng-container>
+				<ng-container *ngIf="marginalitaTotale != '-'">
+					<p class="opacity_value">{{ marginalitaTotale | decimalCustomPipe }} %</p>
+				</ng-container>
+			</div>
+			<div
+				*ngIf="TBalInv.length != 0"
+				class="col-md-4 opacity_text"
+				data-toggle="modal"
+				data-target="#fatturato"
+				style="cursor: pointer">
+				<p class="bold_text" style="font-size: 16px; color: #0d67d0">Fatturato {{ this.year }}</p>
+				<p class="opacity_value">€ {{ importFatturato | decimalCustomPipe }}</p>
+			</div>
+			<div *ngIf="TBalInv.length == 0" class="col-md-4 opacity_text">
+				<p class="bold_text" style="font-size: 16px">Fatturato {{ this.year }}</p>
+				<p class="opacity_value">€ {{ importFatturato | decimalCustomPipe }}</p>
+			</div>
+			<!--<div class="col-xs-4 col-sm-3 col-md-2 col-lg-2 opacity_text">
+        <p class=" text-link d-inline-block text-14p">
+          <em></em>-->
+			<!-- Trigger the modal -->
+			<!--<span *ngIf="importFatturato>0" class="hover link_dettaglio" data-toggle="modal" data-target="#myModal"
+                style="cursor: pointer;" style="font-size: 16px;">Importo fatturato</span>
+        <b *ngIf="importFatturato<=0" class="bold_text" style="font-size: 16px;">Importo fatturato</b>
+        </p>
+        <p class="opacity_value">€ {{importFatturato | decimalCustomPipe}}</p>
+      </div>-->
+			<!--<div class="col-md-2">
+        <div>-->
+			<!--
+      SCELTA ANNO DI VISUALIZZAZIONE CONSUNTIVI E FORECAST
+      -->
+			<!-- <ng-select [(ngModel)]="select_year" [clearable]="false" (change)="select_year_function($event)"
+                     [disabled]="disabilitedYear == true"
+                     [items]="optionSelectAnno" bindValue="Anno" bindLabel="Anno">
+          </ng-select>
+
+        </div>
+      </div>-->
+		</div>
+		<div class="row text-center padding">
+			<div class="col-md-2">
+				<b style="font-size: 16px">Forecast</b>
+			</div>
+			<div class="col-md-2 opacity_text">
+				<p class="bold_text" style="font-size: 16px">Costi</p>
+				<p class="opacity_value">€ {{ fcstCosti | decimalCustomPipe }}</p>
+			</div>
+			<div class="col-md-2 opacity_text">
+				<p class="bold_text" style="font-size: 16px">Ricavi</p>
+				<p class="opacity_value">€ {{ fcstRicavi | decimalCustomPipe }}</p>
+			</div>
+			<div class="col-md-2 opacity_text">
+				<p class="bold_text" style="font-size: 16px">Margine</p>
+				<ng-container *ngIf="marginalitaTotale == '-'">
+					<p class="opacity_value">{{ fcstMargine }} %</p>
+				</ng-container>
+				<ng-container *ngIf="marginalitaTotale != '-'">
+					<p class="opacity_value">{{ fcstMargine | decimalCustomPipe }} %</p>
+				</ng-container>
+			</div>
+			<div class="col-md-4 opacity_text">
+				<p class="bold_text" style="font-size: 16px">Costi a Finire {{ this.year }}</p>
+				<p class="opacity_value">€ {{ costifinire | decimalCustomPipe }}</p>
+			</div>
+		</div>
+
+		<!--
+      SCELTA ANNO DI VISUALIZZAZIONE CONSUNTIVI E FORECAST
+      -->
+		<!--********************************************************************************************************-->
+		<!--NG SELECT ORIGINALE-->
+		<!--********************************************************************************************************-->
+		<!--- <ng-select
+                     [(ngModel)]="select_year" [clearable]="false" (change)="select_year_function($event)"
+                     [disabled]="disabilitedYear == true"
+                     [items]="optionSelectAnno" bindValue="Anno" bindLabel="Anno">
+          </ng-select>-->
+
+		<!--
+FINE BARRA IN ALTO CONTUNTIVI
+-->
+		<!--EXPAND CONSUNTIVO-->
+		<div id="card" style="height: 100px; width: 100px">
+			<div class="background_card_centralMonth">
+				<div class="row">
+					<div class="col-md-5" style="margin-left: 5px">
+						<p (click)="closeConsuntivo()">
+							<i class="far fa-window-minimize" style="color: white; cursor: pointer"></i>
+						</p>
+					</div>
+					<div class="col-md-4" *ngIf="arrShowCard.Circle == 'green'" [matTooltip]="'Marginalità del mese maggiore o uguale a quella di ACR'">
+						<button type="button" style="border: none; background-color: transparent; color: white">
+							{{ arrShowCard.Fmonth | numberMonth }} {{ arrShowCard.Fyear }}
+							<i class="fas fa-circle" style="color: #00e600"></i>
+						</button>
+					</div>
+					<div class="col-md-4" *ngIf="arrShowCard.Circle == 'red'" [matTooltip]="'Marginalità del mese minore a quella di ACR'">
+						<button type="button" style="border: none; background-color: transparent; color: white">
+							{{ arrShowCard.Fmonth | numberMonth }} {{ arrShowCard.Fyear }}
+							<i class="fas fa-circle" style="color: red"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="list-group-item list-group-item-action" style="border-width: 3px">
+				<div class="row">
+					<div class="col-md-4">
+						<p>Costi : € {{ arrShowCard.Costs | decimalCustomPipe }}</p>
+					</div>
+					<div class="col-md-4">
+						<!--CONTROLLO RICAVI RevFc-->
+						<p *ngIf="arrShowCard.RevFc != 'X'">Ricavi : € {{ arrShowCard.Revenues | decimalCustomPipe }}</p>
+						<p *ngIf="arrShowCard.RevFc == 'X'">
+							Ricavi : €
+							<b style="color: red">{{ arrShowCard.Revenues | decimalCustomPipe }}</b>
+						</p>
+					</div>
+					<div class="col-md-4">
+						<p>Marginalità : {{ arrShowCard.Profitability | decimalCustomPipe }} %</p>
+					</div>
+				</div>
+				<!--TABELLA COSTO DEL PERSONALE-->
+				<br />
+				<div class="row">
+					<div class="col-md-6">
+						<b style="float: left">COSTO DEL PERSONALE CONSUNTIVO</b>
+						<table class="table">
+							<thead style="background-color: #034d6a">
+								<tr>
+									<th>
+										<p style="color: white">Profilo di Costo</p>
+									</th>
+									<th>
+										<p style="color: white">GG</p>
+									</th>
+									<th>
+										<p style="color: white">Importo €</p>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let TBalEmpl of TBalEmplExpand; let i = index">
+									<td>
+										<a href=".CstPerNomeExpand-{{ i }}" data-toggle="collapse">
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px; cursor: pointer">
+												<i class="fas fa-chevron-down" style="font-size: 10px"></i>&nbsp;
+												{{ TBalEmpl.CostProfile | sliceText: [10, '...'] }}
+											</p>
+										</a>
+										<div class="collapse CstPerNomeExpand-{{ i }}">
+											<div *ngFor="let TBalEmplName of TBalEmplExpandName">
+												<ng-container *ngIf="TBalEmpl.CostProfile == TBalEmplName.CostProfile">
+													<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+														{{ TBalEmplName.Name }}
+													</p>
+												</ng-container>
+											</div>
+										</div>
+									</td>
+									<td>
+										<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+											{{ TBalEmpl.Quantity | decimalCustomPipe}}
+										</p>
+										<div class="collapse CstPerNomeExpand-{{ i }}">
+											<div *ngFor="let TBalEmplName of TBalEmplExpandName">
+												<ng-container *ngIf="TBalEmpl.CostProfile == TBalEmplName.CostProfile">
+													<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+														{{ TBalEmplName.Quantity | decimalCustomPipe }}
+													</p>
+												</ng-container>
+											</div>
+										</div>
+									</td>
+									<td>
+										<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+											€ {{ TBalEmpl.Value | decimalCustomPipe }}
+										</p>
+										<div class="collapse CstPerNomeExpand-{{ i }}">
+											<div *ngFor="let TBalEmplName of TBalEmplExpandName">
+												<ng-container *ngIf="TBalEmpl.CostProfile == TBalEmplName.CostProfile">
+													<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+														€ {{ TBalEmplName.Value  | decimalCustomPipe}}
+													</p>
+												</ng-container>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-md-6">
+						<b style="float: left">COSTO DEL PERSONALE FORECAST</b>
+						<table class="table">
+							<thead style="background-color: #034d6a">
+								<tr>
+									<th>
+										<p style="color: white">Profilo di costo</p>
+									</th>
+									<th>
+										<p style="color: white">Costo</p>
+									</th>
+									<th>
+										<p style="color: white">GG</p>
+									</th>
+									<th>
+										<p style="color: white">Importo €</p>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let TCeEmpl of TCeEmplExpand" class="opacity_text">
+									<td>
+										<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+											{{ TCeEmpl.CostProfile }}
+										</p>
+									</td>
+									<td>
+										<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+											{{ TCeEmpl.DailyCost | decimalCustomPipe }}
+										</p>
+									</td>
+									<td>
+										<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+											{{ TCeEmpl.Quantity | decimalCustomPipe }}
+										</p>
+									</td>
+									<td>
+										<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+											€ {{ TCeEmpl.Value | decimalCustomPipe }}
+										</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!--TABELLA CONSULENZA TECNICA-->
+				<hr />
+				<div class="row">
+					<div class="col-md-6">
+						<b style="float: left">CONSULENZA TECNICA CONSUNTIVO</b>
+						<table class="table">
+							<thead style="background-color: #034d6a">
+								<tr>
+									<th>
+										<p style="color: white">Fornitore</p>
+									</th>
+									<th>
+										<p style="color: white">Dettaglio</p>
+									</th>
+									<th>
+										<p style="color: white">Nr Ordine</p>
+									</th>
+									<th>
+										<p style="color: white">Importo €</p>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let TBalCons of dataWBsDetail.data.EsBalance.TBalCons">
+									<ng-container
+										*ngIf="TBalCons.Fyear == information_card_anno && TBalCons.Fmonth == information_card_mese">
+										<td>
+											<p
+												class="opacity_value_tab"
+												style="color: #80868a; opacity: 1; font-size: 11px; cursor: pointer"
+												data-toggle="tooltip"
+												data-placement="top"
+												title="{{ TBalCons.DescSupplier }}">
+												{{ TBalCons.DescSupplier | sliceText: [10, '...'] }}
+											</p>
+										</td>
+										<td>
+											<p
+												class="opacity_value_tab"
+												style="color: #80868a; opacity: 1; font-size: 11px; cursor: pointer"
+												data-toggle="tooltip"
+												data-placement="top"
+												title="{{ TBalCons.Description }}">
+												{{ TBalCons.Description | sliceText: [10, '...'] }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TBalCons.Orderno }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												€ {{ TBalCons.Value | decimalCustomPipe }}
+											</p>
+										</td>
+									</ng-container>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-md-6">
+						<b style="float: left">CONSULENZA TECNICA FORECAST</b>
+						<table class="table">
+							<thead style="background-color: #034d6a">
+								<tr>
+									<th>
+										<p style="color: white">Fornitore</p>
+									</th>
+									<th>
+										<p style="color: white">Costo</p>
+									</th>
+									<th>
+										<p style="color: white">GG</p>
+									</th>
+									<th>
+										<p style="color: white">Importo €</p>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let TCeCons of dataWBsDetail.data.EsForecast.TCeCons">
+									<ng-container
+										*ngIf="TCeCons.Fyear == information_card_anno && TCeCons.Fmonth == information_card_mese">
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCeCons.DescSupplier }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCeCons.DailyCost }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCeCons.Quantity }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												€ {{ TCeCons.Value | decimalCustomPipe }}
+											</p>
+										</td>
+									</ng-container>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!--TABELLA VOCI DI COSTO-->
+				<hr />
+				<div class="row">
+					<div class="col-md-6">
+						<b style="float: left">VOCI DI COSTO CONSUNTIVO</b>
+						<table class="table">
+							<thead style="background-color: #034d6a">
+								<tr>
+									<th>
+										<p style="color: white">Dettaglio</p>
+									</th>
+									<th>
+										<p style="color: white">Importo €</p>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let TBalCe of TBalCe">
+									<td>
+										<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+											{{ TBalCe.DescrCe }}
+										</p>
+									</td>
+									<td>
+										<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+											€ {{ TBalCe.totalCost | decimalCustomPipe }}
+										</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-md-6">
+						<b style="float: left">VOCI DI COSTO FORECAST</b>
+						<table class="table">
+							<thead style="background-color: #034d6a">
+								<tr>
+									<th>
+										<p style="color: white">Dettaglio</p>
+									</th>
+									<th>
+										<p style="color: white">Importo €</p>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let TCostElement of dataWBsDetail.data.EsForecast.TCostElement">
+									<ng-container
+										*ngIf="TCostElement.Fyear == information_card_anno && TCostElement.Fmonth == information_card_mese">
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCostElement.DescrCe }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCostElement.Value | decimalCustomPipe }} €
+											</p>
+										</td>
+									</ng-container>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--EXPAND FORECAST-->
+		<div id="cardForecast" style="height: 100px; width: 100px">
+			<div class="forecast_emply_head">
+				<div class="row">
+					<div class="col-md-1" style="margin-left: 2px">
+						<p (click)="closeForecast()">
+							<i class="far fa-window-minimize" style="color: white; cursor: pointer"></i>
+						</p>
+					</div>
+					<div *ngIf="arrShowCard.Circle == 'green'" class="col-md-10" [matTooltip]="'Marginalità del mese maggiore o uguale a quella di ACR'">
+						<p class="white_bold_text text-center">
+							{{ arrShowCard.Fmonth | numberMonth }} {{ arrShowCard.Fyear }}
+							<i class="fas fa-circle" style="color: #00e600"></i>
+						</p>
+					</div>
+					<div *ngIf="arrShowCard.Circle == 'red'" class="col-md-10" [matTooltip]="'Marginalità del mese minore a quella di ACR'">
+						<p class="white_bold_text text-center">
+							{{ arrShowCard.Fmonth | numberMonth }} {{ arrShowCard.Fyear }}
+							<i class="fas fa-circle" style="color: red"></i>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="list-group-item list-group-item-action forecast_emply_body">
+				<div class="row">
+					<div class="col-md-4">
+						<p style="color: black">Costi : € {{ arrShowCard.Costs | decimalCustomPipe }}</p>
+					</div>
+					<div class="col-md-4">
+						<p style="color: black">Ricavi : € {{ arrShowCard.Revenues | decimalCustomPipe }}</p>
+					</div>
+					<div class="col-md-4">
+						<p style="color: black">
+							Marginalità :
+							{{ arrShowCard.Profitability | decimalCustomPipe }} %
+						</p>
+					</div>
+				</div>
+				<!--TABELLA COSTO DEL PERSONALE-->
+				<b style="float: left" style="color: black">COSTO DEL PERSONALE</b>
+				<table class="table" style="background-color: white">
+					<thead>
+						<tr>
+							<th>
+								<p class="bold_text">Profilo di costo</p>
+							</th>
+							<th>
+								<p class="bold_text">Costo</p>
+							</th>
+							<th>
+								<p class="bold_text">GG</p>
+							</th>
+							<th>
+								<p class="bold_text">Importo €</p>
+							</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<!--
+          <a href="#CstPerNome-{{ i }}" data-toggle="collapse">
+                          <p class="opacity_value_tab" style=" color: #80868A;opacity: 1;font-size: 11px">
+                            {{TBalEmpl.CostProfile}}</p>
+                        </a>
+                        <div id="CstPerNome-{{ i }}" class="collapse">
+                          <div *ngFor="let TBalEmplName of TBalEmplName">
+                            <ng-container *ngIf="TBalEmpl.CostProfile == TBalEmplName.CostProfile">
+                            <p class="opacity_value_tab" style=" color: #80868A;opacity: 1;font-size: 11px;"> {{TBalEmplName.Name}}</p>
+                            </ng-container>
+                          </div>
+                        </div>
+          -->
+						<tr *ngFor="let TCeEmpl of dataWBsDetail.data.EsForecast.TCeEmpl; let i = index" class="opacity_text">
+							<ng-container *ngIf="TCeEmpl.Fyear == information_card_anno && TCeEmpl.Fmonth == information_card_mese">
+								<td>
+									<a href="#CstPerNota-{{ i }}" data-toggle="collapse">
+										<p class="opacity_value_tab">
+											<i class="fas fa-chevron-down" style="font-size: 10px"></i>&nbsp;{{ TCeEmpl.CostProfile }}
+										</p>
+									</a>
+									<div id="CstPerNota-{{ i }}" class="collapse">
+										<div>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCeEmpl.Description }}
+											</p>
+										</div>
+									</div>
+								</td>
+								<td>
+									<p class="opacity_value_tab">
+										{{ TCeEmpl.DailyCost | decimalCustomPipe }}
+									</p>
+								</td>
+								<td>
+									<p class="opacity_value_tab">
+										{{ TCeEmpl.Quantity | decimalCustomPipe }}
+									</p>
+								</td>
+								<td>
+									<p class="opacity_value_tab">€ {{ TCeEmpl.Value | decimalCustomPipe }}</p>
+								</td>
+								<td>
+									<p
+										*ngIf="TCeEmpl.Description != undefined && TCeEmpl.Description != '' && TCeEmpl.Description != ' '"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="{{ TCeEmpl.Description }}">
+										<i class="fas fa-sticky-note" style="color: #ffd700; cursor: pointer"></i>
+									</p>
+								</td>
+							</ng-container>
+						</tr>
+					</tbody>
+				</table>
+
+				<!--TABELLA CONSULENZA TECNICA-->
+				<b style="float: left; color: black">CONSULENZA TECNICA</b>
+				<table class="table" style="background-color: white">
+					<thead>
+						<tr>
+							<th>
+								<p class="bold_text">Fornitore</p>
+							</th>
+							<th>
+								<p class="bold_text">Costo</p>
+							</th>
+							<th>
+								<p class="bold_text">GG</p>
+							</th>
+							<th>
+								<p class="bold_text">Importo €</p>
+							</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let TCeCons of dataWBsDetail.data.EsForecast.TCeCons; let i = index" class="opacity_text">
+							<ng-container *ngIf="TCeCons.Fyear == information_card_anno && TCeCons.Fmonth == information_card_mese">
+								<td>
+									<a href="#ConsTecNota-{{ i }}" data-toggle="collapse">
+										<p class="opacity_value_tab">
+											<i class="fas fa-chevron-down" style="font-size: 10px"></i>&nbsp;{{ TCeCons.DescSupplier }}
+										</p>
+									</a>
+									<div id="ConsTecNota-{{ i }}" class="collapse">
+										<div>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCeCons.Description }}
+											</p>
+										</div>
+									</div>
+								</td>
+								<td>
+									<p class="opacity_value_tab">
+										{{ TCeCons.DailyCost | decimalCustomPipe }}
+									</p>
+								</td>
+								<td>
+									<p class="opacity_value_tab">
+										{{ TCeCons.Quantity | decimalCustomPipe }}
+									</p>
+								</td>
+								<td>
+									<p class="opacity_value_tab">€ {{ TCeCons.Value | decimalCustomPipe }}</p>
+								</td>
+								<td>
+									<p
+										*ngIf="TCeCons.Description != undefined && TCeCons.Description != '' && TCeCons.Description != ' '"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="{{ TCeCons.Description }}">
+										<i class="fas fa-sticky-note" style="color: #ffd700; cursor: pointer"></i>
+									</p>
+								</td>
+							</ng-container>
+						</tr>
+					</tbody>
+				</table>
+
+				<!--TABELLA VOCI DI COSTO-->
+				<b style="float: left; color: black">VOCI DI COSTO</b>
+				<table class="table" style="background-color: white">
+					<thead>
+						<tr>
+							<th>
+								<p class="bold_text">Dettaglio</p>
+							</th>
+							<th>
+								<p class="bold_text">Importo €</p>
+							</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							*ngFor="let TCostElement of dataWBsDetail.data.EsForecast.TCostElement; let i = index"
+							class="opacity_text">
+							<ng-container
+								*ngIf="
+									TCostElement.Fyear == information_card_anno &&
+									TCostElement.Fmonth == information_card_mese &&
+									TCostElement.CeDetType == 'G'
+								">
+								<td>
+									<a href="#VociCstNota-{{ i }}" data-toggle="collapse">
+										<p class="opacity_value_tab">
+											<i class="fas fa-chevron-down" style="font-size: 10px"></i>&nbsp;{{ TCostElement.DescrCe }}
+										</p>
+									</a>
+									<div id="VociCstNota-{{ i }}" class="collapse">
+										<div>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCostElement.Description }}
+											</p>
+										</div>
+									</div>
+								</td>
+								<td>
+									<p class="opacity_value_tab">{{ TCostElement.Value | decimalCustomPipe }} €</p>
+								</td>
+								<td>
+									<p
+										*ngIf="
+											TCostElement.Description != undefined &&
+											TCostElement.Description != '' &&
+											TCostElement.Description != ' '
+										"
+										data-toggle="tooltip"
+										data-placement="top"
+										title="{{ TCostElement.Description }}">
+										<i class="fas fa-sticky-note" style="color: #ffd700; cursor: pointer"></i>
+									</p>
+								</td>
+							</ng-container>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!--
+ VISUALIZZAZIONE DELLE CARD IN BASE ALL'ANNO SELEZIONATO NELLA SELECT
+ -->
+		<!--
+  Card centrali consuntivi con anno e mese presi da EsBalance->TBalTot->TPerio
+  -->
+		<div class="row text-center navbar-nav-scroll" id="cardConsuntivo">
+			<ng-container *ngFor="let informationsCards of informationsCards">
+				<ng-container *ngIf="informationsCards.Fyear == year">
+					<ng-container *ngFor="let TPerio of informationsCards.TPerio; let i = index">
+						<ng-container *ngIf="TPerio != undefined">
+							<!--
+        FUNZIONE CHE MI FA VISUALIZZARE DELLE TABELLE A DESTRA CONTENENTI I DATI DEI CONSUNTIVI SELEZIONATI
+        IN BASE AL LORO ANNO E MESE
+        -->
+
+							<ng-container *ngIf="TPerio.type == 'consuntivo'">
+								<!--------------------------------------------
+              <div id='card{{1}}' style="background:#98bf21;height:100px;width:100px;position: absolute"></div>
+              --------------------------------------------------------->
+								<div
+									(click)="click_card(TPerio)"
+									class="list-group col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xxl-4 text-center padding p-3"
+									style="font-size: 14px">
+									<div class="background_card_centralMonth">
+										<div class="row">
+											<div class="col-md-1" style="margin-left: 5px">
+												<p (click)="openConsuntivo(TPerio)">
+													<i class="fas fa-window-restore" style="color: white; cursor: pointer"></i>
+												</p>
+											</div>
+											<div class="col-md-10">
+												<p
+													*ngIf="TPerio.Circle == 'red'"
+                                                    [matTooltip]="'Marginalità del mese minore a quella di ACR'"
+													style="border: none; background-color: transparent; color: white">
+													{{ TPerio.Fmonth | numberMonth }} {{ TPerio.Fyear }}
+													<i class="fas fa-circle" style="color: red"></i>
+												</p>
+												<p
+													*ngIf="TPerio.Circle == 'green'"
+                                                    [matTooltip]="'Marginalità del mese maggiore o uguale a quella di ACR'"
+													style="border: none; background-color: transparent; color: white">
+													{{ TPerio.Fmonth | numberMonth }} {{ TPerio.Fyear }}
+													<i class="fas fa-circle" style="color: #00e600"></i>
+												</p>
+											</div>
+										</div>
+									</div>
+
+									<!--CARD EVIDENZIATA-->
+									<div *ngIf="TPerio.Fmonth == information_card_mese">
+										<div class="list-group-item list-group-item-action" style="border-color: orange; border-width: 3px">
+											<div class="row">
+												<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+													<p class="bold_text float-left">Costi</p>
+												</div>
+												<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+													<p *ngIf="TPerio.RevFc != 'Y'" class="value_card float-right">
+														€ {{ TPerio.Costs | decimalCustomPipe }}
+													</p>
+													<p *ngIf="TPerio.RevFc == 'Y'" class="value_card float-right" style="color: red">
+														€ {{ TPerio.Costs | decimalCustomPipe }}
+													</p>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+													<p class="bold_text float-left">Ricavi</p>
+												</div>
+												<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+													<!--CONTROLLO RICAVI RevFc-->
+													<p *ngIf="TPerio.RevFc != 'X' && TPerio.RevFc != 'Y'" class="value_card float-right">
+														€ {{ TPerio.Revenues | decimalCustomPipe }}
+														<span
+															class="material-icons"
+															*ngIf="TPerio.RevManInd === 'X' && revType === 'CA' "
+															matTooltip="Ricavi modificati manualmente"
+															style="font-size: inherit">
+															edit_note
+														</span>
+													</p>
+
+													<p
+														*ngIf="TPerio.RevFc == 'X' || TPerio.RevFc == 'Y'"
+														class="value_card float-right"
+														style="color: red">
+														€ {{ TPerio.Revenues | decimalCustomPipe }}
+														<span
+															class="material-icons"
+															*ngIf="TPerio.RevManInd === 'X' && revType === 'CA' "
+															matTooltip="Ricavi modificati manualmente"
+															style="font-size: inherit">
+															edit_note
+														</span>
+													</p>
+												</div>
+											</div>
+
+											<!-- Con revType CA ho la possibilità di vedere i 'ricavi Periodo' -->
+											<!-- <div *ngIf=" revType === 'CA' && dataWBsDetail.data.EsHeader.InvType === 'A' && dataWBsDetail.data.EsHeader.InvFreq !== '01' " class="row">
+                        <div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+                          <p class="bold_text float-left">Ricavi periodo</p>
+                        </div>
+                        <div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+                          <p class="value_card float-right">€ {{ TPerio.RevPerio | decimalCustomPipe }}</p>
+                        </div>
+                      </div> -->
+
+											<div class="row">
+												<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+													<p class="bold_text float-left">Marginalità</p>
+												</div>
+												<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+													<p class="value_card float-right">{{ TPerio.Profitability | decimalCustomPipe }} %</p>
+												</div>
+											</div>
+
+											<button
+												*ngIf="visualizzaModifica(TPerio)"
+												type="button"
+												class="btn btn-outline-primary"
+												style="border-radius: 20px"
+												(click)="visualizzaConsuntivo(TPerio)">
+												MODIFICA
+											</button>
+										</div>
+									</div>
+									<!--CARD NON EVIDENZIATA-->
+									<div *ngIf="TPerio.Fmonth != information_card_mese">
+										<div class="list-group-item list-group-item-action">
+											<div class="row">
+												<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+													<p class="bold_text float-left">Costi</p>
+												</div>
+												<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+													<p *ngIf="TPerio.RevFc != 'Y'" class="value_card float-right">
+														€ {{ TPerio.Costs | decimalCustomPipe }}
+													</p>
+													<p *ngIf="TPerio.RevFc == 'Y'" class="value_card float-right" style="color: red">
+														€ {{ TPerio.Costs | decimalCustomPipe }}
+													</p>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+													<p class="bold_text float-left">Ricavi</p>
+												</div>
+												<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+													<!--CONTROLLO RICAVI RevFc-->
+													<p *ngIf="TPerio.RevFc != 'X' && TPerio.RevFc != 'Y'" class="value_card float-right">
+														€ {{ TPerio.Revenues | decimalCustomPipe }}
+														<span
+															class="material-icons"
+															*ngIf="TPerio.RevManInd === 'X' && revType === 'CA' "
+															matTooltip="Ricavi modificati manualmente"
+															style="font-size: inherit">
+															edit_note
+														</span>
+													</p>
+
+													<p
+														*ngIf="TPerio.RevFc == 'X' || TPerio.RevFc == 'Y'"
+														class="value_card float-right"
+														style="color: red">
+														€ {{ TPerio.Revenues | decimalCustomPipe }}
+														<span
+															class="material-icons"
+															*ngIf="TPerio.RevManInd === 'X' && revType === 'CA' "
+															matTooltip="Ricavi modificati manualmente"
+															style="font-size: inherit">
+															edit_note
+														</span>
+													</p>
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+													<p class="bold_text float-left">Marginalità</p>
+												</div>
+												<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+													<p class="value_card float-right">{{ TPerio.Profitability | decimalCustomPipe }} %</p>
+												</div>
+											</div>
+
+											<button
+												*ngIf="visualizzaModifica(TPerio)"
+												type="button"
+												class="btn btn-outline-primary"
+												style="border-radius: 20px"
+												(click)="visualizzaConsuntivo(TPerio)">
+												MODIFICA
+											</button>
+										</div>
+									</div>
+								</div>
+								<!----------------------------------------------------------------------------------------------->
+							</ng-container>
+							<!--
+         CARD CONSUNTIVO RevFc
+        -->
+							<ng-container *ngIf="TPerio.type != undefined && TPerio.type == 'RevFc'">
+								<div class="list-group col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xxl-4 text-center padding p-3">
+									<div class="list-group-item list-group-item-action card_RevFc" style="height: 175px">
+										<div style="margin-top: 35px">
+											<p>
+												<b class="bold_text_card_forecast">{{ TPerio.Fmonth | numberMonth }}</b
+												><b class="bold_text_card_forecast">{{ TPerio.Fyear }}</b>
+											</p>
+											<button
+												type="button"
+												class="btn btn-outline-primary"
+												style="border-radius: 20px"
+												(click)="click_card(TPerio)">
+												Forecast
+											</button>
+										</div>
+									</div>
+								</div>
+							</ng-container>
+
+							<!--
+         CARD BLUE FORECAST PRESI DA EsForecast->TCeTot->TPerio
+        -->
+							<!-- (click)="click_card(TPerio)" -->
+							<div *ngIf="TPerio.type != undefined && TPerio.type == 'blueCard'"
+								class="list-group col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xxl-4 text-center padding p-3">
+								<div class="forecast_emply_head">
+									<div class="row">
+										<div class="col-md-1" style="margin-left: 2px">
+											<p (click)="openForecast(TPerio)">
+												<i class="fas fa-window-restore" style="color: white; cursor: pointer"></i>
+											</p>
+										</div>
+										<div *ngIf="TPerio.Circle == 'green'" class="col-md-10" [matTooltip]="'Marginalità del mese maggiore o uguale a quella di ACR'">
+											<p class="white_bold_text text-center">
+												{{ TPerio.Fmonth | numberMonth }} {{ TPerio.Fyear }}
+												<i class="fas fa-circle" style="color: #00e600"></i>
+												&nbsp;
+												<ng-container *ngIf="isCopyMonthAvailable(information_card_anno, TPerio)">
+													<b (click)="copyToNextMonth(TPerio)"
+														><i class="fas fa-file-import" style="cursor: pointer; color: white"></i
+													></b>
+												</ng-container>
+											</p>
+										</div>
+										<div *ngIf="TPerio.Circle == 'red'" class="col-md-10" [matTooltip]="'Marginalità del mese minore a quella di ACR'">
+											<p class="white_bold_text text-center">
+												{{ TPerio.Fmonth | numberMonth }} {{ TPerio.Fyear }}
+												<i class="fas fa-circle" style="color: red"></i>
+												&nbsp;<ng-container *ngIf="isCopyMonthAvailable(information_card_anno, TPerio)">
+													<b (click)="copyToNextMonth(TPerio)"
+														><i class="fas fa-file-import" style="cursor: pointer; color: white"></i
+													></b>
+												</ng-container>
+											</p>
+										</div>
+									</div>
+								</div>
+								<!--EVIDENZIA IL MESE SELEZIONATO-->
+								<div *ngIf="TPerio.Fmonth == information_card_mese">
+									<div
+										class="list-group-item list-group-item-action forecast_emply_body"
+										style="border-color: orange; border-width: 3px">
+										<div class="row" style="margin-top: -9px">
+											<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+												<p class="bold_text float-left">Costi</p>
+											</div>
+											<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+												<p class="value_card float-right">€ {{ TPerio.Costs | decimalCustomPipe }}</p>
+											</div>
+										</div>
+										<div class="row" style="margin-top: -14px">
+											<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+												<p class="bold_text float-left">Ricavi</p>
+											</div>
+											<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+												<p class="value_card float-right">
+													€ {{ TPerio.Revenues | decimalCustomPipe }}
+												</p>
+											</div>
+										</div>
+										<div class="row" style="margin-top: -14px">
+											<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+												<p class="bold_text float-left">Marginalità</p>
+											</div>
+											<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+												<p class="value_card float-right">{{ TPerio.Profitability | decimalCustomPipe }} %</p>
+											</div>
+										</div>
+										<!--
+            BOTTONE FORECAST CHE MI FA VISUALIZZARE UNA TABELLA DI INSERIMENTO A DESTRA (IN QUESTO CASO DOVRA' ESSERE
+            POPOLATA CON QUALCHE DATO)
+            -->
+										<div class="row">
+											<div class="col-md-2"></div>
+											<div class="col-md-8">
+												<button
+													type="button"
+													class="btn btn-outline-primary button_forecast_emply"
+													(click)="click_forecast(TPerio, true)"
+													style="color: white">
+													Forecast
+												</button>
+											</div>
+											<div class="col-md-2">
+												<p *ngIf="isForecastEditable()"
+													style="margin-top: 10px; cursor: pointer"
+													(click)="deleteForecast(TPerio)">
+													<i class="fas fas fa-trash-alt" style="color: white"></i>
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--MESI NON SELEZIONATI-->
+								<div *ngIf="TPerio.Fmonth != information_card_mese">
+									<div class="list-group-item list-group-item-action forecast_emply_body">
+										<div class="row" style="margin-top: -9px">
+											<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+												<p class="bold_text float-left">Costi</p>
+											</div>
+											<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+												<p class="value_card float-right">€ {{ TPerio.Costs | decimalCustomPipe }}</p>
+											</div>
+										</div>
+										<div class="row" style="margin-top: -14px">
+											<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+												<p class="bold_text float-left">Ricavi</p>
+											</div>
+											<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+												<p class="value_card float-right">€ {{ TPerio.Revenues | decimalCustomPipe }}</p>
+											</div>
+										</div>
+										<div class="row" style="margin-top: -14px">
+											<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+												<p class="bold_text float-left">Marginalità</p>
+											</div>
+											<div class="col-sm-auto col-md-auto col-lg-auto col-xl-auto">
+												<p class="value_card float-right">{{ TPerio.Profitability | decimalCustomPipe }} %</p>
+											</div>
+										</div>
+										<!--
+            BOTTONE FORECAST CHE MI FA VISUALIZZARE UNA TABELLA DI INSERIMENTO A DESTRA (IN QUESTO CASO DOVRA' ESSERE
+            POPOLATA CON QUALCHE DATO)
+            -->
+										<div class="row">
+											<div class="col-md-2"></div>
+											<div class="col-md-8">
+												<button
+													type="button"
+													class="btn btn-outline-primary button_forecast_emply"
+													(click)="click_forecast(TPerio, true)"
+													style="color: white">
+													Forecast
+												</button>
+											</div>
+											<div class="col-md-2">
+												<p *ngIf="isForecastEditable()"
+													style="margin-top: 10px; cursor: pointer"
+													(click)="deleteForecast(TPerio)">
+													<i class="fas fas fa-trash-alt" style="color: white"></i>
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!--
+     CARD TRATTEGGIATE VISUALIZZATE DAL MOMENTO SI VOGLIA AGGIUNGERE QUALCHE MESE PER LA PREVISIONE DELLA WBS
+     -->
+							<ng-container *ngIf="TPerio.type != undefined && TPerio.type == 'dash'">
+								<div class="list-group col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xxl-4 text-center padding p-3">
+									<div class="list-group-item list-group-item-action card_dashed" style="height: 175px">
+										<div style="margin-top: 35px">
+											<p>
+												<b class="bold_text_card_forecast">{{ TPerio.Fmonth | numberMonth }} </b
+												><b class="bold_text_card_forecast">{{ TPerio.Fyear }}</b>
+											</p>
+											<!--
+                BOTTONE FORECAST CHE MI FA VISUALIZZARE UNA TABELLA DI INSERIMENTO A DESTRA (IN QUESTO CASO DOVRA' ESSERE
+                POPOLATA CON NESSUN DATO)
+                -->
+
+											<!--                         *ngIf="revType !== 'CA' || role !== 'RAC'" -->
+											<button
+												type="button"
+												class="btn btn-outline-primary"
+												style="border-radius: 20px"
+												(click)="click_forecast(TPerio, true)">
+												Forecast
+											</button>
+										</div>
+									</div>
+								</div>
+							</ng-container>
+						</ng-container>
+					</ng-container>
+				</ng-container>
+			</ng-container>
+			<!--
+    BOTTONE ESTENDI PERIODO ED ELIMINA PERIODO SERVE PER AGGIUNGERE BOX TRATTEGIATI PER LA PREVISIONE DEL FORECAST
+  -->
+			<ng-container *ngIf="date_est_per == year">
+				<!--ESTENDI PERIODO-->
+				<div
+					*ngIf="action === 'CHANGE' && revType !== 'CA'"
+					class="list-group col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xxl-4 text-center padding p-3">
+					<div
+						class="list-group-item list-group-item-action card_dashed"
+						[attr.disabled]="dataWBsDetail.data.EsHeader.VersnStatus === 'RELASED'">
+						<a (click)="estendi_periodo()" style="color: #1b73e8; cursor: pointer" class="text-3p">
+							<em class="fa fa-plus mr-2"></em>
+							<span>Estendi periodo</span>
+						</a>
+					</div>
+					<br />
+					<!--ELIMINA PERIODO-->
+					<div
+						class="list-group-item list-group-item-action card_dashed"
+						[attr.disabled]="dataWBsDetail.data.EsHeader.VersnStatus === 'RELASED'">
+						<a (click)="elimina_periodo()" style="color: #1b73e8; cursor: pointer" class="text-3p">
+							<em class="fa fa-minus mr-2"></em>
+							<span>Elimina periodo</span>
+						</a>
+					</div>
+				</div>
+			</ng-container>
+			<!--CONTENITORI FANTASMA PER INGRANDIRE LA SCROLL BAR-->
+			<div></div>
+			<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+			<div></div>
+		</div>
+	</div>
+	<!--
+  SCHERMO GRANDE
+  -->
+	<!--
+DIV IN ALTRO A DESTRA CHE STA A INDICARE IL CONSUNTIVO O IL FORECAST DEL MESE DELL'ANNO PRESO IN CONSIDERAZIONE
+I DARI VERRANNO INIZIALIZZATI SEMPRE AL PRIMO MESE DELL'ANNO SCELTO
+-->
+	<div class="col-md-5 lateral">
+		<div class="d-xxl-block">
+			<div class="row">
+				<div class="background_card_month col-md-2">
+					<div style="margin-top: 30px">
+						<p class="white_bold_text">
+							{{ information_card_mese | cutMonth }}
+						</p>
+						<p class="white_bold_text">{{ information_card_anno }}</p>
+					</div>
+				</div>
+				<!--
+      DATI DEL CONSUNTIVO DEL MESE DELL'ANNO PRESO IN CONSIDERAZIONE
+      -->
+				<div
+					style="
+						background-color: white;
+						border: solid;
+						border-left: none;
+						border-top: none;
+						border-bottom: none;
+						border-right-color: #e6e6e6;
+					"
+					class="col-md-5"
+					[ngClass]="{
+						bold_text_section: appare_tab_consuntivo,
+						opacity_text_section: !appare_tab_consuntivo
+					}">
+					<p class="title">Consuntivo</p>
+					<p class="card_section">
+						Costi :<b class="value_card_section">€ {{ information_card_costo | decimalCustomPipe }}</b>
+					</p>
+					<p class="card_section">
+						Ricavi :<b class="value_card_section">€ {{ information_card_ricavo | decimalCustomPipe }} </b>
+					</p>
+					<!-- <p
+            *ngIf="
+              revType === 'CA' &&
+              dataWBsDetail.data.EsHeader.InvType === 'A' &&
+              dataWBsDetail.data.EsHeader.InvFreq !== '01'
+            "
+            class="card_section">
+            Ricavi periodo :<b class="value_card_section">€ {{ information_card_ricavo_atteso | decimalCustomPipe }}</b>
+          </p> -->
+					<p class="card_section">
+						Marginalità :<b class="value_card_section">{{ information_card_marginalita | decimalCustomPipe }} %</b>
+					</p>
+				</div>
+				<!--
+      DATI DEL FORECAST DEL MESE DELL'ANNO PRESO IN CONSIDERAZIONE
+      -->
+				<div
+					style="background-color: white"
+					class="col-md-5"
+					[ngClass]="{
+						bold_text_section: appare_tab_forecast,
+						opacity_text_section: !appare_tab_forecast
+					}">
+					<p class="title">Forecast</p>
+					<ng-container *ngFor="let TCetot of dataWBsDetail.data.EsForecast.TCeTot">
+						<ng-container *ngFor="let TPerio of TCetot.TPerio">
+							<ng-container *ngIf="TPerio.Fyear == information_card_anno && TPerio.Fmonth == information_card_mese">
+								<p class="card_section">
+									Costi :<b class="value_card_section">€ {{ TPerio.Costs | decimalCustomPipe }}</b>
+								</p>
+								<p class="card_section">
+									Ricavi :<b class="value_card_section">€ {{ TPerio.Revenues | decimalCustomPipe }}</b>
+								</p>
+								<p class="card_section">
+									Marginalità :<b class="value_card_section">{{ TPerio.Profitability | decimalCustomPipe }} %</b>
+								</p>
+							</ng-container>
+						</ng-container>
+					</ng-container>
+				</div>
+			</div>
+
+			<!--ATTENZIONE , VERIFICHE DA FARE :
+      -EVIDENZIARE LA WBS SELEZIONATA
+      -->
+
+			<!--
+SCHERMO PICCOLO
+-->
+			<!--
+DIV IN ALTRO A DESTRA CHE STA A INDICARE IL CONSUNTIVO O IL FORECAST DEL MESE DELL'ANNO PRESO IN CONSIDERAZIONE
+I DARI VERRANNO INIZIALIZZATI SEMPRE AL PRIMO MESE DELL'ANNO SCELTO
+-->
+		</div>
+		<!--<div class=" d-block d-xxl-none">
+      <ul class="list-group">
+        <li class="list-group-item background_card_month">
+          <p class="white_bold_text">{{information_card_mese | cutMonth}}</p>
+          <p class="white_bold_text">{{information_card_anno}}</p>
+        </li>-->
+		<!--
+     DATI DEL CONSUNTIVO DEL MESE DELL'ANNO PRESO IN CONSIDERAZIONE
+     -->
+		<!--<li class="list-group-item bold_text list_group_div_month">
+          <p class="bold_text" style="text-align: center">Consuntivo</p>
+          <p style="margin-top: -9px"><b class="bold_text_summary ">Costi :</b><b class="value_card">€
+              {{information_card_costo | decimalCustomPipe}}</b></p>
+          <p style="margin-top: -9px"><b class="bold_text_summary">Ricavi :</b><b class="value_card">€
+              {{information_card_ricavo | decimalCustomPipe}}</b></p>
+          <p style="margin-top: -9px"><b class="bold_text_summary">Marginalità :</b><b
+              class="value_card">{{information_card_marginalita |decimalCustomPipe}} %</b></p>
+        </li>-->
+		<!--
+      DATI DEL FORECAST DEL MESE DELL'ANNO PRESO IN CONSIDERAZIONE
+      -->
+
+		<!--<li class="list-group-item opacity_text">
+          <p class="opacity_label_forecast" style="text-align: center">Forecast</p>
+          <ng-container *ngFor="let informationsCards of informationsCards">
+            <ng-container *ngFor="let TPerio of informationsCards.TPerio">
+              <ng-container *ngIf="TPerio.Fyear == information_card_anno && TPerio.Fmonth == information_card_mese">
+          <p class="opacity_value" style="margin-top: -9px">Costi :<b class="float-right">€
+              {{TPerio.Costs | decimalCustomPipe}}</b></p>
+          <p class="opacity_value" style="margin-top: -9px">Ricavi :<b class="float-right">€
+              {{TPerio.Revenues | decimalCustomPipe}}</b></p>
+          <p class="opacity_value" style="margin-top: -9px">Marginalità :<b
+              class="float-right">{{TPerio.Profitability |decimalCustomPipe}} %</b></p>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </li>
+      </ul>
+    </div>-->
+		<!--
+    BOTTONE INVIA
+    -->
+		<div class="row">
+			<div class="col-md-4 col-xl-6">
+				<p *ngIf="dataWBsDetail.data.EsForecast.Status == 'RELEASED'" style="margin-top: 20px; font-weight: bold">
+					Ultimo Invio :
+					{{ dataWBsDetail.data.EsForecast.ChgDate | date: 'dd/MM/yyyy' }}
+					{{ dataWBsDetail.data.EsForecast.ChgTime }}
+				</p>
+				<p *ngIf="dataWBsDetail.data.EsForecast.Status != 'RELEASED'" style="margin-top: 20px; font-weight: bold">
+					Ultimo Invio :
+				</p>
+			</div>
+			<div class="col-md-8 col-xl-6">
+				<div style="float: right" class="button_salva_invia">
+					<ng-container *ngFor="let TAction of dataWBsDetail.data.EsForecast.TAction">
+						<ng-container *ngIf="TAction.Action == 'RELEASE' && hasPlanning()">
+							<button
+								type="button"
+								class="btn btn-primary"
+								style="margin-right: 25px; background: #034d6a; border: none"
+								data-toggle="modal"
+                                data-target="#inviaModal"
+								[disabled]="
+									dataWBsDetail.data.EsHeader.VersnStatus === 'RELASED' ||
+									dataWBsDetail.data.EsHeader.VersnStatus === 'APPROVED' ||
+									dataWBsDetail.data.EsHeader.VersnStatus === 'REJECTED' ||
+									action == 'DISPLAY'
+								">
+								INVIA
+							</button>
+						</ng-container>
+                        <ng-container *ngIf="TAction.Action == 'RELEASE' && !hasPlanning()">
+                            <button
+                                    type="button"
+                                    class="btn btn-primary"
+                                    style="margin-right: 25px; background: #034d6a; border: none"
+                                    data-toggle="modal"
+                                    data-target="#checkPlaModal"
+                                    [disabled]="
+									dataWBsDetail.data.EsHeader.VersnStatus === 'RELASED' ||
+									dataWBsDetail.data.EsHeader.VersnStatus === 'APPROVED' ||
+									dataWBsDetail.data.EsHeader.VersnStatus === 'REJECTED' ||
+									action == 'DISPLAY'
+								">
+                                INVIA
+                            </button>
+                        </ng-container>
+					</ng-container>
+					<!--
+      BOTTONE SALVA
+      -->
+					<!--<button type="button" class="btn btn-primary button_SALVA" (click)="salva()"
+        [disabled]="dataWBsDetail.data.EsHeader.VersnStatus === 'RELASED' || action == 'DISPLAY'">SALVA</button>-->
+					<!--
+      NEW BOTTONE SALVA
+      -->
+					<button
+						*ngIf="
+							(action === 'CHANGE' && mostraVdcModificabile && !appare_tab_forecast) ||
+							(action === 'CHANGE' && role !== 'RAC' && appare_tab_forecast)
+						"
+						type="button"
+						class="btn btn-primary button_blue"
+						(click)="salva_forecast()">
+						SALVA
+					</button>
+				</div>
+			</div>
+		</div>
+		<br />
+		<!--
+    TABBELLE CHE APPAIONO QUNADO CLICCO SU UNA CARD DI CONSUNTIVO
+    -->
+		<!--
+    TABELLA CONSUNTIVO DEL COSTO DEL PERSONALE
+    -->
+
+		<div *ngIf="appare_tab_consuntivo == true" class="navbar-nav-scroll">
+			<div style="margin-top: 50px" *ngIf="TBalEmpl.length > 0">
+				<div class="accordion accordion-flush" id="accordionFlushExample">
+					<div class="accordion-item" style="background-color: #f5f5f5">
+						<h2 class="accordion-header" id="flush-headingOne">
+							<button
+								class="accordion-button collapsed"
+								type="button"
+								style="background-color: #f5f5f5; height: 50px"
+								data-bs-toggle="collapse"
+								data-bs-target="#consulenzaTecnicaConsuntivo"
+								aria-expanded="true"
+								aria-controls="flush-collapseOne">
+								<p style="float: left" class="opacity_text">COSTO DEL PERSONALE</p>
+							</button>
+						</h2>
+						<div
+							id="consulenzaTecnicaConsuntivo"
+							class="accordion-collapse collapse show"
+							aria-labelledby="flush-headingOne"
+							data-bs-parent="#accordionFlushExample">
+							<div class="accordion-body">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>
+												<div class="div-detail">
+													<button mat-icon-button matTooltip="Visualizza il dettaglio" class="icon-calendar" aria-label="Apri dettaglio" (click)="openDialogDetail()">
+														<mat-icon>event</mat-icon>
+													  </button>
+													  <span class="bold_text">Dipendente</span>
+												</div>
+
+											</th>
+											<th>
+												<p class="bold_text">U. O.</p>
+											</th>
+											<th>
+												<p class="bold_text">GG</p>
+											</th>
+											<th>
+												<p class="bold_text">Importo €</p>
+											</th>
+											<th *ngIf="revType == 'TM'">
+												<p class="bold_text"> </p>
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let TBalEmpl of TBalEmpl" class="opacity_text" >
+											<td>
+												<p
+													class="opacity_value_tab"
+													style="cursor: pointer"
+													data-toggle="tooltip"
+													data-placement="top"
+													title="{{ TBalEmpl.Name }}">
+													{{ TBalEmpl.Name | sliceText: [10, '...'] }}
+												</p>
+											</td>
+											<td>
+												<p class="opacity_value_tab">{{ TBalEmpl.OrgUnit }}</p>
+											</td>
+											<td>
+												<p class="opacity_value_tab">{{ TBalEmpl.Quantity| decimalCustomPipe: 3 }}</p>
+											</td>
+											<td>
+												<p class="opacity_value_tab">€ {{ TBalEmpl.Value | decimalCustomPipe }}</p>
+											</td>
+											<td *ngIf="revType == 'TM'">
+												<p *ngIf="TBalEmpl.isPresent" class="icon-person" [matTooltip]="TBalEmpl.Profile">
+													<mat-icon fontSet="material-icons-round">person</mat-icon>
+												</p>
+												<p *ngIf="!TBalEmpl.isPresent" class="icon-person-disabled">
+													<mat-icon fontSet="material-icons-round">person_off</mat-icon>
+												</p>
+											</td>
+										</tr>
+										<!-- Riga di totale-->
+										<tr class="opacity_text" *ngIf="TBalEmpl.length > 0">
+											<th>
+												<p class="opacity_value_tab"></p>
+											</th>
+											<th>
+												<p class="opacity_value_tab"> </p>
+											</th>
+											<th>
+												<p class="opacity_value_tab">{{	totalDipQuantity | decimalCustomPipe: 3}}</p>
+											</th>
+											<th>
+												<p class="opacity_value_tab"> </p>
+											</th>
+											<th *ngIf="revType == 'TM'">
+												<p class="opacity_value_tab"> </p>
+											</th>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div style="margin-top: 50px" *ngIf="this.revType === 'TM'"> <!-- && initTariffeConsuntivo()?.length"> -->
+				<div class="accordion accordion-flush" id="accordionFlushExample">
+					<div class="accordion-item" style="background-color: #f5f5f5">
+						<h2 class="accordion-header" id="flush-headingOne">
+							<button
+								class="accordion-button collapsed"
+								type="button"
+								style="background-color: #f5f5f5; height: 50px"
+								data-bs-toggle="collapse"
+								data-bs-target="#dettaglioTariffeConsuntivo"
+								aria-expanded="true"
+								aria-controls="flush-collapseOne">
+								<p style="float: left" class="opacity_text">CONSUNTIVO RICAVI T&M</p>
+							</button>
+						</h2>
+						<div
+							id="dettaglioTariffeConsuntivo"
+							class="accordion-collapse collapse show"
+							aria-labelledby="flush-headingOne"
+							data-bs-parent="#accordionFlushExample">
+							<div class="accordion-body">
+								<dettaglio-tariffe-consuntivo
+									[dataWBsDetail]="dataWBsDetail"
+									[readOnly]="!visualizzaTM()"
+									[meseCardSelezionato]="information_card_mese"
+									[annoCardSelezionato]="information_card_anno">
+								</dettaglio-tariffe-consuntivo>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- TABELLA CONSUNTIVO DI CONSUNLENZA -->
+			<div style="margin-top: 50px" *ngIf="TBalCons.length > 0">
+				<div class="accordion accordion-flush" id="accordionFlushExample">
+					<div class="accordion-item" style="background-color: #f5f5f5">
+						<h2 class="accordion-header" id="flush-headingOne">
+							<button
+								class="accordion-button collapsed"
+								type="button"
+								style="background-color: #f5f5f5; height: 50px"
+								data-bs-toggle="collapse"
+								data-bs-target="#consulenzaTecnicaConsuntivo"
+								aria-expanded="true"
+								aria-controls="flush-collapseOne">
+								<p style="float: left" class="opacity_text">CONSULENZA TECNICA</p>
+							</button>
+						</h2>
+						<div
+							id="consulenzaTecnicaConsuntivo"
+							class="accordion-collapse collapse show"
+							aria-labelledby="flush-headingOne"
+							data-bs-parent="#accordionFlushExample">
+							<div class="accordion-body">
+								<table class="table">
+									<thead>
+										<tr>
+											<th class="bold_text">Fornitore</th>
+											<th class="bold_text">Dettaglio</th>
+											<th class="bold_text">Nr Ordine</th>
+											<th class="bold_text">Importo €</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let TBalCons of TBalCons" class="opacity_text">
+											<td>
+												<p
+													class="opacity_value_tab"
+													style="cursor: pointer"
+													data-toggle="tooltip"
+													data-placement="top"
+													title="{{ TBalCons.DescSupplier }}">
+													{{ TBalCons.DescSupplier | sliceText: [10, '...'] }}
+												</p>
+											</td>
+											<td>
+												<p
+													class="opacity_value_tab"
+													style="cursor: pointer"
+													data-toggle="tooltip"
+													data-placement="top"
+													title="{{ TBalCons.Description }}">
+													{{ TBalCons.Description | sliceText: [17, '...'] }}
+												</p>
+											</td>
+											<td>
+												<p class="opacity_value_tab">{{ TBalCons.Orderno }}</p>
+											</td>
+											<td>
+												<p class="opacity_value_tab">€ {{ TBalCons.Value | decimalCustomPipe }}</p>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!--
+      			TABELLA DI CONSUNTIVO DI VOCI DI COSTO
+     		 -->
+
+			<div style="margin-top: 50px">
+				<div class="accordion accordion-flush" id="accordionFlushExample">
+					<div class="accordion-item" style="background-color: #f5f5f5">
+						<h2 class="accordion-header" id="flush-headingOne">
+							<button
+								class="accordion-button collapsed"
+								type="button"
+								style="background-color: #f5f5f5; height: 50px"
+								data-bs-toggle="collapse"
+								data-bs-target="#vociDiCostoConsuntivo"
+								aria-expanded="true"
+								aria-controls="flush-collapseOne">
+								<p style="float: left" class="opacity_text">VOCI DI COSTO</p>
+							</button>
+						</h2>
+						<div
+							id="vociDiCostoConsuntivo"
+							class="accordion-collapse collapse show"
+							aria-labelledby="flush-headingOne"
+							data-bs-parent="#accordionFlushExample">
+							<div class="accordion-body">
+								<table class="table">
+									<thead>
+										<tr>
+											<th class="th-dettaglio-vdc">
+												<p class="bold_text">Dettaglio</p>
+											</th>
+											<th>
+												<p class="bold_text">Importo €</p>
+											</th>
+										</tr>
+									</thead>
+
+                                    <tbody *ngFor="let TBalCe of TBalCe; let i = index">
+                                        <tr
+                                                class="opacity_text"
+                                                *ngIf="
+                                                    TBalCe?.data[0]?.ChangeInd && mostraVdcModificabile;
+                                                    else notRicavi
+                                                ">
+                                            <td >
+                                                <mat-grid-list cols="12" rowHeight="40px">
+
+                                                    <mat-grid-tile colspan="1" style="overflow: unset">
+                                                            <span >
+                                                            <p *ngIf="revType!=='CA'" (click)="eliminaVdcAggiunta(i)" class="font-size-13" style="margin: auto">
+                                                                <i class="fas fa-trash-alt" style="cursor: pointer; color: #0d67d0"></i>
+                                                            </p>
+                                                            <div class="dropdown">
+                                                                <span  style="font-size: 13px; margin: auto" id="pencilCostoPer" data-toggle="dropdown" aria>
+                                                                    <b *ngIf="!TBalCe?.data[0]?.Description && TBalCe?.data[0]?.ManInd">
+                                                                        <em class="fas fa-pencil-alt" style="cursor: pointer; color: #0d67d0"></em>
+                                                                    </b>
+
+                                                                    <b *ngIf="TBalCe?.data[0]?.Description">
+                                                                        <em
+                                                                                class="fas fa-sticky-note"
+                                                                                style="color: #ffd700; cursor: pointer"
+                                                                                data-toggle="tooltip"
+                                                                                data-placement="top"
+                                                                                [title]="TBalCe?.data[0]?.Description"></em>
+                                                                    </b>
+                                                                </span>
+
+                                                                <div
+                                                                        class="dropdown-menu"
+                                                                        aria-labelledby="pencilCostoPer"
+                                                                        style="background-color: #ffd700">
+                                                                    <textarea
+                                                                            rows="5"
+                                                                            id="commentCostPer"
+                                                                            maxlength="100"
+                                                                            style="background-color: #ffd700; border: none"
+                                                                            [value]="TBalCe?.data[0]?.Description ?? '' "
+                                                                            [readonly]="!TBalCe?.data[0]?.ManInd"
+                                                                            (change)="noteVdc($event, TBalCe?.data[0])">
+                                                                    </textarea>
+                                                                </div>
+                                                            </div>
+                                                            </span>
+                                                    </mat-grid-tile>
+
+                                                    <mat-grid-tile colspan="11" *ngIf="TBalCe?.data[0]?.IdRow; else selezioneDettaglio">
+                                                        <p style="color: #80868a; opacity: 1; font-size: 11px; width: 100%;">
+                                                            {{ TBalCe?.data[0]?.DescrCe }}
+                                                        </p>
+                                                    </mat-grid-tile>
+
+                                                    <ng-template #selezioneDettaglio>
+                                                        <mat-grid-tile colspan="11" style="overflow: unset;">
+                                                            <ng-select style="width: 100%" [ngModel]="TBalCe.data[0].DescrCe" (change)="selezioneDettaglioVdc($event, i)">
+                                                                <ng-option
+                                                                        *ngFor="let balList of WbsCe.data.EtCeBalList"
+                                                                        [value]="balList"
+                                                                >
+                                                                    {{balList.DescrCe}}
+                                                                </ng-option>
+                                                            </ng-select>
+                                                        </mat-grid-tile>
+                                                    </ng-template>
+
+                                                </mat-grid-list>
+
+                                            </td>
+
+                                            <td >
+                                                <mat-grid-list cols="12" rowHeight="40px" *ngIf="TBalCe?.data[0]?.IdRow; else importo">
+                                                    <mat-grid-tile colspan="2">
+                                                        <mat-slide-toggle
+                                                                *ngIf="TBalCe?.data[0]?.ChangeInd && TBalCe?.data[0]?.AutoInd"
+                                                                [checked]=" TBalCe?.data[0]?.ManInd === 'X' "
+                                                                (change)=" abilitazioneImportoManuale($event, TBalCe?.data[0]) "
+                                                                color="primary"
+                                                        >
+                                                        </mat-slide-toggle>
+                                                    </mat-grid-tile>
+
+                                                    <mat-grid-tile colspan="9">
+                                                        <!-- <mat-form-field  appearance="outline"> -->
+                                                        <!-- 	matInput -->
+                                                        <input
+                                                                *ngIf="
+                                                                    TBalCe?.data[0]?.ChangeInd;
+                                                                    else notRicavi
+                                                                "
+
+                                                                class="form-control"
+                                                                [value] = "(TBalCe?.data[0]?.ManInd ? TBalCe?.data[0]?.ValueMan :  TBalCe?.data[0]?.Value) | decimalCustomPipe"
+                                                                (change)="modificaVdcManualmente($event, TBalCe?.data[0], i)"
+                                                                [disabled]="
+                                                                !TBalCe?.data[0]?.ManInd ||
+                                                                (action !== 'CHANGE' &&
+                                                                    revType !== 'CA' &&
+                                                                    role !== 'RAC' &&
+                                                                    (information_card_revFc !== 'X' || information_card_revFc !== 'Y'))
+                                                            " >
+                                                        <!-- </mat-form-field> -->
+                                                    </mat-grid-tile>
+
+
+                                                    <mat-grid-tile colspan="1">
+                                                            <span class="material-icons" *ngIf="TBalCe?.data[0]?.ManInd && revType === 'CA'"
+                                                                  matTooltip="Ricavi modificati manualmente">
+                                                                edit_note
+                                                            </span>
+                                                    </mat-grid-tile>
+
+                                                    <mat-grid-tile colspan="7">
+                                                        <p class="pErrorTab" *ngIf="trovaIndiceErrore(i, 'indiceVdc')">
+                                                            Notazione errata
+                                                        </p>
+                                                    </mat-grid-tile>
+
+                                                </mat-grid-list>
+
+                                                <ng-template #importo>
+                                                    <input
+                                                            class="form-control"
+                                                            [value]="TBalCe?.data[0]?.ValueMan | decimalCustomPipe"
+                                                            (change)="inputVdc($event, TBalCe?.data[0], i)"
+                                                    />
+                                                    <p *ngIf="trovaIndiceErrore(i, 'indexError')" class="pErrorTab">Notazione errata</p>
+                                                </ng-template>
+                                            </td>
+                                        </tr>
+
+                                        <ng-template #notRicavi>
+                                            <tr class="opacity_text">
+                                                <td [ngClass]="{'td_flex': TBalCe?.data[0]?.Description && TBalCe?.data[0]?.DescrCe === 'RICAVI' }">
+                                                    <p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px; margin-right: 10px;">
+                                                        {{ TBalCe?.data[0]?.DescrCe }}
+                                                    </p>
+
+                                                    <p *ngIf="TBalCe?.data[0]?.Description" data-toggle="dropdown" aria>
+                                                        <em
+                                                                class="fas fa-sticky-note"
+                                                                style="color: #ffd700; cursor: pointer"
+                                                                data-toggle="tooltip"
+                                                                data-placement="top"
+                                                                [title]="TBalCe?.data[0]?.Description"></em>
+                                                    </p>
+
+                                                    <div
+                                                            class="dropdown-menu"
+                                                            aria-labelledby="pencilCostoPer"
+                                                            style="background-color: #ffd700">
+                                                            <textarea
+                                                                    rows="5"
+                                                                    id="commentCostPer"
+                                                                    maxlength="100"
+                                                                    style="background-color: #ffd700; border: none"
+                                                                    readonly
+                                                                    [value]="TBalCe?.data[0]?.Description ?? '' "
+                                                            >
+                                                            </textarea>
+                                                    </div>
+
+                                                </td>
+
+                                                <td>
+                                                    <div style="display: flex">
+                                                        <p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+                                                            € {{ TBalCe?.data[0]?.Value | decimalCustomPipe }}
+                                                        </p>
+                                                        <span
+                                                                style="margin-left: 10px;"
+                                                                class="material-icons"
+                                                                *ngIf="TBalCe?.data[0]?.ManInd === 'X' && revType === 'CA' "
+                                                                matTooltip="Ricavi modificati manualmente">
+                                                                edit_note
+                                                            </span>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                        </ng-template>
+                                    </tbody>
+								</table>
+								<div class="row">
+									<div class="col-md-2" *ngIf="action == 'CHANGE' && revType === 'CR' && mostraVdcModificabile ">
+										<p class="medium_strong_text" (click)="aggiungiVdc()" style="cursor: pointer">Aggiungi</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<br />
+			<!--CONTENITORI FANTASMA PER INGRANDIRE LA SCROLL BAR-->
+			<div></div>
+			<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+			<div></div>
+			</div>
+
+		<!--
+    TABELLA CHE APPARE QUANDO CLICCHI SU UNA CARD TRATTEGGIATA
+    O IN BLU DI FORECAST E PERMETTONO L'INSERIMENTO DEI DATI
+    -->
+		<div *ngIf="appare_tab_forecast == true" class="navbar-nav-scroll">
+			<!--
+      INPUT TABELLA COSTO PERSONALE
+      -->
+			<!--<div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item" style="background-color: #F5F5F5;">
+          <h2 class="accordion-header" id="flush-headingOne">
+            <button class="accordion-button collapsed" type="button" style="background-color: #F5F5F5; height: 50px;"
+              data-bs-toggle="collapse" data-bs-target="#CostoPersonaleForecast" aria-expanded="true"
+              aria-controls="flush-collapseOne">
+              <p style="float: left" class="opacity_text">COSTO DEL PERSONALE</p>
+            </button>
+          </h2>
+          <div id="CostoPersonaleForecast" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne"
+            data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+              <form [formGroup]="costoPerForm">
+                <div formArrayName="itemsCostoPer">
+                  <table class="table table_inside_card">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>
+
+                        </th>
+                        <th style="width: 30%">
+                          <p class="bold_text">Profilo di costo</p>
+                        </th>
+                        <th>
+                          <p class="bold_text">Costo</p>
+                        </th>
+                        <th style="width: 20%">
+                          <p class="bold_text">GG</p>
+                        </th>
+                        <th>
+                          <p class="bold_text">Importo €</p>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="table_inside_card">
+                      <tr *ngFor="let item of itemsCostoPerArrayControl; let i = index;" [formGroupName]="i">
+                        <td *ngIf="role === 'PM' && action != 'DISPLAY'">
+                            <p (click)="removeItemCostoPer(i)">
+                            <i class="fas fa-trash-alt"  style="cursor: pointer; color: #0D67D0"></i>
+                            </p>
+                        </td>
+                        <td *ngIf="item.value.attribute === 'apiItem'">
+                          <ng-select [readonly]="true" [clearable]="false" formControlName="CostProfile"
+                            [placeholder]="item.value.CostProfile " >
+                          </ng-select>
+                        </td>
+                        <td *ngIf="item.value.attribute === 'formItem'">
+                          <ng-select formControlName="CostProfile"
+                            (change)="select_profiloCosto_costoPersonale_function($event, item.value.Quantity, i)"
+                            [items]="EtPrcstList.data.EtPrcstList" bindLabel="CostProfile" bindValue="CostProfile"  >
+                          </ng-select>
+                        </td>
+                        <td *ngIf="item.value.attribute != 'apiItem' && item.value.attribute != 'formItem'">
+                          <ng-select [readonly]="true" [clearable]="false" formControlName="CostProfile"
+                                     [placeholder]="item.value.CostProfile ">
+                          </ng-select>
+                        </td>
+                        <td>
+                          <div class="form-group" *ngIf="item.value.CostProfile != 'TEAM'">
+                            <input class="form-control" [readonly]="true" formControlName="DailyCost">
+                          </div>
+                          <div class="form-group" *ngIf="item.value.CostProfile == 'TEAM'">
+                            <input class="form-control" [readonly]="false" formControlName="DailyCost">
+                          </div>
+                        </td>
+                        <td>
+                          <div class="form-group">
+                            <input class="form-control" style="width: 80%" type="text" formControlName="Quantity"
+                                   (change)="change_forecast_modal()" (ngModelChange)="calcolateImporto(item.value.DailyCost, item.value.Quantity, i)">
+                          </div>
+                        </td>
+                        <td>
+                          <div class="form-group">
+                            <input class="form-control" formControlName="Value" (change)="change_forecast_modal()">
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </form>
+              <div class="row">
+                <div class="col-md-10" *ngIf="role === 'PM'&& action != 'DISPLAY'" >
+                  <p class="medium_strong_text" (click)="addItemCostoPer()" style="cursor: pointer;">Aggiungi</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>-->
+
+			<!-- NEW TAB COSTO PERSONALE -->
+			<div class="accordion accordion-flush" id="accordionFlushExample">
+				<div class="accordion-item" style="background-color: #f5f5f5">
+					<h2 class="accordion-header" id="flush-headingOne">
+						<button
+							class="accordion-button collapsed"
+							type="button"
+							style="background-color: #f5f5f5; height: 50px"
+							data-bs-toggle="collapse"
+							data-bs-target="#CostoPersonaleForecast"
+							aria-expanded="true"
+							aria-controls="flush-collapseOne">
+							<p style="float: left" class="opacity_text">COSTO DEL PERSONALE</p>
+						</button>
+					</h2>
+					<div
+						id="CostoPersonaleForecast"
+						class="accordion-collapse collapse show"
+						aria-labelledby="flush-headingOne"
+						data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">
+							<table class="table table_inside_card">
+								<thead class="thead-light">
+									<tr>
+										<th style="width: 0%"></th>
+										<th style="width: 15%">
+											<p class="bold_text">Prof. costo</p>
+										</th>
+										<th style="width: 15%">
+											<p class="bold_text">Costo GG</p>
+										</th>
+										<th style="width: 15%">
+											<p class="bold_text">GG</p>
+										</th>
+										<th style="width: 15%">
+											<p class="bold_text">Costo €</p>
+										</th>
+										<th *ngIf="revType === 'TM'" style="width: 18%">
+											<p class="bold_text">Ricavo €</p>
+										</th>
+									</tr>
+								</thead>
+								<tbody
+									class="table_inside_card"
+									*ngFor="let item of dataWBsDetail.data.EsForecast.TCeEmpl; let i = index">
+									<tr *ngIf="item.Fyear == information_card_anno && item.Fmonth == information_card_mese">
+										<td *ngIf="action == 'DISPLAY' || role == 'RAC'"></td>
+										<td *ngIf="isForecastEditable()">
+											<!-- <div> -->
+												<!-- Ricordati di far visualizzare item.Profile e item.Rate -->
+												<!-- <button mat-icon-button (click)="openDialogTariffe(item, i)" class="icon-euro" [matTooltip]="vistaTooltipTarifia(item)">
+													<mat-icon>euro</mat-icon>
+												</button> -->
+												<!-- <span (click)="openDialogTariffe()">
+													<i class="fa fa-plus" style="cursor: pointer; color: #0d67d0" ></i>
+												</span> -->
+
+												<p (click)="splice_CostoPer(i)" style="font-size: 13px;">
+													<i *ngIf="isForecastEditable()" class="fas fa-trash-alt" style="cursor: pointer; color: #0d67d0"></i>
+												</p>
+												<!--note-->
+											<div class="dropdown">
+												<p style="font-size: 13px; margin-top: -18px" id="pencilCostoPer" data-toggle="dropdown" aria>
+													<b *ngIf="item.Description == undefined || item.Description == '' || item.Description == ' '">
+														<i *ngIf="isForecastEditable()" class="fas fa-pencil-alt" style="cursor: pointer; color: #0d67d0"></i>
+													</b>
+													<b *ngIf="item.Description != undefined && item.Description != '' && item.Description != ' '">
+														<i
+															class="fas fa-sticky-note"
+															style="color: #ffd700; cursor: pointer"
+															data-toggle="tooltip"
+															data-placement="top"
+															title="{{ item.Description }}"></i>
+													</b>
+												</p>
+												<!--COLOR NOTE  #ffff9e-->
+												<div class="dropdown-menu" aria-labelledby="pencilCostoPer" style="background-color: #ffd700">
+													<textarea
+														rows="5"
+														id="commentCostPer"
+														maxlength="100"
+														style="background-color: #ffd700; border: none"
+														value="{{ item.Description }}"
+														[readOnly]="!isForecastEditable()"
+														(change)="noteCstPer($event, i)"></textarea>
+												</div>
+											</div>
+											<!-- </div> -->
+										</td>
+										<td *ngIf="item.attribute == undefined || item.attribute == 'apiItem'">
+											<ng-select [placeholder]="item.CostProfile" [readonly]="true"> </ng-select>
+										</td>
+										<td *ngIf="item.attribute == 'formItem'">
+											<div
+												class="ng-invalid"
+												*ngIf="item.CostProfile == null || item.CostProfile == '' || item.CostProfile == ' '">
+												<ng-select
+													[items]="prfl_cst"
+													(change)="prfl_cst_selected($event, i)"
+													[(ngModel)]="this.dataWBsDetail.data.EsForecast.TCeEmpl[i].CostProfile"
+													[disabled]="!isForecastEditable()"
+													dropdownPosition="bottom">
+												</ng-select>
+											</div>
+											<div *ngIf="item.CostProfile != null && item.CostProfile != '' && item.CostProfile != ' '">
+												<ng-select
+													[items]="prfl_cst"
+													(change)="prfl_cst_selected($event, i)"
+													[(ngModel)]="this.dataWBsDetail.data.EsForecast.TCeEmpl[i].CostProfile"
+													[disabled]="!isForecastEditable()"
+													dropdownPosition="bottom">
+												</ng-select>
+											</div>
+										</td>
+										<td>
+											<div class="form-group" *ngIf="item.attribute == undefined || item.attribute == 'apiItem'">
+												<input class="form-control" [value]="item.DailyCost | decimalCustomPipe" [readOnly]="true" />
+												<p *ngIf="item.errorDailyCost == true" class="pErrorTab">Notazione errata</p>
+											</div>
+											<div class="form-group" *ngIf="item.attribute == 'formItem' && item.CostProfile != 'TEAM'">
+												<input
+													class="form-control"
+													(change)="costoPer_DailyCost($event, i)"
+													[value]="item.DailyCost | decimalCustomPipe"
+													[readOnly]="true" />
+												<p *ngIf="item.errorDailyCost == true" class="pErrorTab">Notazione errata</p>
+											</div>
+											<div class="form-group" *ngIf="item.attribute == 'formItem' && item.CostProfile == 'TEAM'">
+												<input
+													class="form-control"
+													(change)="costoPer_DailyCost($event, i)"
+													[value]="item.DailyCost | decimalCustomPipe"
+													[disabled]="!isForecastEditable()"/>
+												<p *ngIf="item.errorDailyCost == true" class="pErrorTab">Notazione errata</p>
+											</div>
+										</td>
+										<td>
+											<div class="form-group">
+												<input
+													style="width: 80%"
+													class="form-control"
+													[value]="item.Quantity | decimalCustomPipe"
+													(change)="costoPer_Qunatity($event, i)"
+													[disabled]="!isForecastEditable()" />
+												<p *ngIf="item.errorQuantity == true" class="pErrorTab">Notazione errata</p>
+											</div>
+										</td>
+										<td>
+										<!-- <td style="display: flex;"> -->
+											<!-- <span style="margin-right: 5px">
+												<button mat-icon-button (click)="openDialogTariffe(item, i)" class="icon-euro" [matTooltip]="vistaTooltipTarifia(item)">
+													<mat-icon>euro</mat-icon>
+												</button>
+											</span> -->
+											<div class="form-group" *ngIf="item.Value != 'NaN'">
+												<input
+													*ngIf="checkIfIsPositiveNumber(item.Value) || (item.CostProfile === 'TEAM' && checkIfIsPositiveNumber(item.Quantity * item.Rate))"
+													[disabled]="!isForecastEditable()"
+													class="form-control"
+													[value]="item.Value | decimalCustomPipe"
+													(change)="costoPer_Value($event, i)" />
+												<input
+													*ngIf="
+														(item.CostProfile === 'TEAM' && !checkIfIsPositiveNumber(item.Quantity * item.Rate) && !checkIfIsPositiveNumber(item.Value)) ||
+														(item.CostProfile !== 'TEAM' && !checkIfIsPositiveNumber(item.Value))
+														"
+													[disabled]="!isForecastEditable()"
+													class="form-control ng-invalid"
+													[value]="item.Value | decimalCustomPipe"
+													(change)="costoPer_Value($event, i)" />
+												<p *ngIf="item.errorValue == true" class="pErrorTab">Notazione errata</p>
+											</div>
+											<div class="form-group" *ngIf="item.Value == 'NaN'">
+												<input
+													class="form-control"
+													[disabled]="!isForecastEditable()"
+													[value]="'0'"
+													(change)="costoPer_Value(0, i)" />
+												<p *ngIf="item.errorValue == true" class="pErrorTab">Notazione errata</p>
+											</div>
+										</td>
+										<td *ngIf="revType === 'TM'">
+
+											<button mat-icon-button (click)="openDialogTariffe(item, i, 'TCeEmpl')" [disabled]="!isForecastEditable()" class="icon-person" [matTooltip]="vistaTooltipTariffa(item)">
+												<mat-icon fontSet="material-icons-round">person_add</mat-icon>
+											</button>
+											<span >{{  ( (item.Quantity * item.Rate)  || '' ) | decimalCustomPipe }}</span>
+
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="row">
+								<div class="col-md-10" *ngIf="isForecastEditable()">
+									<p class="medium_strong_text" (click)="cstPer_push()" style="cursor: pointer; width: fit-content;">Aggiungi</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--
+      INPUT NEW TAB CONSULENZA TECNICA
+      -->
+			<div class="accordion accordion-flush" id="accordionFlushExample">
+				<div class="accordion-item" style="background-color: #f5f5f5">
+					<h2 class="accordion-header" id="flush-headingOne">
+						<button
+							class="accordion-button collapsed"
+							type="button"
+							style="background-color: #f5f5f5; height: 50px"
+							data-bs-toggle="collapse"
+							data-bs-target="#consulenzaTecnicaForecast"
+							aria-expanded="true"
+							aria-controls="flush-collapseOne">
+							<p style="float: left" class="opacity_text">CONSULENZA TECNICA</p>
+						</button>
+					</h2>
+					<div
+						id="consulenzaTecnicaForecast"
+						class="accordion-collapse collapse show"
+						aria-labelledby="flush-headingOne"
+						data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">
+							<table class="table table_inside_card consulenza_tecnica_table">
+								<thead class="thead-light">
+									<tr>
+										<th style="width: 0%"></th>
+										<th style="width: 15%">
+											<p class="bold_text">Fornitore</p>
+										</th>
+										<th style="width: 15%">
+											<p class="bold_text">Costo</p>
+										</th>
+										<th style="width: 15%">
+											<p class="bold_text">GG</p>
+										</th>
+										<th style="width: 15%">
+											<p class="bold_text">Importo €</p>
+										</th>
+										<th *ngIf="revType === 'TM'" style="width: 18%">
+											<p class="bold_text">Ricavo €</p>
+										</th>
+									</tr>
+								</thead>
+								<tbody
+									class="table_inside_card"
+									*ngFor="let item of dataWBsDetail.data.EsForecast.TCeCons; let i = index">
+									<tr *ngIf="item.Fyear == information_card_anno && item.Fmonth == information_card_mese">
+										<td *ngIf="action == 'DISPLAY' || role === 'RAC'"></td>
+										<td *ngIf="action == 'CHANGE' && role !== 'RAC'">
+											<p (click)="splice_Cons(i)" style="font-size: 13px">
+												<i class="fas fa-trash-alt" style="cursor: pointer; color: #0d67d0"></i>
+											</p>
+											<div class="dropdown">
+												<p style="font-size: 13px; margin-top: -18px" id="pencilConsTec" data-toggle="dropdown" aria>
+													<b *ngIf="item.Description == undefined || item.Description == '' || item.Description == ' '">
+														<i class="fas fa-pencil-alt" style="cursor: pointer; color: #0d67d0"></i>
+													</b>
+													<b *ngIf="item.Description != undefined && item.Description != '' && item.Description != ' '">
+														<i
+															class="fas fa-sticky-note"
+															style="color: #ffd700; cursor: pointer"
+															data-toggle="tooltip"
+															data-placement="top"
+															title="{{ item.Description }}"></i>
+													</b>
+												</p>
+												<div class="dropdown-menu" aria-labelledby="pencilConsTec" style="background-color: #ffd700">
+													<textarea
+														rows="5"
+														id="commentConsTec"
+														maxlength="100"
+														value="{{ item.Description }}"
+														(change)="noteConsTec($event, i)"
+														style="background-color: #ffd700; border: none"></textarea>
+												</div>
+											</div>
+										</td>
+										<td *ngIf="item.attribute == 'apiItem' || item.attribute == undefined">
+											<div class="fornitore_section">
+												<ng-select [placeholder]="item.DescSupplier" [readonly]="true"> </ng-select>
+											</div>
+										</td>
+										<td *ngIf="item.attribute == 'formItem'">
+											<div
+												class="fornitore_section ng-invalid"
+												*ngIf="item.DescSupplier == null || item.DescSupplier == '' || item.DescSupplier == ' '">
+												<ng-select
+													[items]="frn"
+													(change)="cons_descSupp($event, i)"
+													[(ngModel)]="this.dataWBsDetail.data.EsForecast.TCeCons[i].DescSupplier"
+													dropdownPosition="bottom"
+													[addTag]="addTag"
+													bindLabel="name">
+												</ng-select>
+											</div>
+											<div
+												class="fornitore_section"
+												*ngIf="item.DescSupplier != null && item.DescSupplier != '' && item.DescSupplier != ' '">
+												<ng-select
+													[items]="frn"
+													(change)="cons_descSupp($event, i)"
+													[(ngModel)]="this.dataWBsDetail.data.EsForecast.TCeCons[i].DescSupplier"
+													dropdownPosition="bottom"
+													[addTag]="addTag"
+													bindLabel="name">
+												</ng-select>
+											</div>
+										</td>
+										<td>
+											<div class="form-group">
+												<input
+													class="form-control"
+													[disabled]="action == 'DISPLAY' || role === 'RAC'"
+													(change)="cons_DailyCost($event, i)"
+													[value]="item.DailyCost | decimalCustomPipe" />
+												<p *ngIf="item.errorDailyCost == true" class="pErrorTab">Notazione errata</p>
+											</div>
+										</td>
+										<td>
+											<div class="form-group">
+												<input
+													class="form-control"
+													[disabled]="action == 'DISPLAY' || role === 'RAC'"
+													(change)="cons_Quantity($event, i)"
+													[value]="item.Quantity | decimalCustomPipe" />
+												<p *ngIf="item.errorQuantity == true" class="pErrorTab">Notazione errata</p>
+											</div>
+										</td>
+										<td>
+											<div class="form-group" *ngIf="item.Value != 'NaN'">
+												<input
+													*ngIf="checkIfIsPositiveNumber(item.Value) || checkIfIsPositiveNumber(item.Quantity*item.Rate)"
+													class="form-control"
+													[value]="item.Value | decimalCustomPipe"
+													[disabled]="action == 'DISPLAY' || role === 'RAC'"
+													(change)="cons_Value($event, i)" />
+												<input
+													*ngIf="!checkIfIsPositiveNumber(item.Value) && !checkIfIsPositiveNumber(item.Quantity * item.Rate)"
+													class="form-control ng-invalid"
+													[value]="item.Value | decimalCustomPipe"
+													[disabled]="action == 'DISPLAY' || role === 'RAC'"
+													(change)="cons_Value($event, i)" />
+												<p *ngIf="item.errorValue == true" class="pErrorTab">Notazione errata</p>
+											</div>
+											<div class="form-group" *ngIf="item.Value == 'NaN'">
+												<input
+													class="form-control"
+													[value]="'0' | decimalCustomPipe"
+													[disabled]="action == 'DISPLAY' || role === 'RAC'"
+													(change)="cons_Value(0, i)" />
+												<p *ngIf="item.errorValue == true" class="pErrorTab">Notazione errata</p>
+											</div>
+										</td>
+										<td *ngIf="revType === 'TM'">
+
+											<button mat-icon-button (click)="openDialogTariffe(item, i, 'TCeCons')" [disabled]="!isForecastEditable()" class="icon-person" [matTooltip]="vistaTooltipTariffa(item)">
+												<mat-icon fontSet="material-icons-round">person_add</mat-icon>
+											</button>
+											<span >{{  ( (item.Quantity * item.Rate)  || '' ) | decimalCustomPipe }}</span>
+
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="row">
+								<div class="col-md-10" *ngIf="action == 'CHANGE' && role !== 'RAC'">
+									<p class="medium_strong_text" (click)="consTec_push()" style="cursor: pointer; width: fit-content;">Aggiungi</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!--INPUT NUOVA TAB VOCI DI COSTO-->
+			<div class="accordion accordion-flush" id="accordionFlushExample">
+				<div class="accordion-item" style="background-color: #f5f5f5">
+					<h2 class="accordion-header" id="flush-headingOne">
+						<button
+							class="accordion-button collapsed"
+							type="button"
+							style="background-color: #f5f5f5; height: 50px"
+							data-bs-toggle="collapse"
+							data-bs-target="#vociDiCostoForecast"
+							aria-expanded="true"
+							aria-controls="flush-collapseOne">
+							<p style="float: left" class="opacity_text">VOCI DI COSTO</p>
+						</button>
+					</h2>
+					<div
+						id="vociDiCostoForecast"
+						class="accordion-collapse collapse show"
+						aria-labelledby="flush-headingOne"
+						data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">
+							<table class="table table_inside_card voci_costo_table">
+								<thead class="thead-light">
+									<tr>
+										<th></th>
+										<th>
+											<p class="bold_text">Dettaglio</p>
+										</th>
+										<th style="width: 30%">
+											<p class="bold_text">Importo €</p>
+										</th>
+									</tr>
+								</thead>
+								<tbody
+									class="table_inside_card"
+									*ngFor="let item of dataWBsDetail.data.EsForecast.TCostElement; let i = index">
+									<tr
+										*ngIf="
+											item.Fyear == information_card_anno &&
+											item.Fmonth == information_card_mese &&
+											item.CeDetType == 'G'
+										">
+										<!-- AutoInd può essere 'X' o '' -->
+										<td *ngIf="action == 'DISPLAY' || role === 'RAC'  || item.AutoInd"></td>
+										<td *ngIf="action == 'CHANGE' && role !== 'RAC' && !item.AutoInd">
+											<p (click)="splice_vcCost(i)" style="font-size: 13px">
+												<i class="fas fa-trash-alt" style="cursor: pointer; color: #0d67d0"></i>
+											</p>
+											<div class="dropdown">
+												<p style="font-size: 13px; margin-top: -18px" id="pencilVociCost" data-toggle="dropdown" aria>
+													<b *ngIf="item.Description == undefined || item.Description == '' || item.Description == ' '">
+														<i class="fas fa-pencil-alt" style="cursor: pointer; color: #0d67d0"></i>
+													</b>
+													<b *ngIf="item.Description != undefined && item.Description != '' && item.Description != ' '">
+														<i
+															class="fas fa-sticky-note"
+															style="color: #ffd700; cursor: pointer"
+															data-toggle="tooltip"
+															data-placement="top"
+															title="{{ item.Description }}"></i>
+													</b>
+												</p>
+												<div class="dropdown-menu" aria-labelledby="pencilVociCost" style="background-color: #ffd700">
+													<textarea
+														rows="5"
+														id="commentVociCost"
+														maxlength="100"
+														value="{{ item.Description }}"
+														(change)="noteVociCst($event, i)"
+														style="background-color: #ffd700; border: none"></textarea>
+												</div>
+											</div>
+										</td>
+										<td *ngIf="item.attribute == 'apiItem' || item.attribute == undefined">
+											<div class="dettaglio_section">
+												<ng-select [placeholder]="item.DescrCe" [readonly]="true"> </ng-select>
+											</div>
+										</td>
+										<td *ngIf="item.attribute == 'formItem'">
+											<div
+												class="dettaglio_section"
+												*ngIf="item.DescrCe != null && item.DescrCe != '' && item.DescrCe != ' '">
+												<ng-select
+													[items]="dt"
+													(change)="vcCost_DescrCe($event, i)"
+													[(ngModel)]="dataWBsDetail.data.EsForecast.TCostElement[i].DescrCe"
+													dropdownPosition="bottom">
+												</ng-select>
+											</div>
+											<div
+												class="dettaglio_section"
+												*ngIf="item.DescrCe == null || item.DescrCe == '' || item.DescrCe == ' '">
+												<ng-select
+													class="ng-invalid"
+													[items]="dt"
+													(change)="vcCost_DescrCe($event, i)"
+													[(ngModel)]="dataWBsDetail.data.EsForecast.TCostElement[i].DescrCe"
+													dropdownPosition="bottom">
+												</ng-select>
+											</div>
+										</td>
+										<td>
+											<div
+												class="form-group"
+												*ngIf="item.Value != 0 && item.Value != '' && item.Value != ' ' && item.Value != '0'">
+												<input
+													class="form-control"
+													[value]="item.Value | decimalCustomPipe"
+													[disabled]="action == 'DISPLAY' || role === 'RAC' || item.AutoInd "
+													(change)="vcCost_Value($event, i)" />
+												<p *ngIf="item.errorValue == true" class="pErrorTab">Notazione errata</p>
+											</div>
+											<div
+												class="form-group"
+												*ngIf="item.Value == 0 || item.Value == '' || item.Value == ' ' || item.Value == '0'">
+												<input
+													class="form-control ng-invalid"
+													[value]="item.Value | decimalCustomPipe"
+													[disabled]="action == 'DISPLAY' || role === 'RAC' || item.AutoInd"
+													(change)="vcCost_Value($event, i)" />
+												<p *ngIf="item.errorValue == true" class="pErrorTab">Notazione errata</p>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="row">
+								<div class="col-md-10" *ngIf="action == 'CHANGE' && role !== 'RAC'">
+									<p class="medium_strong_text" (click)="vcCost_push()" style="cursor: pointer; width: fit-content;">Aggiungi</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<ng-container *ngFor="let informationsCards of informationsCards">
+				<ng-container *ngFor="let TPerio of informationsCards.TPerio">
+					<ng-container
+						*ngIf="
+							TPerio.Fyear == information_card_anno &&
+							TPerio.Fmonth == information_card_mese &&
+							TPerio.type == 'blueCard' &&
+							isCopyMonthAvailable(information_card_anno, TPerio)
+						">
+						<div class="row">
+							<div class="col-md-12">
+								<button
+									type="button"
+									class="btn btn-primary"
+									style="margin-left: 23px; background: #034d6a; border: none"
+									(click)="copyToNextMonth(TPerio)">
+									Copia Mese Successivo
+								</button>
+							</div>
+						</div>
+					</ng-container>
+				</ng-container>
+			</ng-container>
+
+			<!--
+      INPUT TABELLA CONSULENZA TECNICA
+      -->
+			<!--<div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item" style="background-color: #F5F5F5;">
+          <h2 class="accordion-header" id="flush-headingOne">
+            <button class="accordion-button collapsed" type="button" style="background-color: #F5F5F5; height: 50px;"
+              data-bs-toggle="collapse" data-bs-target="#consulenzaTecnicaForecast" aria-expanded="true"
+              aria-controls="flush-collapseOne">
+              <p style="float: left" class="opacity_text">CONSULENZA TECNICA</p>
+            </button>
+          </h2>
+          <div id="consulenzaTecnicaForecast" class="accordion-collapse collapse show"
+            aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+              <form [formGroup]="consulenzaTecnicaForm">
+                <div formArrayName="itemsConsulenzaTecnica">
+                  <table class="table table_inside_card consulenza_tecnica_table">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>
+                        </th>
+                        <th>
+                          <p class="bold_text">Fornitore</p>
+                        </th>
+                        <th>
+                          <p class="bold_text">Costo</p>
+                        </th>
+                        <th>
+                          <p class="bold_text">GG</p>
+                        </th>
+                        <th>
+                          <p class="bold_text">Importo €</p>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="table_inside_card">
+                      <tr *ngFor="let item of itemsConsulenzaTecnicaArrayControl; let i = index;" [formGroupName]="i">
+                        <td >
+                          <div *ngIf="role === 'PM' && action != 'DISPLAY'" >
+                            <p (click)="removeItemConsulenzaTecnica(i)">
+                              <i class="fas fa-trash-alt"  style="cursor: pointer; color: #0D67D0"></i>
+                            </p>
+                          </div>
+                        </td>
+                        <td *ngIf="item.value.attribute === 'apiItem'">
+                          <div >
+                            <ng-select [readonly]="true" [clearable]="false" formControlName="DescSupplier"
+                              [placeholder]="item.value.DescSupplier">
+                            </ng-select>
+                          </div>
+                        </td>
+                        <td *ngIf="item.value.attribute === 'formItem' && EtSupplList.data.EtSupplList!=undefined">
+                          <div class="fornitore_section">
+                            <ng-select formControlName="DescSupplier" [items]="EtSupplList.data.EtSupplList"
+                              bindLabel="DescrSupplier" bindValue="DescrSupplier">
+                            </ng-select>
+                          </div>
+                        </td>
+                        <td *ngIf="item.value.attribute != 'apiItem' && item.value.attribute != 'formItem'">
+                          <div >
+                            <ng-select [readonly]="true" [clearable]="false" formControlName="DescSupplier"
+                                       [placeholder]="item.value.DescSupplier">
+                            </ng-select>
+                          </div>
+                        </td>
+                        <td *ngIf="item.value.attribute === 'formItem' && EtSupplList.data.EtSupplList==undefined">
+                          <div class="fornitore_section">
+                            <ng-select formControlName="DescSupplier"
+                                       bindLabel="DescrSupplier" bindValue="DescrSupplier">
+                            </ng-select>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="form-group">
+                            <input class="form-control" formControlName="DailyCost"
+                                   (change)="change_forecast_modal()" (ngModelChange)="calcolateImportoConsulenza(item.value.DailyCost, item.value.Quantity, i)">
+                          </div>
+                        </td>
+                        <td>
+                          <div class="form-group">
+                            <input class="form-control" formControlName="Quantity"
+                                   (change)="change_forecast_modal()" (ngModelChange)="calcolateImportoConsulenza(item.value.DailyCost, item.value.Quantity, i)">
+                          </div>
+                        </td>
+                        <td>
+                          <div class="form-group">
+                            <input class="form-control" formControlName="Value" (change)="change_forecast_modal()">
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </form>
+              <div class="row">
+                <div class="col-md-2" *ngIf="role === 'PM' && action != 'DISPLAY'" >
+                  <p class="medium_strong_text" (click)="addItemsConsulenzaTecnica()" style="cursor: pointer;">Aggiungi
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>-->
+
+			<!--
+     INPUT TABELLA VOCI DI COSTO
+     -->
+			<!--<div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item" style="background-color: #F5F5F5;">
+          <h2 class="accordion-header" id="flush-headingOne">
+            <button class="accordion-button collapsed" type="button" style="background-color: #F5F5F5; height: 50px;"
+              data-bs-toggle="collapse" data-bs-target="#vociDiCostoForecast" aria-expanded="true"
+              aria-controls="flush-collapseOne">
+              <p style="float: left" class="opacity_text">VOCI DI COSTO</p>
+            </button>
+          </h2>
+          <div id="vociDiCostoForecast" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne"
+            data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+              <form [formGroup]="vociDiCostoForm">
+                <div formArrayName="itemsVociDiCosto">
+                  <table class="table table_inside_card voci_costo_table">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>
+
+                        </th>
+                        <th>
+                          <p class="bold_text">Dettaglio</p>
+                        </th>
+                        <th style="width: 30%;">
+                          <p class="bold_text">Importo €</p>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="table_inside_card">
+                      <tr *ngFor="let item of itemsVociDiCostoArrayControl; let i = index;" [formGroupName]="i">
+                        <td>
+                          <div *ngIf="role === 'PM' && action != 'DISPLAY'" >
+                            <p (click)="removeVociCosto(i)">
+                              <i class="fas fa-trash-alt"  style="cursor: pointer; color: #0D67D0"></i>
+                            </p>
+                          </div>
+                        </td>
+                        <td *ngIf="item.value.attribute === 'apiItem'">
+                          <div class="dettaglio_section">
+                            <ng-select [readonly]="true" [clearable]="false" formControlName="DescrCe"
+                              [placeholder]="item.value.DescrCe">
+                            </ng-select>
+                          </div>
+                        </td>
+                        <td *ngIf="item.value.attribute === 'formItem'">
+                          <div class="dettaglio_section">
+                            <ng-select formControlName="DescrCe" (change)="select_voceCosto_function($event, i)"
+                                       [items]="WbsCe.data.EtCeList" bindLabel="DescrCe" bindValue="DescrCe">
+                            </ng-select>
+                          </div>
+                        </td>
+                        <input [hidden]="true" formControlName="CeDetType">
+                        <input [hidden]="true" formControlName="CeInd">
+                        <input [hidden]="true" formControlName="CostElement">
+                        <td>
+                          <div class="form-group">
+                            <input class="form-control" formControlName="Value" (change)="change_forecast_modal()">
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+              </form>
+              <div class="row">
+                <div class="col-md-2" *ngIf="role === 'PM' && action != 'DISPLAY'" >
+                  <p class="medium_strong_text" *ngIf="role === 'PM'" (click)="addItemVociDiCosto()"
+                    style="cursor: pointer;">Aggiungi</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>-->
+			<!--CONTENITORI FANTASMA PER INGRANDIRE LA SCROLL BAR-->
+			<div></div>
+			<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+			<div></div>
+		</div>
+
+		<!-- MODALE FATTURATO -->
+		<div class="container">
+			<div class="modal fade" id="fatturato" role="dialog">
+				<div class="modal-dialog modal-dialog-scrollable modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Dettaglio</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<table class="table">
+								<thead>
+									<tr class="tr-section-color">
+										<th>
+											<p class="bold_text font-color">Nr.Fattura</p>
+										</th>
+										<th>
+											<p class="bold_text font-color">Data Emissione</p>
+										</th>
+										<th>
+											<p class="bold_text font-color">Importo (€)</p>
+										</th>
+									</tr>
+								</thead>
+								<tbody *ngFor="let TBalInv of TBalInv">
+									<tr class="opacity_text">
+										<td>
+											<p class="opacity_value_tab">{{ TBalInv.Invoice }}</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab">
+												{{ TBalInv.BillDate | date: 'dd/MM/yyyy' }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab">€ {{ TBalInv.Value | decimalCustomPipe }}</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+        <!--MODALE TASTO PLANNING-->
+        <div class="modal fade" id="checkPlaModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-center">Non è presente una pianificazione, continuare comunque?</p>
+                        <div class="row">
+                            <div class="col-3"></div>
+                            <div class="col-3">
+                                <button
+                                        class="btn btn-primary"
+                                        style="background-color: #005069; border: none"
+                                        data-toggle="modal"
+                                        data-target="#inviaModal"
+                                        data-dismiss="modal">
+                                    Continua
+                                </button>
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-primary" style="background-color: #005069; border: none" data-dismiss="modal">
+                                    Annulla
+                                </button>
+                            </div>
+                            <div class="col-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!--MODALE TASTO INVIA-->
+		<div class="modal fade" id="inviaModal" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<p class="text-center">Confermare invio dati</p>
+						<div class="row">
+							<div class="col-3"></div>
+							<div class="col-3">
+								<button
+									class="btn btn-primary"
+									style="background-color: #005069; border: none"
+									(click)="invia()"
+									data-dismiss="modal">
+									Continua
+								</button>
+							</div>
+							<div class="col-3">
+								<button class="btn btn-primary" style="background-color: #005069; border: none" data-dismiss="modal">
+									Annulla
+								</button>
+							</div>
+							<div class="col-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--MODALE VISUALIZZAZIONE DETTAGLI-->
+		<!--<div class="container">
+      <div class="modal " id="visDettagli" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="row" >
+                <div class="col-md-6">
+                  <b style="float: left">COSTO DEL PERSONALE CONSUNTIVO</b>
+                  <table class="table" >
+                    <thead style="background-color: #034D6A">
+                    <tr>
+                      <th>
+                        <p style="color:white">Dipendente</p>
+                      </th>
+                      <th>
+                        <p style="color:white">GG</p>
+                      </th>
+                      <th>
+                        <p style="color:white">Costo €</p>
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody >
+                    <tr *ngFor="let TBalEmpl of dataWBsDetail.data.EsBalance.TBalEmpl" >
+                      <ng-container *ngIf="information_card_anno == TBalEmpl.Fyear">
+                        <td>
+                          <p class="opacity_value_tab" style=" color: #80868A;opacity: 1;font-size: 11px;">{{TBalEmpl.Name}}</p>
+                        </td>
+                        <td>
+                          <p class="opacity_value_tab" style=" color: #80868A;opacity: 1;font-size: 11px;">{{TBalEmpl.Quantity}}</p>
+                        </td>
+                        <td>
+                          <p class="opacity_value_tab" style=" color: #80868A;opacity: 1;font-size: 11px;">€ {{TBalEmpl.Value | decimalCustomPipe}}</p>
+                        </td>
+                      </ng-container>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="col-md-6">
+                  <b style="float: left" >COSTO DEL PERSONALE FORECAST</b>
+                  <table class="table" >
+                    <thead style="background-color: #034D6A">
+                    <tr>
+                      <th>
+                        <p style="color: white">Profilo di costo</p>
+                      </th>
+                      <th>
+                        <p style="color: white">Costo</p>
+                      </th>
+                      <th>
+                        <p style="color: white">GG</p>
+                      </th>
+                      <th>
+                        <p style="color: white">Importo €</p>
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let TCeEmpl of dataWBsDetail.data.EsForecast.TCeEmpl" class="opacity_text">
+                      <ng-container *ngIf="TCeEmpl.Fyear == information_card_anno">
+                        <td>
+                          <p class="opacity_value_tab" style=" color: #80868A;opacity: 1;font-size: 11px;">{{TCeEmpl.CostProfile}}</p>
+                        </td>
+                        <td>
+                          <p class="opacity_value_tab" style=" color: #80868A;opacity: 1;font-size: 11px;">{{TCeEmpl.DailyCost}}</p>
+                        </td>
+                        <td>
+                          <p class="opacity_value_tab" style=" color: #80868A;opacity: 1;font-size: 11px;">{{TCeEmpl.Quantity}}</p>
+                        </td>
+                        <td>
+                          <p class="opacity_value_tab" style=" color: #80868A;opacity: 1;font-size: 11px;">€ {{TCeEmpl.Value | decimalCustomPipe}}</p>
+                        </td>
+                      </ng-container>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>-->
+		<!--MODALE DETTAGLI-->
+		<div class="modal fade" id="visDettagli" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<!--VALORI IN ALTRO-->
+						<div class="row text-center padding">
+							<div class="col-md-2 opacity_text">
+								<p class="bold_text" style="font-size: 16px">Costi</p>
+								<p class="opacity_value">€ {{ costiConsuntivati | decimalCustomPipe }}</p>
+							</div>
+							<div class="col-md-2 opacity_text">
+								<p class="bold_text" style="font-size: 16px">Ricavi</p>
+								<p class="opacity_value">€ {{ ricaviMaturati | decimalCustomPipe }}</p>
+							</div>
+							<div class="col-md-2 opacity_text">
+								<p class="bold_text" style="font-size: 16px">Margine</p>
+								<ng-container *ngIf="marginalitaTotale == '-'">
+									<p class="opacity_value">{{ marginalitaTotale }} %</p>
+								</ng-container>
+								<ng-container *ngIf="marginalitaTotale != '-'">
+									<p class="opacity_value">{{ marginalitaTotale | decimalCustomPipe }} %</p>
+								</ng-container>
+							</div>
+							<div class="col-md-2 opacity_text">
+								<p class="bold_text" style="font-size: 16px">Fcst Costi</p>
+								<p class="opacity_value">€ {{ fcstCosti | decimalCustomPipe }}</p>
+							</div>
+							<div class="col-md-2 opacity_text">
+								<p class="bold_text" style="font-size: 16px">Fcst Ricavi</p>
+								<p class="opacity_value">€ {{ fcstRicavi | decimalCustomPipe }}</p>
+							</div>
+							<div class="col-md-2 opacity_text">
+								<p class="bold_text" style="font-size: 16px">Fcst Margine</p>
+								<p class="opacity_value">{{ fcstMargine | decimalCustomPipe }} %</p>
+							</div>
+							<hr />
+							<div class="row">
+								<div class="col-md-6">
+									<button
+										type="button"
+										class="btn"
+										style="background-color: #558a51; color: white; float: right; float: left"
+										[disabled]="buttonExportConsuntivo == false"
+										(click)="exportDettagliConsuntivo()">
+										<i class="fas fa-file-excel" style="color: white"></i>
+										export
+									</button>
+								</div>
+								<div class="col-md-6">
+									<button
+										type="button"
+										class="btn"
+										style="background-color: #558a51; color: white; float: right"
+										[disabled]="buttonExportForecast == false"
+										(click)="exportDettagliForecast()">
+										<i class="fas fa-file-excel" style="color: white"></i>
+										export
+									</button>
+								</div>
+							</div>
+						</div>
+						<!--TABELLA COSTO DEL PERSONALE-->
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<b style="float: left">COSTO DEL PERSONALE CONSUNTIVO</b>
+							<table class="table">
+								<thead style="background-color: #034d6a">
+									<tr>
+										<th>
+											<p style="color: white">Profilo di costo</p>
+										</th>
+										<th>
+											<p style="color: white">GG</p>
+										</th>
+										<th>
+											<p style="color: white">Importo €</p>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let TBalEmpl of TBalEmplDett; let i = index">
+										<td>
+											<a href=".CstPerNome-{{ i }}" data-toggle="collapse">
+												<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+													<i class="fas fa-chevron-down" style="font-size: 10px"></i>&nbsp;{{ TBalEmpl.CostProfile }}
+												</p>
+											</a>
+											<div class="collapse CstPerNome-{{ i }}">
+												<div *ngFor="let TBalEmplName of TBalEmplName">
+													<ng-container *ngIf="TBalEmpl.CostProfile == TBalEmplName.CostProfile">
+														<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+															{{ TBalEmplName.Name }}
+														</p>
+													</ng-container>
+												</div>
+											</div>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TBalEmpl.Quantity | decimalCustomPipe }}
+											</p>
+											<div class="collapse CstPerNome-{{ i }}">
+												<div *ngFor="let TBalEmplName of TBalEmplName">
+													<ng-container *ngIf="TBalEmpl.CostProfile == TBalEmplName.CostProfile">
+														<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+															{{ TBalEmplName.Quantity | decimalCustomPipe }}
+														</p>
+													</ng-container>
+												</div>
+											</div>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												€ {{ TBalEmpl.Value | decimalCustomPipe }}
+											</p>
+											<div class="collapse CstPerNome-{{ i }}">
+												<div *ngFor="let TBalEmplName of TBalEmplName">
+													<ng-container *ngIf="TBalEmpl.CostProfile == TBalEmplName.CostProfile">
+														<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+															€ {{ TBalEmplName.Value | decimalCustomPipe }}
+														</p>
+													</ng-container>
+												</div>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col-md-6">
+							<b style="float: left">COSTO DEL PERSONALE FORECAST</b>
+							<table class="table">
+								<thead style="background-color: #034d6a">
+									<tr>
+										<th>
+											<p style="color: white">Profilo di costo</p>
+										</th>
+										<th>
+											<p style="color: white">Costo</p>
+										</th>
+										<th>
+											<p style="color: white">GG</p>
+										</th>
+										<th>
+											<p style="color: white">Importo €</p>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let TCeEmpl of TCeEmplDett" class="opacity_text">
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCeEmpl.CostProfile }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCeEmpl.DailyCost | decimalCustomPipe }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCeEmpl.Quantity | decimalCustomPipe }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												€ {{ TCeEmpl.Value | decimalCustomPipe }}
+											</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!--TABELLA CONSULENZA TECNICA-->
+					<hr />
+					<div class="row">
+						<div class="col-md-6">
+							<b style="float: left">CONSULENZA TECNICA CONSUNTIVO</b>
+							<table class="table">
+								<thead style="background-color: #034d6a">
+									<tr>
+										<th>
+											<p style="color: white">Forn.</p>
+										</th>
+										<th>
+											<p style="color: white">Dett.</p>
+										</th>
+										<th>
+											<p style="color: white">Ordine</p>
+										</th>
+										<th>
+											<p style="color: white">Importo</p>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let TBalCons of TBalConsDett">
+										<td>
+											<p
+												class="opacity_value_tab"
+												style="color: #80868a; opacity: 1; font-size: 11px; cursor: pointer"
+												data-toggle="tooltip"
+												data-placement="top"
+												title="{{ TBalCons.DescSupplier }}">
+												{{ TBalCons.DescSupplier | sliceText: [10, '...'] }}
+											</p>
+										</td>
+										<td>
+											<p
+												class="opacity_value_tab"
+												style="color: #80868a; opacity: 1; font-size: 11px; cursor: pointer"
+												data-toggle="tooltip"
+												data-placement="top"
+												title="{{ TBalCons.Description }}">
+												{{ TBalCons.Description | sliceText: [17, '...'] }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TBalCons.Orderno }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												€ {{ TBalCons.Value | decimalCustomPipe }}
+											</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col-md-6">
+							<b style="float: left">CONSULENZA TECNICA FORECAST</b>
+							<table class="table">
+								<thead style="background-color: #034d6a">
+									<tr>
+										<th>
+											<p style="color: white">Forn.</p>
+										</th>
+										<th>
+											<p style="color: white">Costo</p>
+										</th>
+										<th>
+											<p style="color: white">GG</p>
+										</th>
+										<th>
+											<p style="color: white">Importo</p>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let TCeCons of TCeConsDett">
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCeCons.DescSupplier }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCeCons.DailyCost | decimalCustomPipe }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCeCons.Quantity | decimalCustomPipe }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												€ {{ TCeCons.Value | decimalCustomPipe }}
+											</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!--TABELLA VOCI DI COSTO-->
+					<hr />
+					<div class="row">
+						<div class="col-md-6">
+							<b style="float: left">VOCI DI COSTO CONSUNTIVO</b>
+							<table class="table">
+								<thead style="background-color: #034d6a">
+									<tr>
+										<th>
+											<p style="color: white">Dettaglio</p>
+										</th>
+										<th>
+											<p style="color: white">Importo €</p>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let TBalCe of TBalCeDett">
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TBalCe.DescrCe }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												€ {{ TBalCe.Value | decimalCustomPipe }}
+											</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col-md-6">
+							<b style="float: left">VOCI DI COSTO FORECAST</b>
+							<table class="table">
+								<thead style="background-color: #034d6a">
+									<tr>
+										<th>
+											<p style="color: white">Dettaglio</p>
+										</th>
+										<th>
+											<p style="color: white">Importo €</p>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let TCostElement of TCostElementDett">
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCostElement.DescrCe }}
+											</p>
+										</td>
+										<td>
+											<p class="opacity_value_tab" style="color: #80868a; opacity: 1; font-size: 11px">
+												{{ TCostElement.Value | decimalCustomPipe }} €
+											</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<table *ngIf="appareExcel == false">
+	<tr>
+		<td>Dipendente</td>
+		<td>GG</td>
+		<td>Costo</td>
+	</tr>
+	<tr *ngFor="let excelTBalEmpl of data">
+		<ng-container *ngIf="excelTBalEmpl.Fyear == this.information_card_anno">
+			<td>{{ excelTBalEmpl.Name }}</td>
+			<td>{{ excelTBalEmpl.Quantity }}</td>
+			<td>{{ excelTBalEmpl.Value }}</td>
+		</ng-container>
+	</tr>
+</table>

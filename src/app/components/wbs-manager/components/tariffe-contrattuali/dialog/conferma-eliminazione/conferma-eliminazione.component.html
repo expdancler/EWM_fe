@@ -1,0 +1,7 @@
+<div mat-dialog-content>
+    <p>Sicuro di voler cancellare l'intera riga?</p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="true">Continua</button>
+    <button mat-button (click)="onNoClick()" cdkFocusInitial>Annulla</button>
+  </div>

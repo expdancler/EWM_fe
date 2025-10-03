@@ -1,0 +1,7 @@
+{
+	"environment" : {
+		"production": "false",
+		"environmentName": "development",
+		"baseUrl": "http://ewm.exprivia.com:8080"
+	}
+}

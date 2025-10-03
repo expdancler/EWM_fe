@@ -1,0 +1,31 @@
+.image-logo{
+  background-image: url("../assets/Logo Exprivia.svg");
+  width: 100%;
+  height: 1vh;
+  background-size: cover;
+}
+
+.navbar{
+  .navbar-nav{
+    .logo-section{
+      display: flex;
+      .logo{
+        width: 15%; 
+        margin-bottom: 10px;
+      }
+    }
+    .responsive-logo-section{
+      display: flex;
+      .log{
+        width: 5%;
+      }
+      .wbs-manager-section{
+        margin-top: 15px;
+      }
+    }
+    .responsive-work-space{
+      margin-left: 100px;
+    }
+  }
+
+}

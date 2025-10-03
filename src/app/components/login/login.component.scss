@@ -1,0 +1,53 @@
+.image-logo{
+  height: 100vh;
+  width: 100%;
+  background-image: url("../../../assets/Background WBSManager.svg");
+  background-size: cover;
+}
+.login-section {
+     margin-top: 100px;
+     .list-group{
+        .list-group-item {
+            width: 85%;
+        }
+     }
+    form {
+        margin-top: 100px;
+    }
+}
+.form-group{
+  margin-right: 30px;
+  margin-left: 30px;
+}
+.btn{
+  margin-top: 150px;
+  background: var(--unnamed-color-e85212) 0% 0% no-repeat padding-box;
+  background: #E85212 0% 0% no-repeat padding-box;
+  box-shadow: 3px 3px 6px #00000029;
+  border-radius: 5px;
+  opacity: 1;
+  width: 100px;
+  color: white;
+}
+p{
+  letter-spacing: var(--unnamed-character-spacing-0);
+  text-align: left;
+  letter-spacing: 0px;
+  color: #212529;
+  opacity: 1;
+}
+.opacity_text{
+  letter-spacing: var(--unnamed-character-spacing-0);
+  text-align: left;
+  letter-spacing: 0px;
+  color: #868E96;
+  opacity: 1;
+  font: normal normal bold 10px/13px ;
+}
+input{
+  margin-top: -15px;
+}
+.input_smartphone{
+  margin-left: 1px;
+  margin-right: 1px;
+}

@@ -1,0 +1,721 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2 main-section d-none d-sm-block">
+      <h5 class="main-title" style="margin-top: 20%">Workspace</h5>
+    </div>
+    <div class="col-md-1 d-none d-sm-block"></div>
+
+    <!-- <div *ngFor="let label of labels; let index = index; trackBy:trackByIndex;" class="col-md-2 d-none d-sm-block">
+        <label for="label.model" class="labelPeriodo">{{label.text}}</label>
+        <input type="text" [(ngModel)]="labels[index].model" class="form-control inputPeriodo" id="label.model" disabled>
+      </div> -->
+
+    <!-- Periodo di Forecast -->
+    <div class="col-md-2 d-none d-sm-block">
+      <label for="perForecast" class="labelPeriodo">Periodo di Forecast</label>
+      <input type="text" [(ngModel)]="perForecast" class="form-control inputPeriodo" id="perForecast" disabled />
+    </div>
+
+    <!-- Data invio da -->
+    <div class="col-md-2 d-none d-sm-block">
+      <label for="dataInvioForecastDa" class="labelPeriodo">Data invio da:</label>
+      <input
+        type="text"
+        [(ngModel)]="dataInvioForecastDa"
+        class="form-control inputPeriodo"
+        id="dataInvioForecastDa"
+        disabled />
+    </div>
+
+    <!-- Data invio a -->
+    <div class="col-md-2 d-none d-sm-block">
+      <label for="dataInvioForecastA" class="labelPeriodo">Data invio a:</label>
+      <input
+        type="text"
+        [(ngModel)]="dataInvioForecastA"
+        class="form-control inputPeriodo"
+        id="dataInvioForecastA"
+        disabled />
+    </div>
+
+    <!-- Button -->
+    <div class="col-md-3 d-none d-sm-block">
+      <button
+        type="button"
+        class="btn btn-primary"
+        style="margin-top: 36px"
+        data-bs-toggle="modal"
+        data-bs-target="#apriPeriodo"
+        *ngIf="buttonOpen === 'X'"
+        (click)="popUpApriP()">
+        Apri Periodo
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        style="margin-left: 10px; margin-top: 36px"
+        data-bs-toggle="modal"
+        *ngIf="buttonClose === 'X'"
+        data-bs-target="#chiudiPeriodo"
+        (click)="popUpChiudiP()">
+        Chiudi Periodo
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        style="margin-left: 10px; margin-top: 36px"
+        data-toggle="modal"
+        data-target="#remindAll"
+        *ngIf="buttonSolleciti === 'X'">
+        Invia Solleciti
+      </button>
+
+      <!--MODALE REMIND MASSIVO-->
+      <!-- <div class="modal fade" id="remindAll" role="dialog">
+          <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color: #005069">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <p class="text-center">Confermare l’invio del sollecito per le WBS non ancora inviate</p>
+                <div class="row">
+                  <div class="col-3"></div>
+                  <div class="col-3">
+                    <button class="btn btn-primary" style="background-color: #005069; border: none" (click)="wbsRemind()" data-dismiss="modal">Continua</button>
+                  </div>
+                  <div class="col-3">
+                    <button class="btn btn-primary" style="background-color: #005069; border: none" data-dismiss="modal" >Annulla</button>
+                  </div>
+                  <div class="col-3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+      <app-modals
+        [descrizione]="modal[0].descrizione"
+        [idModal]="modal[0].idModal"
+        (emitClick)="wbsRemind()"></app-modals>
+    </div>
+
+    <div class="col-md-12 main-section d-block d-sm-none">
+      <h3 class="main-title">Workspace</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-2 form d-none d-sm-block navbar-nav-scroll">
+      <div class="search-title">
+        <p>Ricerca</p>
+      </div>
+      <hr />
+      <!-- INZIO FORM FROU -->
+      <form [formGroup]="searchForm" (keyup.enter)="searchList()">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-3">
+              <p style="margin-top: 5px">Stato</p>
+            </div>
+            <div class="col-md-9">
+              <!-- Controllo con ngStyle il cambio del colore-->
+              <button 
+                type="button"
+                class="btn btn-primary button-aperte"
+                [ngStyle]="{ 'background-color': searchForm.value.stato === '1' ? '#034D6A' : '#6E6E6E' }"
+                (click)="searchAperte()">
+                Aperte
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary button-chiuse"
+                [ngStyle]="{ 'background-color': searchForm.value.stato == 'all' ? '#034D6A' : '#6E6E6E' }"
+                (click)="searchTutte()">
+                Tutte
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <p style="margin-top: 5px">WBS</p>
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="wbs"
+              id="wbs"
+              placeholder="es. X-G123"
+              maxlength="15" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-5">
+            <p style="margin-top: 5px">Descrizione</p>
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="descrizione"
+              id="descrizione"
+              placeholder="Descrizione"
+              maxlength="10" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <p style="margin-top: 5px">Cliente</p>
+          </div>
+          <div class="form-group">
+            <div class="cliente-section">
+              <ng-select
+                placeholder="Cliente"
+                [items]="listaClienti"
+                bindLabel="DescrCustomer"
+                bindValue="Customer"
+                formControlName="cliente">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="row">
+            <div class="col-md-3">
+              <p style="margin-top: 5px">PM</p>
+            </div>     
+            <div class="form-group">
+              <div>
+                <ng-select placeholder="PM" [items]="listaPM" formControlName="pm" bindLabel="ProjectManager" bindValue="PmCode">
+                </ng-select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="row">
+            <div class="col-md-3 width-unset" >
+              <p style="margin-top: 5px">Tipologia commessa</p>
+            </div>     
+            <div class="form-group">
+              <div>
+                <ng-select placeholder="Tipologia commessa" [items]="listaTipologiaCommessa" formControlName="tipologiaCommessa" bindLabel="label" bindValue="value">
+                </ng-select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--<div class="row">
+          <div class="col-md-3">
+            <p style="margin-top: 5px">PM</p>
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <input (change)="changePM($event)" type="text" class="form-control"
+                     id="pm" placeholder="Project Manager" >
+            </div>
+          </div>
+        </div>-->
+        <!--<hr>
+        <div class="form-group">
+          <label for="dataInizio">
+            <p>Data da</p>
+          </label>
+          <input (keyup.enter)="searchList()" type="date" class="form-control" formControlName="dataInizio"
+            id="dataInizio" placeholder="Data">
+        </div>
+        <div class="form-group">
+          <label for="dataFine">
+            <p>Data a</p>
+          </label>
+          <input (keyup.enter)="searchList()" type="date" class="form-control" formControlName="dataFine" id="dataFine"
+            placeholder="Data">
+        </div>-->
+        <!--<div style="height: 50px;">
+          <div *ngIf="validatinDate" class="text-danger">
+            "Data da" deve essere minore di "Data a"
+          </div>
+          <div *ngIf="!validatinDate">
+          </div>
+        </div>-->
+      </form>
+      <button type="button" class="btn btn-primary button-ricerca" (click)="searchList(); changePage(0)">Cerca</button>
+      <button type="button" class="btn btn-secondary button-reset" (click)="resetForm(); changePage(0)">Reset</button>
+      <hr />
+    </div>
+
+    <div class="col-md-12 form-responsive d-block d-sm-none" (click)="openModalResponsive()">
+      <div class="main-section-responsive">
+        <div class="search-title-responsive">
+          <i class="fas fa-chevron-circle-down icon"></i>
+          <p>Ricerca</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-10">
+      <table class="table main-table-section">
+        <thead class="thead-section">
+          <tr>
+            <div class="row">
+              <th class="col-md-1" style="width: 1%"></th>
+              <th class="col-md-2">
+                <p>WBS</p>
+              </th>
+              <th class="col-md-2">
+                <p>Descrizione</p>
+              </th>
+              <th class="col-md-2">
+                <p>Cliente</p>
+              </th>
+              <th class="col-md-1">
+                <p>PM</p>
+              </th>
+              <th class="col-md-1">
+                <p>Data Chiusura</p>
+              </th>
+              <th class="col-md-1">
+                <p>Tipologia Commessa</p>
+              </th>
+              <th class="col-md-1">
+                <p>Stato</p>
+              </th>
+              <th class="col-md-1">
+                <p>Azione</p>
+              </th>
+            </div>
+          </tr>
+        </thead>
+      </table>
+      <div class="navbar-nav-scroll" style="margin-top: -15px; max-height: 63.5vh">
+        <table class="table main-table-section">
+          <tbody class="navbar-nav-scroll">
+            <tr *ngFor="let item of EtWbsList.slice(itemPerPage*currentPage, (itemPerPage*currentPage)+itemPerPage); let i = index">
+              <div class="row" style="margin-bottom: -30px"
+              >
+                <td
+                  *ngIf="item.Performance == '1'"
+                  class="col-md-1"
+                  [matTooltip]="'Le performance di marginalità sono inferiori alla ACR ed oltre il range di accettabilità'"
+                  style="width: 1%; border-left: 10px solid red"></td>
+                <td
+                  *ngIf="item.Performance == '0'"
+                  class="col-md-1"
+                  [matTooltip]="'Performance di marginalità rispetto alla ACR non disponibile'"
+                  style="width: 1%; border-left: 10px solid gray"></td>
+                <td
+                  *ngIf="item.Performance == '3'"
+                  class="col-md-1"
+                  [matTooltip]="'Le performance di marginalità sono maggiori o uguali alla ACR'"
+                  style="width: 1%; border-left: 10px solid #009800"></td>
+                <td
+                  *ngIf="item.Performance == '2'"
+                  class="col-md-1"
+                  [matTooltip]="'Le performance di marginalità sono inferiori alla ACR ma nel range di accettabilità'"
+                  style="width: 1%; border-left: 10px solid orange"></td>
+                <td class="col-md-2">
+                  <p *ngIf="item.TAction[0].Action === 'DISPLAY'" class="wbs-detail codice_commessa">
+                    <a href="javascript:{}" (click)="passDataToWbs(item, 'DISPLAY')"
+                      >{{ item.Wbs }}
+                      <b *ngIf="item.Released === 'X'"><i class="fas fa-paper-plane" title="Inviata"></i></b>
+                    </a>
+                    <b *ngIf="item.CommToRead > 0" style="padding-left: 5px"
+                      ><i class="fas fa-envelope" title="Comunicazioni da leggere"></i
+                    ></b>
+                    <b *ngIf="item.Unlocked === 'X'" style="padding-left: 5px"
+                      ><i class="fas fa-unlock" title="Sbloccata"></i
+                    ></b>
+                    <b *ngIf="item.Reminder === 'X'" style="padding-left: 5px"
+                      ><i class="fas fa-bell" title="Sollecito invio"></i
+                    ></b>
+                  </p>
+
+                  <p
+                    *ngIf="item.TAction[0].Action === 'CHANGE'"
+                    style="padding-left: 0rem"
+                    class="wbs-detail codice_commessa">
+                    <a href="javascript:{}" (click)="passDataToWbs(item, 'CHANGE')"
+                      >{{ item.Wbs }}
+                      <b *ngIf="item.Released === 'X'"><i class="fas fa-paper-plane" title="Inviata"></i></b>
+                    </a>
+                    <b *ngIf="item.CommToRead > 0" style="padding-left: 5px"
+                      ><i class="fas fa-envelope" title="Comunicazioni da leggere"></i
+                    ></b>
+                    <b *ngIf="item.Unlocked === 'X'" style="padding-left: 5px"
+                      ><i class="fas fa-unlock" title="Sbloccata"></i
+                    ></b>
+                    <b *ngIf="item.Reminder === 'X'" style="padding-left: 5px"
+                      ><i class="fas fa-bell" title="Sollecito invio"></i
+                    ></b>
+                  </p>
+                </td>
+                <td class="col-md-2 tr-section" style="font-size: 13px">
+                  <p>{{ item.DescrWbs }}</p>
+                </td>
+                <td class="col-md-2 tr-section">
+                  <p>{{ item.DescrCustomer }}</p>
+                </td>
+                <td class="col-md-1 tr-section">
+                  <p>{{ item.ProjectManager }}</p>
+                </td>
+                <td class="col-md-1 tr-section">
+                  <p>{{ item.EndDate | date: 'dd/MM/yyyy' }}</p>
+                </td>
+                <td class="col-md-1 tr-section">
+                  <p>{{ item?.DescrRevType }}</p>
+                </td>
+                <td class="col-md-1 tr-section">
+                  <p>{{ item.Status }}</p>
+                </td>
+                <td class="col-md-1 tr-section">
+                  <div class="dropdown">
+                    <button
+                      class="btn btn-secondary dropdown-toggle"
+                      type="button"
+                      id="dropdownMenuButton{{ i }}"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false">
+                      Action
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <div *ngFor="let itemTaction of item.TAction">
+                        <a
+                          *ngIf="itemTaction.Action === 'CHANGE'"
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          (click)="passDataToWbs(item, 'CHANGE')"
+                          >Modifica</a
+                        >
+                        <a
+                          *ngIf="itemTaction.Action === 'DISPLAY'"
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          (click)="passDataToWbs(item, 'DISPLAY')"
+                          >Visualizza</a
+                        >
+                        <a
+                          *ngIf="itemTaction.Action === 'UNLOCK'"
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          data-toggle="modal"
+                          href="#unlockModal"
+                          (click)="setItem(item)"
+                          >Sblocco WBS</a
+                        >
+                        <a
+                          *ngIf="itemTaction.Action === 'REMIND'"
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          data-toggle="modal"
+                          href="#remindModal"
+                          (click)="setItem(item)"
+                          >Sollecito WBS</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display: flex; flex-direction: row; align-items: center; justify-content: flex-end; margin: 7px 0px 0px 0px">
+        Righe per pagina:
+        <ng-select
+          style="margin-left: 10px;"
+          [items]=optionsPage
+          (change)="setItemPerPage($event)"
+          [searchable]="false"
+          [clearable]="false"
+          [(ngModel)]="itemPerPage"
+        >
+        </ng-select>
+        <div style="margin-left: 15px">
+          {{(itemPerPage*currentPage) + 1}} - {{(itemPerPage*currentPage) + itemPerPage > EtWbsList.length ? EtWbsList.length : (itemPerPage*currentPage) + itemPerPage}} of {{EtWbsList?.length ?? 0}}
+        </div>
+        <div style="margin-left: 15px">
+          <button
+            (click)="changePage(0)"
+            class="btn"
+          >
+            <i class="fas fa-angle-double-left"></i>
+          </button>
+          <button
+            (click)="changePage(currentPage-1)"
+            class="btn"
+          >
+            <i class="fas fa-angle-left"></i>
+          </button>
+          <button
+            (click)="changePage(currentPage+1)"
+            class="btn"
+          >
+            <i class="fas fa-angle-right"></i>
+          </button>
+          <button
+            (click)="changePage(EtWbsList.length/itemPerPage)"
+            class="btn"
+          >
+            <i class="fas fa-angle-double-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <app-modals
+        [descrizione]="modal[1].descrizione"
+        [idModal]="modal[1].idModal"
+        (emitClick)="wbsRemind(itemValue)"></app-modals>
+
+      <app-modals
+        [descrizione]="modal[2].descrizione"
+        [idModal]="modal[2].idModal"
+        (emitClick)="unlock(itemValue)"></app-modals>
+    </div>
+    <!--<div class="col-md-10 " >
+      <div class="row thead-section" style="background-color: #F5F5F5">
+        <div class="col-md-2 tr-section " style="margin-top: 14px">
+          <p>WBS</p>
+        </div>
+        <div class="col-md-2 tr-section" style="margin-top: 14px">
+          <p>Descrizione</p>
+        </div>
+        <div class="col-md-2 tr-section" style="margin-top: 14px">
+          <p>Cliente</p>
+        </div>
+        <div class="col-md-1 tr-section" style="margin-top: 14px">
+          <p>PM</p>
+        </div>
+        <div class="col-md-2 tr-section" style="margin-top: 14px">
+          <p>Data Chiusura</p>
+        </div>
+        <div class="col-md-1 tr-section" style="margin-top: 14px">
+          <p>Stato</p>
+        </div>
+        <div class="col-md-1 tr-section" style="margin-top: 14px">
+          <p>Azione</p>
+        </div>
+      </div>
+      <div class="navbar-nav-scroll">
+      <div class="row " *ngFor="let item of EtWbsList; let i = index" style = "border-bottom: solid 2px #F5F5F5">
+        <div class="col-md-2 " *ngFor="let action of item.TAction">
+          <div style="margin-top: 17px">
+          <p *ngIf="action.Action == 'DISPLAY'"  class="wbs-detail codice_commessa"><a
+            href="javascript:{}" (click)="passDataToWbs(item,'DISPLAY')"><i class="fas fa-circle" style="{{item.class}}"></i> {{item.Wbs}}</a></p>
+          <p  *ngIf="action.Action == 'CHANGE'" style="padding-left: 0rem;" class="wbs-detail codice_commessa"><a
+            href="javascript:{}" (click)="passDataToWbs(item,'CHANGE')"><i class="fas fa-circle" style="{{item.class}}"></i> {{item.Wbs}}</a></p>
+          </div>
+          </div>
+        <div class="col-md-2 tr-section">
+          <p>{{item.DescrWbs}}</p>
+        </div>
+        <div class="col-md-2 tr-section">
+          <p>{{item.DescrCustomer}}</p>
+        </div>
+        <div class="col-md-1 tr-section">
+          <p>{{item.ProjectManager}}</p>
+        </div>
+        <div class="col-md-2 tr-section">
+          <p>{{item.EndDate | date: 'dd/MM/yyyy'}}</p>
+        </div>
+        <div class="col-md-1 tr-section">
+          <p>{{item.Status}}</p>
+        </div>
+        <div class="col-md-1 tr-section">
+          <!--<div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{i}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Action
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" *ngFor="let action of item.TAction">
+              <a  *ngIf="action.Action == 'CHANGE'" class="dropdown-item"  (click)="passDataToWbs(item,'CHANGE')">Modifica</a>
+              <a *ngIf="action.Action == 'DISPLAY'" class="dropdown-item"  (click)="passDataToWbs(item,'DISPLAY')">Visualizza</a>
+            </div>
+          </div>-->
+    <!--<a class="btn button-action" data-toggle="collapse" href="#action{{i}}" role="button"
+             aria-expanded="false" aria-controls="collapseExample">Action</a>
+          <div class="collapse" id="action{{i}}">
+            <div class="card card-body" >
+              <div *ngFor="let action of item.TAction">
+                <div *ngIf="action.Action == 'CHANGE'">
+                  <p style="cursor: pointer; color: #0D67D0" (click)="passDataToWbs(item,'CHANGE')">Modifica</p>
+                </div>
+                <div *ngIf="action.Action == 'DISPLAY'">
+                  <p style="cursor: pointer; color: #0D67D0" (click)="passDataToWbs(item,'DISPLAY')">Visualizza</p>
+                </div>
+              </div>
+            </div>
+          </div>-->
+    <!--</div>
+      </div>
+    </div>
+    </div>-->
+    <!--<div class="col-md-10 navbar-nav-scroll" >
+      <div class="row">
+      <table class="table table-fixed" >
+        <thead class="thead-section">
+        <tr class="tr-section" style="background-color: #F5F5F5">
+        <th ></th>
+        <th class="col-md-1">WBS</th>
+        <th class="col-md-1">Descrizione</th>
+        <th class="col-md-1">Cliente</th>
+        <th class="col-md-1">PM</th>
+        <th class="col-md-1">Data Apertura</th>
+        <th class="col-md-1">Data chiusura</th>
+        <th class="col-md-1">Stato</th>
+        <th class="col-md-1">Azione</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of EtWbsList; let i = index">
+          <td style="{{item.class}}" >
+          </td>
+          <td *ngFor="let action of item.TAction" class="col-md-1">
+            <p *ngIf="action.Action == 'DISPLAY'" style="padding-left: 0rem;" class="wbs-detail codice_commessa"><a
+              href="javascript:{}" (click)="passDataToWbs(item,'DISPLAY')">{{item.Wbs}}</a></p>
+            <p *ngIf="action.Action == 'CHANGE'" style="padding-left: 0rem;" class="wbs-detail codice_commessa"><a
+              href="javascript:{}" (click)="passDataToWbs(item,'CHANGE')">{{item.Wbs}}</a></p>
+          </td>
+          <td class="col-md-1">
+            <p class="commessa">{{item.DescrWbs}}</p>
+          </td>
+          <td class="col-md-1">
+            <p class="commessa">{{item.DescrCustomer}}</p>
+          </td>
+          <td class="col-md-1">
+            <p class="commessa">{{item.ProjectManager}}</p>
+          </td>
+          <td class="col-md-1">
+            <p class="commessa">{{item.StartDate | date: 'dd/MM/yyyy'}}</p>
+          </td>
+          <td class="col-md-1">
+            <p class="commessa">{{item.EndDate | date: 'dd/MM/yyyy'}}</p>
+          </td>
+          <td class="col-md-1">
+            <p class="commessa">{{item.Status}}</p>
+          </td>
+          <td class="col-md-1">
+            <a class="btn button-action" data-toggle="collapse" href="#action{{i}}" role="button"
+                  aria-expanded="false" aria-controls="collapseExample">Action</a>
+            <div class="collapse" id="action{{i}}">
+              <div class="card card-body">
+                <div *ngFor="let action of item.TAction">
+                  <div *ngIf="action.Action == 'CHANGE'">
+                    <p style="cursor: pointer; color: #0D67D0" (click)="passDataToWbs(item,'CHANGE')">Modifica</p>
+                  </div>
+                  <div *ngIf="action.Action == 'DISPLAY'">
+                    <p style="cursor: pointer; color: #0D67D0" (click)="passDataToWbs(item,'DISPLAY')">Visualizza</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>-->
+
+    <!--
+
+ATTENZIONE MODIFICHE NON FATTE PER LA VERSIONE SCHERMI PICCOLI
+
+-->
+    <!-- <div class="d-block d-sm-none" *ngFor="let item of EtWbsList">
+      <div class="list-group">
+        <div class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="row">
+            <div>
+            </div>
+            </div>
+            <div class="detail-section">
+              <div class="row">
+                <div class="col-10">
+                  <p class="wbs-detail">{{item.Wbs}}</p>
+                </div>
+                <div class="col-2"><button class="btn btn-light icon" (click)="passDataToWbs(item,'')"><i
+                      class="fas fa-ellipsis-v"></i></button></div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <p>{{item.DescrWbs}}</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <p>{{item.DescrCustomer}}</p>
+                </div>
+              </div>
+              <!-- <div class="row table-section">
+                <table class="table">
+                  <thead>
+                    <tr class="tr-section">
+                      <th>Data Apertura</th>
+                      <th>Data prevista chiusura</th>
+                      <th>Stato</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="tr-section">
+                      <td>{{item.StartDate}}</td>
+                      <td>{{item.EndDate}}</td>
+                      <td *ngIf=" item.Status === '0' ">
+                        <p class="commessa">Aperta</p>
+                      </td>
+                      <td *ngIf=" item.Status === '1' ">
+                        <p class="commessa">Chiusa</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div> -->
+    <!-- </div>
+        </div>
+      </div>
+    </div> -->
+    <div class="modal fade" id="chiudiPeriodo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+      <!-- Dato invio A -->
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Chiudi Periodo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <label for="dataInvioA">
+              <p>Data Invio A</p>
+            </label>
+            <input type="date" class="form-control" [(ngModel)]="dataInvioA" id="dataInvioA" placeholder="Data" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="chiudiPeriodo()">Salva</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Data invio Da-->
+    <div class="modal fade" id="apriPeriodo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Apri Periodo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <label for="dataInvioDa">
+              <p>Data Invio Da</p>
+            </label>
+            <input type="date" class="form-control" [(ngModel)]="dataInvioDa" id="dataInvioDa" placeholder="Data" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" (click)="apriPeriodo()" class="btn btn-primary">Salva</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

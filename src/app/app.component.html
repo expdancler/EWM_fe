@@ -1,0 +1,70 @@
+<nav *ngIf="loggedUser" class="navbar navbar-expand-lg navbar-light" style="background-color: #005069">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item d-none d-sm-block">
+        <div class="row">
+          <div class="col-md-1">
+        <div class="logo-section" style="width: 200px;">
+          <img src="assets/Logo Exprivia.svg" class="logo">
+          <!--<a class="nav-link" style="color: white;font-size: 12px;"><p>Exprivia WBS management</p></a>-->
+        </div>
+          </div>
+          <div class="col-md-10">
+        <a class="nav-link" style="color: white;font-size: 15px;"><p>Exprivia WBS management</p></a>
+          </div>
+        </div>
+       </li>
+      <li class="nav-item d-block d-sm-none">
+        <div class="responsive-logo-section" style="width: 200px;">
+          <img src="assets/Logo Exprivia.svg" class="logo">
+          <a class="nav-link wbs-manager-section" style="color: white;font-size: 18px;"><p>Exprivia WBS management</p></a>
+        </div>
+      </li>
+      <!--<li class="nav-item responsive-work-space d-none d-sm-block" >
+        <a class="nav-link" style="cursor: pointer; color: white;margin-bottom: 0px;padding-top: 20px" (click)="fn_changeForecast_Wrk()"><p style="cursor: pointer">Workspace</p></a>
+      </li>
+      <li class="nav-item d-block d-sm-none">
+        <a class="nav-link" style="cursor: pointer; color: white;margin-bottom: 0px;padding-top: 20px;margin-left: -200px"  (click)="fn_changeForecast_Wrk()"><p style="cursor: pointer">Workspace</p></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="cursor: pointer; color: white;margin-bottom: 0px;padding-top: 20px"(click)="fn_changeForecast_Rpt()"><p>Reports</p></a>
+      </li>-->
+    </ul>
+    <div class="row" style="margin-right: 700px">
+      <div class="col-md-5"> <!-- <div class="col-md-4"> -->
+        <a class="nav-link" style="cursor: pointer; color: white;margin-bottom: 0px;padding-top: 20px" (click)="fn_changeForecast_Wrk()"><p style="cursor: pointer">Workspace</p></a>
+      </div>
+      <div class="col-md-3"> <!-- <div class="col-md-3"> -->
+        <a class="nav-link" style="cursor: pointer; color: white;margin-bottom: 0px;padding-top: 20px"(click)="fn_changeForecast_Rpt()"><p>Reports</p></a>
+      </div>
+      <!-- Se attivi il pulsante di qua sopra, riportare quello di sotto come "Reports (Old)"-->
+<!--      <div class="col-md-5">-->
+<!--        <a class="nav-link" style="cursor: pointer; color: white;margin-bottom: 0px;padding-top: 20px"(click)="fn_changeForecast_RptOld()"><p>Reports</p></a>-->
+<!--      </div>-->
+    <div *ngIf="hasAccessToForecast" class="col-md-3">
+        <a class="nav-link" style="cursor: pointer; color: white;margin-bottom: 0px;padding-top: 20px"(click)="fn_changeForecast_Exc()"><p>Forecast</p></a>
+    </div>
+    </div>
+    <div class="dropdown">
+    <p class="p" style="color: white;cursor: pointer"id="logOut" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+    ><i class="fas fa-user"></i> {{name_loggedUser}} {{surname_loggedUser}}</p>
+    <div class="dropdown-menu" aria-labelledby="logOut">
+      <a class="dropdown-item" routerLink="/login">Log Out</a>
+    </div>
+    </div>
+  </div>
+</nav>
+
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
+
+<router-outlet></router-outlet>

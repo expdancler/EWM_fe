@@ -1,0 +1,13 @@
+<form>
+	<mat-form-field appearance="outline">
+		<mat-label>Nominativo</mat-label>
+
+		<input type="text" matInput [formControl]="controlNominativo" [matAutocomplete]="auto" />
+
+		<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+			<mat-option *ngFor="let nom of filtroOpzioni | async" [value]="nom">
+				{{ nom.name }}
+			</mat-option>
+		</mat-autocomplete>
+	</mat-form-field>
+</form>

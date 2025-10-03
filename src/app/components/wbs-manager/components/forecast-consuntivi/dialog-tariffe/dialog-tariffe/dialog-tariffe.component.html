@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Seleziona la tariffa</h1>
+
+<div mat-dialog-content>
+	<mat-form-field appearance="fill" class="width-tariffa">
+		<mat-label>Tariffa contrattuale</mat-label>
+		<mat-select [(value)]="tariffa" [compareWith]="compareObjects"
+			(selectionChange)="tariffaSelezionata($event)">
+			<mat-option *ngFor="let tariffa of data.profiliContrattuali" [value]="tariffa">
+				{{ visualizzazioneOpzioni(tariffa) }}
+				<!-- {{ tariffa.Profile }} 
+				( {{ tariffa.StartDate | date : 'dd/MM/yyyy' }} - {{ tariffa.EndDate | date : 'dd/MM/yyyy' }} ) -->
+			</mat-option>
+		</mat-select>
+	</mat-form-field>
+
+	<mat-form-field appearance="fill" class="importo-campo">
+		<mat-label>Importo</mat-label>
+		<input matInput [disabled]="tariffa.Profile !== 'ALTRO'" [value]="(tariffa.Rate | decimalCustomPipe) || '' "
+			(change)="importoManuale($event)" />
+	</mat-form-field>
+	<span *ngIf="erorreImportoManuale" class="pErrorTab">Notazione errata</span>
+</div>
+
+<div mat-dialog-actions class="button-dialog">
+	<button mat-button (click)="confermaSelezione()" [disabled]="erorreImportoManuale">Conferma</button>
+	<button mat-button mat-dialog-close>Chiudi</button>
+</div>

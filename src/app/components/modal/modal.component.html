@@ -1,0 +1,349 @@
+<!--MODALE DEI VALORI NULLI INSERITI FORECAST-->
+<div *ngIf="save_null">
+    <div class="modal-header" style="background-color: #005069;">
+        <p style="color: white;">WBS Manager</p>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div>
+                Compilare i dati nelle tabelle prima di salvare
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="wbsDetail">
+    <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div>
+                Modale
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="activeModal.close('Close click')">Ok</button>
+    </div>
+</div>
+
+<!--MODALE DEL CHANGE FORECAST WORK-SPACE-->
+<div *ngIf="modal_changeForecast_Wrk">
+    <div class="modal-header" style="background-color: #005069;">
+        <p style="color: white;">WBS Manager</p>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div class="text-center">
+                Vuoi lasciare la pagina senza effettuare il salvataggio?
+            </div>
+            <br>
+        </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-3">
+                <button class="btn btn-primary" style="background-color: #005069; border: none"
+                        (click)="modal_changeForecast_continua_Wrk()">Continua
+                </button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-primary" style="background-color: #005069; border: none"
+                        (click)="activeModal.dismiss('Cross click')">Annulla
+                </button>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+</div>
+
+<!--MODALE DEL CHANGE FORECAST REPORTS-->
+<div *ngIf="modal_changeForecast_Rpt">
+    <div class="modal-header" style="background-color: #005069;">
+        <p style="color: white;">WBS Manager</p>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div class="text-center">
+                Vuoi lasciare la pagina senza effettuare il salvataggio?
+            </div>
+            <br>
+        </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-3">
+                <button class="btn btn-primary" style="background-color: #005069; border: none"
+                        (click)="modal_changeForecast_continua_Rpt()">Continua
+                </button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-primary" style="background-color: #005069; border: none"
+                        (click)="activeModal.dismiss('Cross click')">Annulla
+                </button>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+</div>
+<!--MODALE DEL CHANGE FORECAST REPORTS OLD-->
+<div *ngIf="modal_changeForecast_RptOld">
+    <div class="modal-header" style="background-color: #005069;">
+        <p style="color: white;">WBS Manager</p>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div class="text-center">
+                Vuoi lasciare la pagina senza effettuare il salvataggio?
+            </div>
+            <br>
+        </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-3">
+                <button class="btn btn-primary" style="background-color: #005069; border: none"
+                        (click)="modal_changeForecast_continua_RptOld()">Continua
+                </button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-primary" style="background-color: #005069; border: none"
+                        (click)="activeModal.dismiss('Cross click')">Annulla
+                </button>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+</div>
+
+<!--MODALE DEL CHANGE FORECAST EXCEL-->
+<div *ngIf="modal_changeForecast_Exc">
+    <div class="modal-header" style="background-color: #005069;">
+        <p style="color: white;">WBS Manager</p>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div class="text-center">
+                Vuoi lasciare la pagina senza effettuare il salvataggio?
+            </div>
+            <br>
+        </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-3">
+                <button class="btn btn-primary" style="background-color: #005069; border: none"
+                        (click)="modal_changeForecast_continua_Exc()">Continua
+                </button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-primary" style="background-color: #005069; border: none"
+                        (click)="activeModal.dismiss('Cross click')">Annulla
+                </button>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="wbsDetail">
+    <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div>
+                Modale
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="activeModal.close('Close click')">Ok</button>
+    </div>
+</div>
+
+<div *ngIf="modalSearch">
+    <div class="modal-header">
+        <div class="main-title">
+            <div class="search-title">
+                <p>Ricerca</p>
+            </div>
+        </div>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" style="background-color: #F5F5F5;">
+        <div class="container">
+            <form [formGroup]="searchForm">
+                <div class="form-group">
+                    <label for="wbs">WBS</label>
+                    <input type="text" class="form-control" formControlName="wbs" id="wbs" placeholder="es. X-G123"
+                           maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label for="descrizione">Descrizione</label>
+                    <input type="text" class="form-control" formControlName="descrizione" id="descrizione"
+                           placeholder="Default input" maxlength="10">
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="cliente"><p>Cliente</p></label>
+                    <ng-select
+                            placeholder="Cliente"
+                            [items]="listaClienti"
+                            bindLabel="DescrCustomer"
+                            bindValue="Customer"
+                            formControlName="cliente">
+                    </ng-select>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="dataInizio">Da</label>
+                    <input type="date" class="form-control" formControlName="dataInizio" id="dataInizio"
+                           placeholder="Data">
+                </div>
+                <div class="form-group">
+                    <label for="dataFine">A</label>
+                    <input type="date" class="form-control" formControlName="dataFine" id="dataFine" placeholder="Data">
+                </div>
+                <div style="height: 60px;">
+                    <div *ngIf="validatinDate" class="text-danger">
+                        "Data da" deve essere minore di "Data a"
+                    </div>
+                    <div *ngIf="!validatinDate">
+                    </div>
+                </div>
+            </form>
+            <button type="button" class="btn btn-primary" (click)="searchList()">Cerca</button>
+            <button class="btn btn-secondary" style="margin-left: 15px;" (click)="resetForm()">Reset</button>
+            <hr>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="loginFailedDescription">
+    <div class="modal-header" style="background-color: #005069;">
+        <p style="color: white;">WBS Manager</p>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div>
+                {{ loginFailedDescription }}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="activeModal.close('Close click')">Ok</button>
+    </div>
+</div>
+
+<div *ngIf="invia">
+    <div class="modal-header" style="background-color: #005069;">
+        <p style="color: white;">WBS Manager</p>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div>
+                Per eseguire l’invio della wbs occorre prima salvare le modifiche cliccando il bottone Salva.
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="activeModal.close('Close click')">Ok</button>
+    </div>
+</div>
+
+<div *ngIf="unauthorized">
+    <div class="modal-header" style="background-color: #005069;">
+        <p style="color: white;">WBS Manager</p>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div>
+                Salvataggio non consentito: Non sono state operate modifiche.
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="activeModal.close('Close click')">Ok</button>
+    </div>
+</div>
+
+<div *ngIf="invalidVociCosto">
+    <div class="modal-header" style="background-color: #005069;">
+        <p style="color: white;">WBS Manager</p>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div>
+                Attenzione! una voce di costo contiene un importo ma non il relativo dettaglio. Si prega di sistemare e
+                riprovare il salvataggio.
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="activeModal.close('Close click')">Ok</button>
+    </div>
+</div>
+
+<!--COPY NEXT MONTH-->
+<div *ngIf="modal_copyNextMonth">
+    <div class="modal-header" style="background-color: #005069;">
+        <p style="color: white;">WBS Manager</p>
+        <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div class="text-center">
+                Sovrascrivere mese successivo
+            </div>
+            <br>
+        </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-3">
+                <button class="btn btn-primary" style="background-color: #005069; border: none"
+                        (click)="copyToNextMonth()">Continua
+                </button>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-primary" style="background-color: #005069; border: none"
+                        (click)="activeModal.dismiss('Cross click')">Annulla
+                </button>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+</div>

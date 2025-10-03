@@ -1,0 +1,255 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-6 main-section d-none d-sm-block">
+			<h3 class="main-title">Report</h3>
+		</div>
+		<div class="col-md-4 main-section d-none d-sm-block divFormFielPeriod" >
+			<mat-form-field appearance="fill" appearance="outline" class="formFieldPeriod">
+				<mat-label>Periodo di selezione</mat-label>
+				<mat-select (selectionChange)="onChangePeriod($event)" [value]="valueSelctedPeriod">
+				  <mat-option *ngFor="let pSelezione of periodoSelezione" [value]="pSelezione.value">
+					{{pSelezione.label}}
+				  </mat-option>
+				</mat-select>
+			  </mat-form-field>
+		</div>
+		<div class="col-md-2 main-section d-none d-sm-block" style="text-align: center;">
+			<button type="button" class="btn btn-green" (click)="exportAllDataAsXLSX()" style="margin-top: 20px;">
+				<i class="fas fa-file-excel"></i> Esporta dati
+			</button>
+		</div>
+		<div class="col-md-12 main-section d-block d-sm-none">
+			<h3 class="main-title">WBS Manager</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2 form lateral">
+			<div class="search-title">
+				<h6><i class="fas fa-sliders-h mr-2" style="color: coral;"></i> Viste</h6>
+			</div>
+			<hr />
+			<div class="vertical-menu">
+
+				<a [className]="isActive === 'Hdr' ? 'active' : 'inactive'" style="cursor: pointer"
+					 (click)="tabPivot(fieldsHdr, 'Hdr')"
+				>
+					<i class="fas fa-stream mr-2"></i>
+					Dati Vita Intera
+				</a>
+				<a
+					[className]="isActive === 'Fy' ? 'active' : 'inactive'"  style="cursor: pointer"
+					(click)="tabPivot(fieldsYear, 'Fy')"
+				>
+					<i class="far fa-calendar mr-2"></i>
+					Dati Esercizio
+				</a>
+				<a
+					[className]="isActive === 'Fm' ? 'active' : 'inactive'"
+					style="cursor: pointer"
+					(click)="tabPivot(fieldsMonth, 'Fm')"
+				>
+					<i class="fas fa-calendar-alt mr-2"></i>
+					Dati Periodo
+				</a>
+				<a
+					[className]="isActive === 'Bal' ? 'active' : 'inactive'"
+					style="cursor: pointer"
+					(click)="tabPivot(fieldsBalance, 'Bal')"
+				>
+					<i class="fas fa-chart-bar mr-2"></i>
+					Dettaglio Consuntivo
+				</a>
+				<a
+					[className]="isActive === 'For' ? 'active' : 'inactive'"
+					style="cursor: pointer"
+					(click)="tabPivot(fieldsForecast, 'For')"
+				>
+					<i class="fas fa-chart-line mr-2"></i>
+					Dettaglio Forecast
+				</a>
+				<a
+					[className]="isActive === 'Acr' ? 'active' : 'inactive'"
+					style="cursor: pointer"
+					(click)="tabPivot(fieldsAcr, 'Acr')"
+				>
+					<i class="fas fa-chart-pie mr-2"></i>
+					ACR
+				</a>
+				<a
+					[className]="isActive === 'Bil' ? 'active' : 'inactive'"
+					style="cursor: pointer"
+					(click)="tabPivot(fieldsBilling, 'Bil')"
+				>
+					<i class="fas fa-euro-sign mr-2"></i>
+					Fatturazione
+				</a>
+			</div>
+			<br />
+			<!--NG SELECT SALVA REPORT-->
+			<ng-container *ngIf="showLayout == true">
+				<div class="row">
+					<div class="col-md-4">
+						<button
+							type="button"
+							class="btn btn-outline-secondary"
+							data-toggle="modal"
+							data-target="#salvaLayout"
+							(click)="clickButtonLayout = 'Salva'"
+							[disabled]="
+								ngSelectName.length == 0 || ngModelSelect == undefined || ngModelSelect == 'Selezione Layout'
+							">
+							Salva
+						</button>
+					</div>
+					<div class="col-md-6">
+						<button
+							type="button"
+							class="btn btn-outline-secondary"
+							data-toggle="modal"
+							data-target="#salvaLayout"
+							(click)="clickButtonLayout = 'New'">
+							Nuovo
+						</button>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-10">
+						<ng-select
+								(change)="layoutSalvato($event)"
+								[(ngModel)]="ngModelSelect"
+								[items]="ngSelectName"
+								[notFoundText]="'Nessun layout salvato...'"
+								[placeholder]="'Selezione Layout'"
+						>
+							<ng-template ng-label-tmp let-item="item">
+								<b style="color: grey; font-size: 14px; font-weight: normal">{{item.name}}</b>
+							</ng-template>
+							<ng-template ng-option-tmp let-item="item" let-index="index">
+								<b style="color: grey; font-size: 14px; font-weight: normal">{{item.name}}</b>
+							</ng-template>
+						</ng-select>
+					</div>
+					<div class="col-md-2">
+						<p
+							style="cursor: pointer"
+							(click)="clickButtonLayout = 'Delete'"
+							data-toggle="modal"
+							data-target="#salvaLayout">
+							<i class="fas fa-trash" style="font-size: 20px; margin-top: 8px"> </i>
+						</p>
+					</div>
+				</div>
+			</ng-container>
+		</div>
+		<div class="col-md-10 p-3">
+			<div class="row">
+			</div>
+			<br />
+
+			<div>
+				<div id="pivot-container"></div>
+			</div>
+		</div>
+	</div>
+	<!--MODALE TASTO SALVA LAYOUT-->
+	<div class="modal fade" id="salvaLayout" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" #closebutton>&times;</button>
+				</div>
+				<!-- BODY DELLA MODALE QUANDO SCHIACCI IL BUTTON NEW -->
+				<div class="modal-body" *ngIf="clickButtonLayout == 'New'">
+					<div class="form-group">
+						<label for="namelayout">Layout:</label>
+						<input type="text" class="form-control" id="namelayout" (change)="layoutNamefnt($event)" maxlength="30" />
+						<p style="color: red" *ngIf="confirmName == 'nomeUguale'">Nome Layout già in uso</p>
+						<p style="color: red" *ngIf="confirmName == 'stringaVuota'">Inserire il nome del Layout</p>
+						<p></p>
+						<label for="namelayout">Utenti associati:</label>
+						<ng-select
+							(change)="changeUserLayout($event)"
+							[(ngModel)]="ngModelSelect"
+							bindLabel='full'
+							[virtualScroll]="true"
+							[multiple]="true"
+							[items]="ngSelectUsers"
+							[notFoundText]="'Non sono presenti utenti selezionabili...'"
+							[placeholder]="'Cerca per cognome, nome, email, username...'"
+						>
+							<ng-template ng-label-tmp let-item="item">
+								<b style="color: grey; font-size: 14px; font-weight: normal">{{item.Uname}}</b>
+							</ng-template>
+							<ng-template ng-option-tmp let-item="item" let-index="index">
+								<b style="color: grey; font-size: 14px; font-weight: normal">{{item.Name}} ({{item.Mail}})</b>
+							</ng-template>
+						</ng-select>
+					</div>
+					<!--<div class="form-group">
+        <label for="Descrlayout">Descrizione:</label>
+        <input type="text" class="form-control" id="Descrlayout" (change)="layoutDescrfnt($event)" maxlength="30">
+        </div>-->
+					<div class="row">
+						<div class="col-3"></div>
+						<div class="col-3">
+							<button class="btn btn-primary" style="background-color: #005069; border: none" (click)="savePivotTab()">
+								Conferma
+							</button>
+						</div>
+						<div class="col-3">
+							<button class="btn btn-primary" style="background-color: #005069; border: none" data-dismiss="modal">
+								Annulla
+							</button>
+						</div>
+						<div class="col-3"></div>
+					</div>
+				</div>
+				<!--BODY DELLA MOADALE QUANDO SCHIACCIO IL BUTTON SALVA-->
+				<div class="modal-body" *ngIf="clickButtonLayout == 'Salva'">
+					<p>Sovrascrivere il layout selezionato?</p>
+					<div class="row">
+						<div class="col-3"></div>
+						<div class="col-3">
+							<button
+								class="btn btn-primary"
+								style="background-color: #005069; border: none"
+								data-dismiss="modal"
+								(click)="svrLayout()">
+								Conferma
+							</button>
+						</div>
+						<div class="col-3">
+							<button class="btn btn-primary" style="background-color: #005069; border: none" data-dismiss="modal">
+								Annulla
+							</button>
+						</div>
+						<div class="col-3"></div>
+					</div>
+				</div>
+				<!--BODY DELLA MODALE QUANDO SCHIACCIO IL BIDONE-->
+				<div class="modal-body" *ngIf="clickButtonLayout == 'Delete'">
+					<p>Cancellare il layout selezionato?</p>
+					<div class="row">
+						<div class="col-3"></div>
+						<div class="col-3">
+							<button
+								class="btn btn-primary"
+								style="background-color: #005069; border: none"
+								data-dismiss="modal"
+								(click)="delateLayout()">
+								Conferma
+							</button>
+						</div>
+						<div class="col-3">
+							<button class="btn btn-primary" style="background-color: #005069; border: none" data-dismiss="modal">
+								Annulla
+							</button>
+						</div>
+						<div class="col-3"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,21 @@
+.modal-header{
+    background-color: #F5F5F5;
+  }
+  .search-title {
+      margin-top: 20px;
+      margin-left: 20px; 
+      width: 59px;
+      height: 50px;
+      color: #6E6E6E;
+      font: 50px;
+  }
+  .modal-body{
+    font-size: 16px;
+    color: #666;
+  }
+  p {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  ::ng-deep .ng-dropdown-panel .scroll-host {
+    display: block !important;
+  }

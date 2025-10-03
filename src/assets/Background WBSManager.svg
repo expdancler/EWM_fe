@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="1077" viewBox="0 0 1920 1077">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_618" data-name="Rectangle 618" width="1920" height="1077" fill="#fff" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_1" data-name="Mask Group 1" clip-path="url(#clip-path)">
+    <g id="Group_829" data-name="Group 829">
+      <rect id="Rectangle_617" data-name="Rectangle 617" width="1920" height="1077" fill="#034d6a"/>
+      <g id="logo-exprivia" transform="translate(-804.907 -146.274)" opacity="0.069">
+        <path id="Path_18" data-name="Path 18" d="M272.1,979.9c22.183,5.859,29.716,0,25.95-20.09C256.2,713.71,354.138,244.945,623.259,34.838,645.86,16,656.742-3.25,609.029,10.562,257.874,101.385-131.788,869.407,274.2,980.321" transform="translate(1362.354 239.725)" fill="#fff"/>
+        <path id="Path_19" data-name="Path 19" d="M559.6,207.97C429.435.374,92.51,14.186,91.673,14.186s-5.441,2.511,0,3.767A837.081,837.081,0,0,1,531.14,338.136a650.8,650.8,0,0,1,29.716-129.748" transform="translate(870.609 571.771)" fill="#fff"/>
+        <path id="Path_20" data-name="Path 20" d="M116.82,125.562A125.562,125.562,0,1,1,242.383,251.124,125.563,125.563,0,0,1,116.82,125.562" transform="translate(2004.819 0)" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg>

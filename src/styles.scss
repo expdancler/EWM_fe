@@ -1,0 +1,46 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import '~webdatarocks/theme/stripedblue/webdatarocks.min.css';
+@import "flexmonster/flexmonster.min.css";
+
+.toast-container .ngx-toastr {
+    width: 550px;
+    margin-right: 550px;
+}
+.blue-snackbar {
+	background: #3F51B5;
+}
+// #fm-toolbar-wrapper #fm-toolbar #fm-tab-minustab {
+//     width: 60px !important;
+//     margin-left: 15px;
+// }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+//.mat-form-field-infix {
+//    width: auto !important;
+//   }
+
+#fm-pivot-view .fm-grid-view div.fm-cell.cell_grey {
+  background-color: #c0c0c0 !important;
+}
+#fm-pivot-view .fm-grid-view div.fm-cell.cell_blue {
+  background-color: #44546a !important;
+  color: #FFF;
+}
+#fm-pivot-view .fm-grid-view div.fm-cell.cell_electro {
+  background-color: #1f497d !important;
+  color: #FFF;
+}
+#fm-pivot-view .fm-grid-view div.fm-cell.cell_header_yellow {
+  background-color: #ffff00 !important;
+  color: #ff0000;
+}
+#fm-pivot-view .fm-grid-view div.fm-cell.cell_yellow {
+  background-color: #ffff00 !important;
+}
+#fm-pivot-view .fm-grid-view div.fm-cell.cell_lightblue {
+  background-color: #00b0f0 !important;
+  color: #FFF;
+}

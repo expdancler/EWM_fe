@@ -1,0 +1,99 @@
+.card_tiitle{
+   font: var(--unnamed-font-style-normal) normal bold 14px/17px var(--unnamed-font-family-helvetica-neue);
+    letter-spacing: var(--unnamed-character-spacing-0);
+    text-align: left;
+    ////font: normal normal bold 14px/17px Helvetica Neue;
+    letter-spacing: 0px;
+    color: #6E6E6E;
+    opacity: 1;
+}
+.card_label{
+    font: var(--unnamed-font-style-normal) normal var(--unnamed-font-weight-normal) 18px/24px var(--unnamed-font-family-helvetica-neue);
+letter-spacing: var(--unnamed-character-spacing-0);
+color: var(---2c2c2c-focus-text);
+text-align: left;
+//font: normal normal normal 18px/24px Helvetica Neue;
+letter-spacing: 0px;
+color: #2C2C2C;
+opacity: 1;
+}
+.bold_text{
+  font: var(--unnamed-font-style-normal) normal bold 12px/24px var(--unnamed-font-family-helvetica-neue);
+  letter-spacing: var(--unnamed-character-spacing-0);
+  color: var(---2c2c2c-focus-text);
+
+  //font: normal normal bold 16px/30px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #2C2C2C;
+  opacity: 1;
+}
+.opacity_text{
+    font: var(--unnamed-font-style-normal) normal var(--unnamed-font-weight-normal) 19px/23px var(--unnamed-font-family-helvetica-neue);
+letter-spacing: var(--unnamed-character-spacing-0);
+
+//font: normal normal normal 19px/23px Helvetica Neue;
+letter-spacing: 0px;
+color: #80868A;
+opacity: 1;
+}
+.strong_text{
+    font: var(--unnamed-font-style-normal) normal bold 20px/25px var(--unnamed-font-family-helvetica-neue);
+letter-spacing: var(--unnamed-character-spacing-0);
+//font: normal normal bold 20px/25px Helvetica Neue;
+letter-spacing: 0px;
+color: #1B73E8;
+opacity: 1;
+}
+.medium_strong_text{
+    font: var(--unnamed-font-style-normal) normal bold var(--unnamed-font-size-16)/19px var(--unnamed-font-family-helvetica-neue);
+letter-spacing: var(--unnamed-character-spacing-0);
+
+//font: normal normal bold 16px/19px Helvetica Neue;
+letter-spacing: 0px;
+color: #1B73E8;
+opacity: 1;
+}
+.table_inside_card{
+  word-break: break-all;
+}
+.opacity_text{
+
+  //font: normal normal 100 14px/28px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #80868A;
+  opacity: 1;
+}
+.margin_top_nine{
+  margin-top: 9px
+}
+.margin_top_twenty{
+  margin-top: -20px
+}
+.econmy_value_tab{
+  font: var(--unnamed-font-style-normal) normal bold 12px/15px var(--unnamed-font-family-helvetica-neue);
+  letter-spacing: var(--unnamed-character-spacing-0);
+  //font: normal normal bold 12px/15px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #80868A;
+  opacity: 1;
+  text-align: right;
+}
+.other_value_tab{
+  font: var(--unnamed-font-style-normal) normal var(--unnamed-font-weight-normal) 12px/14px var(--unnamed-font-family-helvetica-neue);
+  letter-spacing: var(--unnamed-character-spacing-0);
+  //font: normal normal normal 12px/14px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #80868A;
+  opacity: 1;
+}
+.label_tab{
+  font: var(--unnamed-font-style-normal) normal bold 13px/16px var(--unnamed-font-family-helvetica-neue);
+  letter-spacing: var(--unnamed-character-spacing-0);
+  color: var(---4b4b4b-normal-text);
+  text-align: left;
+  //font: normal normal bold 13px/16px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #4B4B4B;
+  opacity: 1;
+  text-align: right;
+}
