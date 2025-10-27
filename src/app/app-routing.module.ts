@@ -29,21 +29,19 @@ const routes: Routes = [
         canActivate: [AuthGuard],
 
     },
-    // {
-    //     path: 'forecast',
-    //     loadChildren: () => import('./components/forecast-excel/forecast-excel.module').then(m => m.ForecastExcelModule),
-    //     canActivate: [AuthGuard],
-    // },
-];
-
-// C'è solo su produzione perchè i dati riportati
-// dal be sono sempre di produzione
-const onlyProdRoutes: Routes = environment.production ? [
     {
         path: 'forecast',
         loadChildren: () => import('./components/forecast-excel/forecast-excel.module').then(m => m.ForecastExcelModule),
         canActivate: [AuthGuard],
     },
+];
+
+const onlyProdRoutes: Routes = environment.production ? [
+    // {
+    //     path: 'forecast',
+    //     loadChildren: () => import('./components/forecast-excel/forecast-excel.module').then(m => m.ForecastExcelModule),
+    //     canActivate: [AuthGuard],
+    // },
 ] : []
 
 @NgModule({

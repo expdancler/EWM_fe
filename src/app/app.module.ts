@@ -12,6 +12,8 @@ import {InterceptorService} from './services/interceptor.service';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {LoginComponent} from './components/login/login.component';
 import {ToastrModule} from 'ngx-toastr';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCardModule } from "@angular/material/card";
 
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
@@ -45,6 +47,8 @@ registerLocaleData(localeIt);
             timeOut: 0,
             tapToDismiss: false
         }),
+        MatButtonToggleModule,
+        MatCardModule,
         MatTableModule,
         MatPaginatorModule,
         MatSortModule,

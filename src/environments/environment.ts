@@ -6,7 +6,6 @@ export const environment = {
   production: false,
   environmentName: "development",
   baseUrl: "http://localhost:8080" //"https://localhost/EWM"
-  // baseUrl: "https://10.6.8.118/EWM_old",
   // baseUrl: "https://10.6.8.118/EWM"
 };
 

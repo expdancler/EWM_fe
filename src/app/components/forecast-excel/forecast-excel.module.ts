@@ -6,6 +6,9 @@ import {ForecastExcelComponent} from "./components/forecast-excel.component";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatOptionModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {MatCardModule} from "@angular/material/card";
+import {FormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -17,7 +20,10 @@ import {MatSelectModule} from "@angular/material/select";
         ForecastExcelRoutingModule,
         MatFormFieldModule,
         MatOptionModule,
-        MatSelectModule
+        MatSelectModule,
+        MatButtonToggleModule,
+        MatCardModule,
+        FormsModule
     ]
 })
 export class ForecastExcelModule { }

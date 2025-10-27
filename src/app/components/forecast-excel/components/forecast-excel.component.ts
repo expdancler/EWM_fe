@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import * as Flexmonster from 'flexmonster';
 import {ForecastExcelService} from "../services/forecast-excel.service";
 import {ExcelService} from "../services/excel.service";
@@ -207,7 +207,8 @@ const tableStructure = {
 @Component({
     selector: 'app-forecast-excel',
     templateUrl: './forecast-excel.component.html',
-    styleUrls: ['./forecast-excel.component.scss']
+    styleUrls: ['./forecast-excel.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForecastExcelComponent implements OnInit {
     private report: any = {};
@@ -216,7 +217,10 @@ export class ForecastExcelComponent implements OnInit {
     private rowUn: any = [];
     private captions: any = {};
     private measures: any[] = [];
-    private fieldsFormat: any[] = []
+    private fieldsFormat: any[] = [];
+
+    private firstYearBdg = 2026;
+    private nYearBdg: number = Math.max(1, (new Date().getFullYear() + 1) - this.firstYearBdg + 1)
 
     private reportFormats = {
         name: "", // vale come default
@@ -252,6 +256,10 @@ export class ForecastExcelComponent implements OnInit {
         { length: new Date().getFullYear() - 2000 + 1 }, // Lunghezza dell'array
         (_, index) => (new Date().getFullYear() - index).toString() // Funzione di mappatura per generare gli anni
     )];
+    yearRangeBdg: string[] = Array.from(
+        { length: this.nYearBdg },
+        (_, index) => (this.firstYearBdg + index).toString() // Funzione di mappatura per generare gli anni
+    ).reverse();
     monthRange: {value: string, label: string}[] = [
         {value: "", label: ""},
         {value: "1", label: "Gennaio"},
@@ -267,15 +275,21 @@ export class ForecastExcelComponent implements OnInit {
         {value: "11", label: "Novembre"},
         {value: "12", label: "Dicembre"},
     ];
-    selectePeriod: {crm: PeriodProp, ewm: PeriodProp} | null = null;
+    selectePeriod: {crm: PeriodProp, ewm: PeriodProp, bdg: {year: string}} | null = null;
+    reportMode: "fcst" | "bdg" = "fcst";
 
     constructor(private forecastExcelService: ForecastExcelService, private excelService: ExcelService) {
     }
 
     ngOnInit(): void {
+        this.reportMode = "fcst";
+
+        let currYear = new Date().getFullYear().toString();
+        let currMonth = (new Date().getMonth()+1).toString();
         this.selectePeriod = {
-            crm: {month: (new Date().getMonth()+1).toString(), year: new Date().getFullYear().toString()},
-            ewm: {month: (new Date().getMonth()+1).toString(), year: new Date().getFullYear().toString()},
+            crm: {month: currMonth, year: currYear},
+            ewm: {month: currMonth, year: currYear},
+            bdg: {year: (new Date().getFullYear() + 1).toString()}
         }
 
         this.captions = this.getCaptions();
@@ -300,37 +314,64 @@ export class ForecastExcelComponent implements OnInit {
         }
     }
 
+    onChangePeriodBdg(event: any) {
+        if (this.selectePeriod?.bdg) {
+            // @ts-ignore
+            this.selectePeriod.bdg.year = event.value;
+        }
+    }
+
     isSelectedPeriodEmpty(){
         if (!this.selectePeriod)
             return true;
 
         const crm = this.selectePeriod?.crm ?? {month: "", year: ""}
         const ewm = this.selectePeriod?.ewm ?? {month: "", year: ""}
+        const bdg = this.selectePeriod?.bdg ?? {year: ""}
 
-        return (crm.month == "" || crm.year == "") && (ewm.month == "" || ewm.year == "")
+        if (this.reportMode == "fcst") {
+            return (crm.month == "" || crm.year == "") && (ewm.month == "" || ewm.year == "");
+        } else {
+            return bdg.year == ""
+        }
+    }
+
+    processResult(res: { data: { data: any; }; }){
+        this.data = this.adjustData(res?.data?.data ?? []);
+
+        this.reportSlice = {
+            ...this.reportSlice,
+            rows: this.rowUn,
+            measures: this.measures,
+        }
+        this.refreshDataTable();
     }
 
     getDataForecast(){
         const crm = this.selectePeriod?.crm ?? {month: "", year: ""}
         const ewm = this.selectePeriod?.ewm ?? {month: "", year: ""}
+        const bdg = this.selectePeriod?.bdg ?? {year: ""}
 
-        if ((crm.month == "" && crm.year != "") || (crm.month != "" && crm.year == "")){
-            alert("Attenzione! il periodo selezionato per CRM è incompleto. La ricerca non verrà eseguita per CRM")
-        }
-        if ((ewm.month == "" && ewm.year != "") || (ewm.month != "" && ewm.year == "")){
-            alert("Attenzione! il periodo selezionato per EWM è incompleto. La ricerca non verrà eseguita per EWM")
-        }
-
-        this.forecastExcelService.getForecastData(crm, ewm).subscribe(res => {
-            this.data = this.adjustData(res?.data?.data ?? []);
-
-            this.reportSlice = {
-                ...this.reportSlice,
-                rows: this.rowUn,
-                measures: this.measures,
+        if (this.reportMode == "fcst") {
+            if ((crm.month == "" && crm.year != "") || (crm.month != "" && crm.year == "")){
+                alert("Attenzione! il periodo selezionato per CRM è incompleto. La ricerca non verrà eseguita per CRM")
             }
-            this.refreshDataTable()
-        });
+            if ((ewm.month == "" && ewm.year != "") || (ewm.month != "" && ewm.year == "")){
+                alert("Attenzione! il periodo selezionato per EWM è incompleto. La ricerca non verrà eseguita per EWM")
+            }
+
+            this.forecastExcelService
+                .getForecastData({crm, ewm})
+                .subscribe(res => this.processResult(res));
+        } else {
+            if (bdg.year == ""){
+                alert("Attenzione! l'anno selezionato per BUDGET non è valido. La ricerca non verrà eseguita per BUDGET")
+            }
+
+            this.forecastExcelService
+                .getForecastData({bdg})
+                .subscribe(res => this.processResult(res));
+        }
     }
 
     getCaptions(): {} {
@@ -638,6 +679,11 @@ export class ForecastExcelComponent implements OnInit {
 
             return obj;
         })
-        this.excelService.exportExcelFcstClienti("FCST_COMMERCIALE", "FCST CLIENTI", header, rows);
+        this.excelService.exportExcelFcstClienti(
+            this.reportMode === "fcst" ? "FCST_COMMERCIALE" : "BDG_COMMERCIALE",
+            this.reportMode === "fcst" ? "FCST CLIENTI" : "BDG CLIENTI",
+            header,
+            rows
+        );
     }
 }

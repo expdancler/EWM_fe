@@ -37,21 +37,35 @@ export class ForecastExcelService {
             .pipe(retry(1), catchError(this.processError));
     }
 
-    getForecastData(crm?: {month: string, year: string}, ewm?: { month: string, year: string }): Observable<any> {
+    getForecastData({crm, ewm, bdg}: {
+        crm?: { month: string, year: string },
+        ewm?: { month: string, year: string },
+        bdg?: { year: string }
+    }): Observable<any> {
         const token = this.storageService.secureStorage.getItem("token");
         let headers: {"content-type": string , "Authorization"?: string} = { "content-type": "application/json" };
         if (environment.production) headers.Authorization = "Bearer " + token;
 
         let username_loggedUSer = this.storageService.secureStorage.getItem("username_loggedUser");
-        let request: { Username: string, CrmMonth?: string, CrmYear?: string, EwmMonth?: string, EwmYear?: string} = { Username: username_loggedUSer };
-        if (crm && crm.month && crm.year) {
-            request.CrmMonth = crm.month;
-            request.CrmYear = crm.year;
+        let request: {
+            Username: string,
+            CrmMonth?: string, CrmYear?: string,
+            EwmMonth?: string, EwmYear?: string,
+            BdgYear?: string,
+        } = { Username: username_loggedUSer };
+        if (bdg && bdg.year) {
+            request.BdgYear = bdg.year;
+        } else {
+            if (crm && crm.month && crm.year) {
+                request.CrmMonth = crm.month;
+                request.CrmYear = crm.year;
+            }
+            if (ewm && ewm.month && ewm.year){
+                request.EwmMonth = ewm.month
+                request.EwmYear = ewm.year
+            }
         }
-        if (ewm && ewm.month && ewm.year){
-            request.EwmMonth = ewm.month
-            request.EwmYear = ewm.year
-        }
+
         let data = JSON.stringify(request);
         return this.httpClient
             .post(/*this.baseURL + */"/wbs/getForecastExcelData", data, { headers: headers })

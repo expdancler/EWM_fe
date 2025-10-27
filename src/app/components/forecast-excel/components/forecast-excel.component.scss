@@ -1,38 +1,71 @@
-.page {
+/* ---- dimensioni controlli ---- */
+$control-h: 48px;
+$field-min: 160px;
 
+/* Card responsiva: 80% su desktop, 100% su mobile */
+.responsive-card {
+  min-width: fit-content;
+  width: 1025px;
+  max-width: 80%;
+  margin: 15px auto;
+  transition: width .2s ease;
 }
-.header {
-  background-color: #FAFAFA;
+
+/* Contenuto card: controlli in riga (wrap se serve) */
+.controls-row {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 50px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  vertical-align: center;
-  //padding: 15px 0 0 0;
+  flex-wrap: wrap;
+  column-gap: 20px;
+  align-items: center;
+  justify-content: space-between;
 }
-.section {
-  //background-color: #00b0f0;
-  padding-top: 20px;
+
+.field-select {
+  width: 120px;
+}
+
+/* ===== Bottoni azione (stessa altezza delle combo) ===== */
+.actions-row {
   display: flex;
-  flex-direction: row;
-  gap: 20px;
-  vertical-align: center;
+  gap: 10px;
+  align-items: flex-end;
+  flex: 0 0 auto;
 }
-.action-section {
-  //background-color: #00b0f0;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  height: $control-h;
+  margin: auto;
+  justify-self: center;
 }
-.btn-blue {
-  color: #fff;
-  background-color: #005069;
-  border-color: #005069;
-}
-.btn-green {
-  color: #fff;
-  background-color: #558a51;
-  border-color: #558a51;
+.btn-blue { color: #fff !important; background-color: #005069; border-color: #005069; }
+.btn-blue:hover:not(:disabled) { filter: brightness(1.05); }
+.btn-green { color: #fff !important; background-color: #558a51; border-color: #558a51; }
+.btn-green:hover:not(:disabled) { filter: brightness(1.05); }
+.btn:disabled { opacity: .6; cursor: not-allowed; }
+
+/* =========================
+   MOBILE
+   ========================= */
+@media (max-width: 768px) {
+  .responsive-card { width: 100%; }   /* full-width su mobile */
+
+  .controls-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .field { min-width: 0; width: 100%; }
+  .field-select mat-form-field { width: 100%; min-width: 0; }
+  .toggle--compact { width: 100%; }
+  .actions-row { flex-direction: column; align-items: stretch; }
+  .btn--md { width: 100%; }
 }

@@ -1,55 +1,133 @@
 <div class="page">
+    <!-- FILTRI -->
     <div class="header">
-        <div class="section">
-            <mat-form-field appearance="fill">
-                <mat-label>CRM - Mese</mat-label>
-                <mat-select (selectionChange)="onChangePeriodCrm('month', $event)" [value]="selectePeriod?.crm?.month">
-                    <mat-option *ngFor="let month of monthRange" [value]="month.value">
-                        {{ month.label }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>CRM - Anno</mat-label>
-                <mat-select (selectionChange)="onChangePeriodCrm('year', $event)" [value]="selectePeriod?.crm?.year">
-                    <mat-option *ngFor="let year of yearRange" [value]="year">
-                        {{ year }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
+        <mat-card class="responsive-card">
+            <mat-card-content class="controls-row">
 
-        <div class="section">
-            <mat-form-field appearance="fill">
-                <mat-label>EWM - Mese</mat-label>
-                <mat-select (selectionChange)="onChangePeriodEwm('month', $event)" [value]="selectePeriod?.ewm?.month">
-                    <mat-option *ngFor="let month of monthRange" [value]="month.value">
-                        {{ month.label }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>EWM - Anno</mat-label>
-                <mat-select (selectionChange)="onChangePeriodEwm('year', $event)" [value]="selectePeriod?.ewm?.year">
-                    <mat-option *ngFor="let year of yearRange" [value]="year">
-                        {{ year }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
+                <!-- Modalità border: 1px solid red; -->
+                <div style="height: 90px">
+                    <div>Modalità</div>
+                    <div>
+                        <mat-button-toggle-group [(ngModel)]="this.reportMode">
+                            <mat-button-toggle value="fcst">Forecast</mat-button-toggle>
+                            <mat-button-toggle value="bdg">Budget</mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+                </div>
 
-        <div class="action-section">
-            <button type="button" class="btn btn-blue" (click)="getDataForecast()" [disabled]="isSelectedPeriodEmpty()">
-                <i class="fas fa-search"></i> Ricerca
-            </button>
-            <button type="button" class="btn btn-green" (click)="exportAllDataAsXLSX()">
-                <i class="fas fa-file-excel"></i> Esporta dati
-            </button>
-        </div>
+                <div>
+                    <div>Anno</div>
+                    <div>
+                        <mat-form-field class="field-select" appearance="fill" floatLabel="never">
+                            <mat-select
+                                    (selectionChange)="onChangePeriodBdg($event)"
+                                    [value]="selectePeriod?.bdg?.year"
+                                    [disabled]="this.reportMode === 'fcst'"
+                            >
+                                <mat-option *ngFor="let year of yearRangeBdg" [value]="year">
+                                    {{ year }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
 
-        <div class="col-md-12 main-section d-block d-sm-none">
-            <h3 class="main-title">WBS Manager</h3>
-        </div>
+                <!-- CRM - Mese -->
+                <div>
+                    <div>CRM - Mese</div>
+                    <div>
+                        <mat-form-field class="field-select" appearance="fill" floatLabel="never">
+                            <mat-select
+                                    (selectionChange)="onChangePeriodCrm('month', $event)"
+                                    [value]="selectePeriod?.crm?.month"
+                                    [disabled]="this.reportMode === 'bdg'"
+                            >
+                                <mat-option *ngFor="let month of monthRange" [value]="month.value">
+                                    {{ month.label }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- CRM - Anno -->
+                <div>
+                    <div>CRM - Anno</div>
+                    <div class="field__control">
+                        <mat-form-field class="field-select" appearance="fill" floatLabel="never">
+                            <mat-select
+                                    (selectionChange)="onChangePeriodCrm('year', $event)"
+                                    [value]="selectePeriod?.crm?.year"
+                                    [disabled]="this.reportMode === 'bdg'"
+                            >
+                                <mat-option *ngFor="let year of yearRange" [value]="year">
+                                    {{ year }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- EWM - Mese -->
+                <div>
+                    <div>EWM - Mese</div>
+                    <div>
+                        <mat-form-field class="field-select" appearance="fill" floatLabel="never">
+                            <mat-select
+                                    (selectionChange)="onChangePeriodEwm('month', $event)"
+                                    [value]="selectePeriod?.ewm?.month"
+                                    [disabled]="this.reportMode === 'bdg'"
+                            >
+                                <mat-option *ngFor="let month of monthRange" [value]="month.value">
+                                    {{ month.label }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- EWM - Anno -->
+                <div>
+                    <div>EWM - Anno</div>
+                    <div>
+                        <mat-form-field class="field-select" appearance="fill" floatLabel="never">
+                            <mat-select
+                                    (selectionChange)="onChangePeriodEwm('year', $event)"
+                                    [value]="selectePeriod?.ewm?.year"
+                                    [disabled]="this.reportMode === 'bdg'"
+                            >
+                                <mat-option *ngFor="let year of yearRange" [value]="year">
+                                    {{ year }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Azioni -->
+                <div class="actions-row">
+                    <button
+                            type="button"
+                            class="btn btn-blue btn--md"
+                            (click)="getDataForecast()"
+                            [disabled]="isSelectedPeriodEmpty()"
+                    >
+                        <i class="fas fa-search"></i> Ricerca
+                    </button>
+
+                    <button
+                            type="button"
+                            class="btn btn-green btn--md"
+                            (click)="exportAllDataAsXLSX()"
+                    >
+                        <i class="fas fa-file-excel"></i> Esporta dati
+                    </button>
+                </div>
+
+            </mat-card-content>
+        </mat-card>
     </div>
+
+    <!-- TABELLA -->
     <div id="report-container"></div>
 </div>
